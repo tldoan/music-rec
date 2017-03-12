@@ -93,7 +93,12 @@ WSGI_APPLICATION = 'maquette.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'd3apee5dggvufm',
+	'USER': 'ltcwmqcdnujvut',
+	'PASSWORD': '28108949c454b913db18e56e7f48cba3bff28c3947d6261a7bd2fb1f5cfb8363',
+	'HOST': 'ec2-54-243-38-139.compute-1.amazonaws.com',
+	'PORT': '5432',
+
     }
 }
 
