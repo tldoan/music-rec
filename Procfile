@@ -1,1 +1,1 @@
-web: gunicorn maquette.wsgi:application --log-file -
+web: gunicorn maquette.wsgi --log-file -
