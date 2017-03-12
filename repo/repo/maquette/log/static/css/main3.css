@@ -1,0 +1,77 @@
+.tokenfield .token{
+color:white;
+background-color:#5bc0de;
+
+font-weight:bold;
+font-style: italic;
+
+
+}
+
+#conteneur
+ {
+    display: flex;
+    justify-content: space-around;
+  
+ }
+ #listening_time
+ {
+    background-color:yellow; 
+  
+ }
+.element{
+    flex:1 1 0;
+    overflow:auto; 
+    text-align: center;
+    background-color:white;
+    border: 3px black double;
+ }
+ .element1{
+    flex-grow:1;
+    flex-shrink:0;
+    flex-basis:1;
+    overflow:0; 
+    text-align: center;
+    background-color:white;
+    border: 3px black double;
+ }
+ 
+
+.glyphicon-heart{
+	font-size:2.5em;
+
+}
+.glyphicon-heart-empty
+{
+   font-size:2.5em; 
+}
+
+.custom-heart {
+       
+ color: red;
+  }
+ .label
+ {
+ 	font-size:15px;
+ }
+
+.glyphicon-star-empty {
+
+color:#b0c619;
+font-size: 80px;
+}
+
+.cell_hvr:hover {
+        background-color: rgb(230, 115, 0) ;
+}
+
+.progress-bar-vertical {
+  
+
+transform: rotate(90deg);
+width: 150%;
+  height: 2%;
+
+  
+}
+

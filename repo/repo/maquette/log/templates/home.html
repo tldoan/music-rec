@@ -1,0 +1,197 @@
+
+{% extends "base.html" %}
+
+
+{% block nav_bar %}
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+ 
+    <ul class="nav navbar-nav navbar-right">
+      <li class="active">
+       
+       <form action="/m/profil" method="post">
+            {% csrf_token %}
+                
+            <!--  <button style="width:90px" class="btn btn-info">Edit profil</button> --> 
+               
+            <button class="btn btn-info btn-md">
+                      <span class="glyphicon  glyphicon glyphicon-user" aria-hidden="true"></span> 
+               
+                    Profil
+            </button>  
+
+           
+            </form>         
+      </li>
+  
+      <li>
+
+         <form action="/m/change_password" method="post">
+                {% csrf_token %}
+                      
+                <button class="btn btn-warning btn-md">
+                reset
+                 
+                password</button>
+            </form>
+      </li>
+     
+          <li>
+     
+           <form action="/m/logout" method="post">
+            
+                {% csrf_token %}
+                 <button class="btn btn-danger btn-md">
+                     <span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span> 
+                   
+                   logout
+                   
+                   </button>  
+                   
+               
+            </form>
+
+      </li>
+      </ul>
+
+
+
+    
+  </div>
+</nav>
+
+<br/>
+<br/>
+
+{% endblock  %}
+
+
+{% block content %}
+ <h1>  Welcome home {{ user}}  </h1>
+
+
+
+<br/>
+
+<br/>
+{% if sauvegarde %}
+<h1> Modification faites ! </h1>
+<<!-- h1> vous etes en {{prof.get_area_display}} </h1>
+<h1> vous avez  {{prof.get_age_display}} </h1>
+<h1> vous venez de  {{prof.get_region_display}} </h1> -->
+
+{% endif  %}
+
+
+
+    <div class="row">
+       <!--  <div class="  col-md-offset-4 col-md-6"> -->
+        <!--
+            <form action="/m/profil" method="post">
+            {% csrf_token %}
+                
+             <button style="width:90px" class="btn btn-info">Edit profil</button> 
+            <button class="btn btn-success btn-md">
+                    <!-- <span class="glyphicon  glyphicon glyphicon-user" aria-hidden="true"></span> 
+                    <br/> 
+                    Profil
+            </button> 
+
+           
+            </form> -->
+        <!-- </div> -->
+
+        
+         <!--    <form action="/m/logout" method="post">
+                {% csrf_token %}
+                 <button class="btn btn-danger btn-md">
+                    <span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span> 
+                    <br/>
+                    logout
+                  </button> 
+               
+            </form> -->
+        
+
+        <!-- <div class=" col-md-offset-7 col-md-12">    -->
+          <!--   <form action="/m/change_password" method="post">
+                {% csrf_token %}
+                      
+                <button style="width:90px" class="btn btn-warning">change password</button>
+            </form> -->
+        <!-- </div> -->   
+
+    </div>
+
+    
+
+               
+        
+    
+
+{% endblock %}
+
+{% block track_list %}
+
+ <table class="table   table-inverse table-responsive">
+  <thead>
+  <tr> <th colspan="3" class='title'><h3><strong>Tracks we have for you:</strong></h3></th>  
+ 
+    <tr> 
+     <th scope="row">Track name </th>
+     <th scope="row">Artist name</th>
+     <th scope="row">Album</th>
+     </tr>
+
+
+     
+    
+  </thead>
+  <tbody>
+        {% for x in track_list %}
+        
+    <tr>
+      
+      <td class='cell_hvr'> {{ x.track_name }}    </td>
+      <td class='cell_hvr'>{{ x.Artist }}  </td>
+      <td class='cell_hvr'> {{ x.Album_name }} </td> 
+      <td class='cell_hvr'> 
+
+          
+<!--- START RECORDING -->
+        <form id='record' class='record' action='' method='post'>
+              {% csrf_token %}  
+              <input type="hidden" id='next_song' class='next_song' name='next_song' value="{{x.track_pseudo}}">     
+              <!-- <button style="width:90px" class="btn btn-warning">start recording</button>   -->
+              <button class="btn btn-primary" >
+                 <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> Play
+              </button>                                  
+        </form>
+       
+      </td>
+      
+      
+    </tr>
+    
+                          
+   
+       {% empty %}
+       <tr> <th colspan="3" class='title'><h3><strong>No track in the database</strong></h3></th>  
+       
+        {% endfor %}
+   
+  </tbody>
+</table>
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+

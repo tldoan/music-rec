@@ -1,0 +1,194 @@
+{% extends "base_fiche_resto.html" %}
+
+{% block averate_rating %}
+
+
+<div class="container">
+<div class="progress vertical">
+    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:{% widthratio resto.rating 5 100 %}%">
+      <span class="sr-only">{{ resto.rating|floatformat:2 }}/5</span>
+    </div>
+  </div>
+  </div>
+
+
+
+<h1 class="rating-num">     {{resto.rating|floatformat:2}}</h1>
+{%  endblock  %}
+
+{% block image %}
+
+
+<p>
+
+  <img src="fall.jpg" class="rounded" alt="width:304px;height:228px;">
+
+</p>
+{% endblock %}
+
+
+
+
+{% block name %} {{ resto.name }} {% endblock  %}
+
+{% block is_open %}
+
+	{% if ouvert  %}
+
+	<button type="button" class="btn btn-success" ><h3>Open Now </h3></button>
+
+
+	{% else %}
+
+	<button class="btn btn-danger" type="button"><h3>Closed Now</h3></button> 
+
+	{% endif %}
+{%  endblock %}
+
+
+
+
+ { %  endblock %}
+
+{% block review %}  {{ resto.nb_reviews}} {% endblock%}
+
+
+{%  block phone %}  {{ resto.phone_number}} {% endblock %}
+
+
+{%  block  website%} <a href="http://{{ resto.site_web }}"> {{  resto.site_web }} </a>   {% endblock %}
+
+{%  block price_range %}  {{resto.price_range_display}}{% endblock %} 
+
+{%  block adress %} {{resto.address_display}}  , {{resto.neighborhood}}{% endblock %}
+
+
+{%  block food_type %} {{resto.type_of_food}}  {% endblock %}
+
+
+
+
+{%  block longitude  %} {{resto.longitude}} {% endblock %}
+{%  block latitude  %} {{resto.latitude}} {% endblock %}
+
+							{%  block recommendations  %}
+								{% for x in liste %}
+		                            <div class="element">
+		                                  <h4> {{ x.name}} </h4>
+		                                  
+		                                  <img src="{{ x.photos_url}}" alt="photos of the website" > {{ resto.photo_url}}
+		                                  <br/>
+		                                  <h5> {{ x.type_of_food}} </h5>
+		                                  
+		                                  <h6> {{ x.neighborhood}} </h6>
+		                                  <br/>
+		                            </div>
+		                        {% endfor %}
+		                    {% endblock %}
+
+
+{% block rating %}
+  {% if sauvegarde  %}
+  <p>  your rating has been taken account </p>
+
+  {% endif %}
+
+
+  <h1> {{ resto.pseudo}}</h1>
+
+   {%  if has_yet_rated %}
+   <p> You have rated this restaurant: {{ REVIEW.rating }} stars</p>
+
+   {% else %}
+	<div class='row'>
+		<div class='panel panel-default'>
+			<div class='panel-body'>
+					<form class='form-horizontal' action='' method='post'>
+						{% csrf_token %}
+						
+
+						{% for field in form %}
+
+							<div class='form-gorup'>
+								<div class='col-sm-offset-2 col-sm-10'>
+									<span class='text-danger'> {{field.errors}} </span>
+								</div>
+
+								<label class='control-label' >{{field.label_tag}} </label>
+
+								<div class='col-md-10'>{{field}}  </div>
+								
+
+
+							</div>
+
+						{% endfor %}				
+						
+						<div class='col-sm-offset-2 col-sm-10'>
+								<button type='submit' class="btn btn-success"> Submit </button>
+						</div>
+					</form>
+			</div>
+		</div>
+	</div>
+
+ 
+{%  endif %}
+{% endblock %}
+
+
+
+{%  block biz_hours %} 
+
+ <table class="table    table-inverse table-responsive">
+  <thead>
+  <tr> <th colspan="3" class='title'><h3><strong>Business Hours</strong></h3></th>	
+  </tr>
+    <tr>
+      
+      <th colspan="3" class='title' >...</th>
+      
+      
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Monday</th>
+      <td class='cell_hvr'>{{resto.morning_day0_start}} - {{resto.morning_day0_end}}  </td>
+      <td class='cell_hvr'>{{resto.night_day0_start}} - {{resto.night_day0_end}} </td>
+      
+    </tr>
+    <tr >
+      <th scope="row">Tuesday</th>
+      <td class='cell_hvr'>{{resto.morning_day1_start}} - {{resto.morning_day1_end}}  </td>
+      <td class='cell_hvr'>{{resto.night_day1_start}} - {{resto.night_day1_end}} </td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row">Wednesday</th>
+      <td class='cell_hvr'>{{resto.morning_day2_start}} - {{resto.morning_day2_end}}  </td>
+      <td class='cell_hvr'>{{resto.night_day2_start}} - {{resto.night_day2_end}} </td>
+    </tr>
+    <tr>
+      <th scope="row">Thursday</th>
+      <td class='cell_hvr'>{{resto.morning_day3_start}} - {{resto.morning_day3_end}}  </td>
+      <td class='cell_hvr'>{{resto.night_day3_start}} - {{resto.night_day3_end}} </td>
+    </tr>
+      <th scope="row">Friday</th>
+      <td class='cell_hvr'>{{resto.morning_day4_start}} - {{resto.morning_day4_end}}  </td>
+      <td class='cell_hvr'>{{resto.night_day4_start}} - {{resto.night_day4_end}} </td>
+    </tr>
+     <tr>
+      <th scope="row">Saturday</th>
+      <td class='cell_hvr'>{{resto.morning_day5_start}} - {{resto.morning_day5_end}}  </td>
+      <td class='cell_hvr'>{{resto.night_day5_start}} - {{resto.night_day5_end}} </td>
+    </tr>
+     <tr>
+      <th scope="row">Sunday</th>
+      <td class='cell_hvr'>{{resto.morning_day6_start}} - {{resto.morning_day6_end}}  </td>
+      <td class='cell_hvr'>{{resto.night_day6_start}} - {{resto.night_day6_end}} </td>
+    </tr>
+  </tbody>
+</table>
+
+{% endblock %}
