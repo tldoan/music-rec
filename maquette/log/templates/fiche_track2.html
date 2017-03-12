@@ -1,0 +1,192 @@
+{% extends "fiche_track_base2.html" %}
+
+
+{% block nav_bar %}
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+ 
+    <ul class="nav navbar-nav navbar-right">
+      <li class="active">
+       
+           <form id='home' class='form-horizontal' action=""  method='post'>
+            {% csrf_token %}
+            
+            <input type="hidden"  class='percentage2' name='percentage2' value="">
+            <input type="hidden"  class='listening_time2' name='listening_time2' value="">
+            <input type="hidden"  class='home' name='home' value="home">
+           <!--  <button id='home' class='btn btn-warning'>Back home</button> -->
+            <button class="btn btn-warning btn-md">
+              <span class="glyphicon glyphicon glyphicon-home" aria-hidden="true"></span> 
+              
+               home
+            </button> 
+           </form>  
+      </li>
+  
+
+     
+          <li>
+     
+           <form action="/m/logout" method="post">
+            
+                {% csrf_token %}
+                 <button class="btn btn-danger btn-md">
+                     <span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span> 
+                   
+                   logout
+                   
+                   </button>  
+                   
+               
+            </form>
+
+      </li>
+      </ul>
+
+
+
+    
+  </div>
+</nav>
+
+<br/>
+<br/>
+
+
+{% endblock  %}
+
+{% block home_button %} 
+
+
+
+
+<br/>
+  <form id='home' class='form-horizontal' action="{% url 'homepage'%}"  >
+  {% csrf_token %}
+  <button id='home' class='btn btn-info'>Back home without record</button>
+</form>
+
+ {% endblock  %}
+
+
+
+
+{% block name %} {{track.Artist}} - {{track.track_name}} {% endblock %}
+
+
+{% block artist_image %} {{track.Album_cover}}{% endblock  %}
+
+{% block Artist_popularity %} {{track.Artist_popularity| floatformat:0}} {% endblock  %}
+
+
+{% block lyrics %} lyrics {% endblock  %}
+<!--
+{{track.lyrics|safe}}
+-->
+
+{% block album %} {{track.Album_name}} {% endblock  %}
+
+{% block track_popularity %} {{track.track_popularity| floatformat:2}} {% endblock  %} 
+
+{% block track_name %} {{track.track_name}} {% endblock  %}
+
+{% block artist %} {{track.Artist}} {% endblock  %}
+
+
+
+{% block form %}
+		{% if  has_yet_rated  %}
+
+		
+		<p> you have rated this song {{review.rating}} </p>
+
+	
+
+
+		{% else  %}
+	 
+		
+		<form id='form_rate' class='form-horizontal' action='' method='post'>
+				{% csrf_token %}
+				{%  if Wrong %}
+             	<h3><strong> Please give rate</strong>></h3>
+             	{%  endif %}
+				<input type="hidden" name='rating' class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" />	   
+				<span id='heart-rate' class="label label-danger"></span>
+
+				  <br/>
+				  <br/>
+				 <p> Tells us what do you think about this song: </p>
+
+					<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
+
+					<div class='col-sm-offset-2 col-sm-10'>
+							<button type='submit' class="btn btn-success"> Submit</button>
+					</div>
+		</form>
+		
+
+
+
+		{% endif  %}		
+{% endblock  %}
+
+
+
+
+
+{% block wordclouod_form %}
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+
+ 
+
+ 
+
+{% block in_queue %}
+
+ <div>
+<h3>Next song:</h3>
+  <form id='solo' class='solo' action="" method='post'>
+                        {% csrf_token %}  
+                          <!--  sending variables to django -->
+                          percentage
+                        <input type="text" id='percentage' class='percentage' name='percentage' value="">
+                        <br/>
+                        length
+                        <input type="text" id='listening_time' class='listening_time' name='listening_time' value="">
+                                 
+                        <br/> 
+                        
+                        <span id='artist' class="label label-info" name='artist'>{{track2.Artist}}</span>
+                        <span id='next_song' class="label label-info" name='next_song'>{{titre_2}}</span>
+                        <br/>
+                        <img src= {{track2.Artist_image}} class="img-circle" alt="artist image"> 
+                        <br/>
+                        <!-- <span id='titre_2' class="label label-info" name='titre_2'>empty</span> -->
+                        <input type='text' id='next_song' class='next_song' name='solo' value={{titre_2}}>
+                        <br/> 
+
+                      <br/>
+                      <button id='load2' class="btn btn-default btn-sm" >
+                       <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+                      <br/> 
+                       Play                
+                      </button>
+   </form>
+
+<div>
+
+{% endblock  %}
