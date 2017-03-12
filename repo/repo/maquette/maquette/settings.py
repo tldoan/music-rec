@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 print BASE_DIR
 
-
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -28,7 +28,7 @@ SECRET_KEY = '5=87fsk=@y5^!cd70yr=!kti!2vw+8prmx)l7z3%n6!1w$h*6y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['music-rec.herokuapp.com']
 
 
 # Application definition
@@ -132,23 +132,41 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 
 STATIC_URL = '/static/'
+#STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+#STATICFILES_DIRS=[
+#        os.path.join(BASE_DIR,'static'),]
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'log/templates'),
 )
 
 
-STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
-print STATIC_ROOT
+
+#print STATIC_ROOT
 MEDIAT_ROOT=''
 MEDIA_URL='/media/'
 
-STATICFILES_DIRS=[
-        os.path.join(BASE_DIR,'static'),]
+
+
+
+
+
 
 LOGIN_URL = '/m/login'
+
+
+
+
 LOGIN_REDIRECT_url='m/login'
 
 AUTH_PROFILE_MODULE='log.Profile'
