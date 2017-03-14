@@ -11,14 +11,17 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-print BASE_DIR
 
+
+DATABASES['default'] = dj_database_url.config()
+db_from_env = dj_database_url.config(conn_max_age=500)
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +33,7 @@ SECRET_KEY = '5=87fsk=@y5^!cd70yr=!kti!2vw+8prmx)l7z3%n6!1w$h*6y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://music-rec.herokuapp.com','0.0.0.0','music-rec.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','music-rec.herokuapp.com']
 
 
 # Application definition
@@ -90,17 +93,28 @@ WSGI_APPLICATION = 'maquette.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'd3apee5dggvufm',
+# 	'USER': 'ltcwmqcdnujvut',
+# 	'PASSWORD': '28108949c454b913db18e56e7f48cba3bff28c3947d6261a7bd2fb1f5cfb8363',
+# 	'HOST': 'ec2-54-243-38-139.compute-1.amazonaws.com',
+# 	'PORT': '5432',
+
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'd3apee5dggvufm',
-	'USER': 'ltcwmqcdnujvut',
-	'PASSWORD': '28108949c454b913db18e56e7f48cba3bff28c3947d6261a7bd2fb1f5cfb8363',
-	'HOST': 'ec2-54-243-38-139.compute-1.amazonaws.com',
-	'PORT': '5432',
-
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -160,7 +174,7 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
-print STATIC_ROOT
+
 MEDIAT_ROOT=''
 MEDIA_URL='/media/'
 
