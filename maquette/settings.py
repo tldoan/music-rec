@@ -160,7 +160,7 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'log/templates'),
 )
 
-
+#STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
 #STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
@@ -175,7 +175,7 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
-STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
+
 
 MEDIAT_ROOT=''
 MEDIA_URL='/media/'
