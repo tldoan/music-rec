@@ -25,6 +25,7 @@ urlpatterns = [
       url(r'^change_password$', views.change_password, name='change_password'),
       url(r'^change_rating/(?P<track>\w+)$', views.change_rating, name='change_rating'),
       url(r'^home', views.homepage, name='homepage'),
+
 #         
         
           
