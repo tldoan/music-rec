@@ -104,8 +104,7 @@ WSGI_APPLICATION = 'maquette.wsgi.application'
 
 #     }
 # }
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES = {}
+
 
 # DATABASES = {
 #     'default': {
@@ -114,6 +113,7 @@ DATABASES = {}
 #     }
 # }
 
+db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
 # Password validation
