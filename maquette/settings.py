@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles','log','jquery',
+
     
    
   
@@ -112,7 +113,7 @@ DATABASES = {
     }
 }
 
-print DATABASES
+
 
 
 # Password validation
@@ -187,7 +188,6 @@ AUTH_PROFILE_MODULE='log.Profile'
 import dj_database_url
 
 
-print DATABASES
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
