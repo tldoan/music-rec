@@ -161,14 +161,14 @@ TEMPLATE_DIRS = (
 )
 
 #STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, '../log/static')
 
 STATIC_URL = '/static/'
 
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, '../log/static'),
+    os.path.join(PROJECT_ROOT, 'static'),
 )
 
 
