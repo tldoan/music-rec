@@ -161,7 +161,7 @@ TEMPLATE_DIRS = (
 )
 
 #STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
-STATIC_ROOT = os.path.join(PROJECT_ROOT, '../log/static')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, '../log/')
 
 STATIC_URL = '/static/'
 
