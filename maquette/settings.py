@@ -93,33 +93,33 @@ WSGI_APPLICATION = 'maquette.wsgi.application'
 Database
 https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': "django.db.backends.postgresql_psycopg2",
-        'NAME': 'd3apee5dggvufm',
-	'USER': 'ltcwmqcdnujvut',
-	'PASSWORD': '28108949c454b913db18e56e7f48cba3bff28c3947d6261a7bd2fb1f5cfb8363',
-	'HOST': 'ec2-54-243-38-139.compute-1.amazonaws.com',
-	'PORT': '5432',
-
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'ENGINE': "django.db.backends.postgresql_psycopg2",
+#         'NAME': 'd3apee5dggvufm',
+# 	'USER': 'ltcwmqcdnujvut',
+# 	'PASSWORD': '28108949c454b913db18e56e7f48cba3bff28c3947d6261a7bd2fb1f5cfb8363',
+# 	'HOST': 'ec2-54-243-38-139.compute-1.amazonaws.com',
+# 	'PORT': '5432',
+
 #     }
 # }
 
 
-# import dj_database_url
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+
+import dj_database_url
 
 
 
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
