@@ -251,6 +251,8 @@ def fiche_track(request, track_pseudo):
                     has_yet_rated=True
                     if wordcloud!='':
                         load_wordcloud(track_pseudo,wordcloud)
+                    has_just_commented=True
+                    time_before=float(request.POST.get('time_before_rated',''))             
                 return render(request,'fiche_track.html',locals())
         elif 'queue' in request.POST:
              print 'methode = POST  titre_1_________________'
@@ -391,6 +393,8 @@ def solo(request,titre_1,titre_2):
                     has_yet_rated=True
                     if wordcloud!='':
                         load_wordcloud(titre_1,wordcloud)
+                    has_just_commented=True
+                    time_before=float(request.POST.get('time_before_rated',''))
                 return render(request,'fiche_track2.html',locals())
         elif 'solo' in request.POST:
              print 'methode = POST _solo________________'
