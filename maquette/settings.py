@@ -95,7 +95,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'postgresql_psycopg2',
         'NAME': 'd3apee5dggvufm',
 	'USER': 'ltcwmqcdnujvut',
 	'PASSWORD': '28108949c454b913db18e56e7f48cba3bff28c3947d6261a7bd2fb1f5cfb8363',
