@@ -90,8 +90,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'maquette.wsgi.application'
 
 
-Database
-https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+# Database
+# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
