@@ -5,7 +5,7 @@
 {% block nav_bar %}
 
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-custom" id='grad1'>
   <div class="container-fluid">
  
     <ul class="nav navbar-nav navbar-right">
@@ -16,7 +16,7 @@
                  <form action="/m/register" method="post">
                				{% csrf_token %}
                       
-                	<button  class="btn btn-info">Register</button>
+                	<button  class="btn btn-custom">Register</button>
            		</form> 
                    
                
@@ -72,18 +72,16 @@
 
 <div class='container'>
 
-	<div class="center-block">
-	<div class='row'>
-	<div class='cold-md-offset-3 cold-md-6'>
-	<div class="panel panel-primary" style="width:50%">
-		<div class="panel-heading">
-		<h1> Login  </h1>
+	
+	<div class="panel panel-custom" style="width:50%">
+		<div class="panel-heading" id='grad1'>
+		<h1> Account  </h1>
 		</div>
 	
 
      
       					<div class="panel-body">
-      					<div class='cold-md-offset-3 cold-md-6'>
+      					
     
 	
 							
@@ -104,7 +102,7 @@
 							  <div class='row'>
 							  	<div class="form-group col-md-offset-4 col-md-5">
 							  		<div class='input-group'>		    	
-							    	<span class="input-group-addon" id="basic-addon1"><t class='glyphicon glyphicon-hand-right'></t></span>
+							    	<span class="input-group-addon" id="basic-addon1"><t class='glyphicon glyphicon-lock'></t></span>
 							    	<input type="password" name='password' class="form-control"  value='' id="Password1" placeholder="Password">
 							    	</div>
 							  	</div>
@@ -112,10 +110,10 @@
 								
 								<br/>
 								<div class='row'>
-					    		<div class='col-md-offset-5 cold-md-6'>
-					    		<button class="btn btn-success">Submit</button>
 					    		
-					    		</div>
+					    		<button class="btn btn-custom">Log in</button>
+					    		
+					    		
 					    		</div>
 		    					
 						</form>
@@ -126,12 +124,6 @@
 			
 			
 		
-		</div>
-		
-	
-	
-	</div>
-	</div>
 	</div>
 
 

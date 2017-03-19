@@ -5,18 +5,20 @@
 {% block nav_bar %}
 
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-custom" id='grad1'>
   <div class="container-fluid">
  
     <ul class="nav navbar-nav navbar-right">
       <li class="active">
        
-       <form action="/m/profil" method="post">
+       <form action="/profil" method="get">
+
             {% csrf_token %}
+            <input type="hidden"  name='profil' value="0">
                 
             <!--  <button style="width:90px" class="btn btn-info">Edit profil</button> --> 
                
-            <button class="btn btn-info btn-md">
+            <button class="btn btn-custom btn-md">
                       <span class="glyphicon  glyphicon glyphicon-user" aria-hidden="true"></span> 
                
                     Profil
@@ -26,24 +28,24 @@
             </form>         
       </li>
   
-      <li>
+   <!--    <li>
 
-         <form action="/m/change_password" method="post">
+         <form action="/change_password" method="post">
                 {% csrf_token %}
                       
-                <button class="btn btn-warning btn-md">
+                <button class="btn btn-custom btn-md">
                 reset
                  
                 password</button>
             </form>
-      </li>
+      </li> -->
      
           <li>
      
-           <form action="/m/logout" method="post">
+           <form action="/logout" method="post">
             
                 {% csrf_token %}
-                 <button class="btn btn-danger btn-md">
+                 <button class="btn btn-custom btn-md">
                      <span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span> 
                    
                    logout
@@ -86,7 +88,7 @@
 
 
 
-    <div class="row">
+
        <!--  <div class="  col-md-offset-4 col-md-6"> -->
         <!--
             <form action="/m/profil" method="post">
@@ -123,7 +125,7 @@
             </form> -->
         <!-- </div> -->   
 
-    </div>
+ 
 
     
 
@@ -134,7 +136,7 @@
 {% endblock %}
 
 {% block track_list %}
-
+<div class="container">
  <table class="table   table-inverse table-responsive">
   <thead>
   <tr> <th colspan="3" class='title'><h3><strong>Tracks we have for you:</strong></h3></th>  
@@ -165,7 +167,7 @@
               {% csrf_token %}  
               <input type="hidden" id='next_song' class='next_song' name='next_song' value="{{x.track_pseudo}}">     
               <!-- <button style="width:90px" class="btn btn-warning">start recording</button>   -->
-              <button class="btn btn-primary" >
+              <button class="btn btn-custom2" >
                  <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> Play
               </button>                                  
         </form>
@@ -178,12 +180,13 @@
                           
    
        {% empty %}
-       <tr> <th colspan="3" class='title'><h3><strong>No track in the database</strong></h3></th>  
+       <tr> <th colspan="3" class='title'><h3><strong>No track in the database</strong></h3></th>  </tr>
        
         {% endfor %}
    
   </tbody>
 </table>
+</div>
 
 
 

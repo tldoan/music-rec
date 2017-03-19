@@ -5,7 +5,7 @@ from django.contrib import admin
 from .models import Profile, Restaurant, Coments, Tracks,Track_Coments  , Traj
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user','area', 'age','region')
+    list_display = ('user','area', 'age','region','sex')
     #list_filter = ('occupation', )
     
     #ordering = ('occupation', )

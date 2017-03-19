@@ -58,6 +58,8 @@ function update(player) {
     $('.percentage').val(fraction); 
     $('.listening_time2').val(time);
     $('.percentage2').val(fraction); 
+    $('.time_before_rated').val(time);
+
     //$('.percentage').each(function(){
     //  $(this).val(fraction);
     //});
@@ -100,88 +102,7 @@ $.ajax({
         });        
   });
 
- var song_rate = document.getElementById("song_rate").value;
- //var song_rate = document.getElementByClassName("song_rate22").value;
-
-//var song_rate = document.getElementById('song-rating').value;
-$(function () { 
-         
-  $('.rating2').each(function(index,value){
-     
-    console.log($('#'+index).text());
-      
-      
-      $(this).rating('rate',$('#'+index).text())
-       });  
-  });
-
-document.getElementById('load2').disabled=true;
-document.getElementById('unload').disabled=true;
-$(function() { 
-
-    // $.each($('.btn btn-warning btn-sm'), function( index, value ) {
-    //  console.log('loooooooolrrr');
-    //  $('#queue_'+index).disabled=false;
-   
-    // });
-
-  $('#unload').click(function(){
-     $.each($('.element'), function( index, value ) {
-       $('#element_'+index).show();
-        //document.getElementById('queue_'+index).disabled=false;
-        document.getElementById('unload').disabled=true;
-     });
-    $('#titre_1').text('empty');
-    $('#titre_2').text('empty');
-    document.getElementById('unload').disabled=true;
-    document.getElementById('load2').disabled=true;
-
-  });
-         
-  $('.swtich_page').each(function(index,value){
-    
-      
-     $('#'+'queue_'+index).click(function(){         
-         if ($('#titre_1').text()=='empty') {
-
-                  //console.log('titre_1');  
-                 
-                  $('#titre_1').text($('.next_song_'+index).val());
-                  $('.titre_1').val($('.next_song_'+index).val());
-                  $('#element_'+index).hide();
-                  document.getElementById('load2').disabled=false;
-                  document.getElementById('unload').disabled=false;
-             
-            }else if ($('#titre_2').text()=='empty') {
-              $('#titre_2').text($('.next_song_'+index).val());
-              $('.titre_2').val($('.next_song_'+index).val());
-              $('#element_'+index).hide();
-
-
-            } else if ($('#titre_1').text()!=='empty' && $('#titre_2').text()!=='empty'){
-                alert('queue full ! delete songs');
-               console.log('icii');
-              
-              // $('#queue_'+index).disabled=true;
-             // console.log('queue_'+index)
-              // document.getElementById('queue_'+index).disabled=true;
-              
-
-             
-            }
-
-        
-  
-      
-       });  
-  });
-  });
-
-
-
-
-
-
+ 
 
  // token list
  ///////////////////

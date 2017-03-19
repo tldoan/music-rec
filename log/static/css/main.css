@@ -1,0 +1,144 @@
+.tokenfield .token{
+color:white;
+background-color:grey;
+
+font-weight:bold;
+
+
+
+}
+.ui-menu 
+{
+background-color:white;
+color:black;
+width:300px;
+
+
+}
+.close
+{
+    color:white;
+}
+#conteneur
+ {
+    display: flex;
+    justify-content: space-around;
+  
+ }
+ #listening_time
+ {
+    background-color:yellow; 
+  
+ }
+.element{
+    flex:1 1 0;
+    overflow:auto; 
+    text-align: center;
+    background-color:white;
+    border: 3px black double;
+ }
+ .element1{
+    flex-grow:1;
+    flex-shrink:0;
+    flex-basis:1;
+    overflow:0; 
+    text-align: center;
+    background-color:white;
+    border: 3px black double;
+ }
+ 
+
+.glyphicon-heart{
+	font-size:2.5em;
+
+}
+.glyphicon-heart-empty
+{
+   font-size:2.5em; 
+}
+
+.custom-heart {
+       
+ color: red;
+  }
+ .label
+ {
+ 	font-size:15px;
+    
+ }
+
+.glyphicon-star-empty {
+
+color:#b0c619;
+font-size: 80px;
+}
+
+.cell_hvr:hover {
+        background-color: grey ;
+}
+
+.progress-bar-vertical {
+  
+
+transform: rotate(90deg);
+width: 150%;
+  height: 2%;
+
+  
+}
+#grad1 
+ {
+    
+    background: #47484a; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#47484a, #647489); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#47484a, #647489); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#47484a, #647489); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+}
+body
+{
+    background-image:url("metal_wallpaper.jpg");
+}
+
+.btn
+{
+    border:2px solid black;
+    background-color:transparent;
+    color:black;
+}
+
+.btn:hover
+{
+    background-color:yellow;
+
+}
+h3
+{
+    color:white;
+}
+h4 
+{
+    color:white;
+}
+h1
+{
+    color:white;
+}
+.btn-custom2
+{
+    border:2px solid white;
+    background-color:transparent;
+    color:white;
+}
+
+p{
+    color:white;
+}
+.table
+{
+    background-color:transparent;
+}
+.container
+{
+    background-color:grey;
+}

@@ -1,10 +1,10 @@
-{% extends "fiche_track_base2.html" %}
+{% extends "fiche_track_base.html" %}
 
 
 {% block nav_bar %}
 
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-custom" id='grad1'>
   <div class="container-fluid">
  
     <ul class="nav navbar-nav navbar-right">
@@ -20,7 +20,7 @@
             <button class="btn btn-warning btn-md">
               <span class="glyphicon glyphicon glyphicon-home" aria-hidden="true"></span> 
               
-               home
+              home
             </button> 
            </form>  
       </li>
@@ -29,21 +29,22 @@
      
           <li>
      
-           <form action="/m/logout" method="post">
+          <form id='logout' action="" method="post">
             
                 {% csrf_token %}
-                 <button class="btn btn-danger btn-md">
+                <input type='hidden' class='liste3' name='liste3' value="{{l}}">
+                <input type="hidden"  class='percentage2' name='percentage2' value="">
+                <input type="hidden"  class='listening_time2' name='listening_time2' value="">
+                 <button class="btn btn-custom btn-md">
                      <span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span> 
-                   
-                   logout
-                   
+                   logout       
                    </button>  
                    
                
             </form>
 
-      </li>
-      </ul>
+          </li>
+    </ul>
 
 
 
@@ -51,48 +52,13 @@
   </div>
 </nav>
 
-<br/>
-<br/>
-
 
 {% endblock  %}
 
-{% block home_button %} 
 
 
 
 
-<br/>
-  <form id='home' class='form-horizontal' action="{% url 'homepage'%}"  >
-  {% csrf_token %}
-  <button id='home' class='btn btn-info'>Back home without record</button>
-</form>
-
- {% endblock  %}
-
-
-
-
-{% block name %} {{track.Artist}} - {{track.track_name}} {% endblock %}
-
-
-{% block artist_image %} {{track.Album_cover}}{% endblock  %}
-
-{% block Artist_popularity %} {{track.Artist_popularity| floatformat:0}} {% endblock  %}
-
-
-{% block lyrics %} lyrics {% endblock  %}
-<!--
-{{track.lyrics|safe}}
--->
-
-{% block album %} {{track.Album_name}} {% endblock  %}
-
-{% block track_popularity %} {{track.track_popularity| floatformat:2}} {% endblock  %} 
-
-{% block track_name %} {{track.track_name}} {% endblock  %}
-
-{% block artist %} {{track.Artist}} {% endblock  %}
 
 
 
@@ -107,13 +73,13 @@
 
 		{% else  %}
 	 
-		
+		<div class='container' id='grad1'>
 		<form id='form_rate' class='form-horizontal' action='' method='post'>
 				{% csrf_token %}
 				{%  if Wrong %}
-             	<h3><strong> Please give rate</strong>></h3>
+             	<h3><strong> Please give rate</strong></h3>
              	{%  endif %}
-        <input type="text"  class='time_before_rated' name='time_before_rated' value="">     
+        <input type="text"  class='time_before_rated' name='time_before_rated' value="0">     
 				<input type="hidden" name='rating' class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" />	   
 				<span id='heart-rate' class="label label-danger"></span>
 
@@ -124,39 +90,22 @@
 					<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
 
 					<div class='col-sm-offset-2 col-sm-10'>
-							<button type='submit' class="btn btn-success"> Submit</button>
+							<button type='submit' class="btn btn-custom2"> Submit</button>
 					</div>
 		</form>
+    </div>
 		
 
 
 
 		{% endif  %}		
-{% endblock  %}
-
-
-
-
-
-{% block wordclouod_form %}
-
-
-{% endblock  %}
-
-
-
-
-
-
-
+{% endblock %}
 
 
 
  
 
- 
-
-{% block in_queue %}
+{% block in_queue2 %}
 
  <div>
 <h3>Next song:</h3>
@@ -181,7 +130,7 @@
                         <br/> 
 
                       <br/>
-                      <button id='load2' class="btn btn-default btn-sm" >
+                      <button id='load2' class="btn btn-custom2 btn-sm" >
                        <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
                       <br/> 
                        Play                
@@ -190,4 +139,4 @@
 
 <div>
 
-{% endblock  %}
+{% endblock %}

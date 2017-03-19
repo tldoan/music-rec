@@ -14,3 +14,46 @@ red, bleu, hawai
 hawai, sun
 red
 bleu, voiture
+voiture
+voiture
+bleu
+red
+bleu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+voiture, awesomeness
+
+
+
+
+
+
+
+
+
+
+
+

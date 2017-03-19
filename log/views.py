@@ -20,11 +20,13 @@ from datetime import time
 from django.conf import settings
 import os
 from wordcloud import WordCloud
+import random
+#import matplotlib.pyplot as plt
 
-from django.templatetags.static import static
+from PIL import Image
+import numpy as np
 
 from django.db.models import Avg
-
 
 def loggin(request):  
     logout(request)
@@ -40,16 +42,17 @@ def auth(request):
         if user is not None:
                 if user.is_active:
                     login(request,user)
-                    prof = get_object_or_404(Profile, user=request.user)
-                    #track_list = Tracks.objects.order_by('track_name')
-                    print prof.area
-                    print prof.age
-                    print prof.region
-                    if (prof.area=='' or prof.age=='' or prof.region==''):
-                        return redirect('profil')
+                    if Profile.objects.filter(user=request.user).exists():
+                        prof = get_object_or_404(Profile, user=request.user)
+                        #prof=Profile.objects.filter(user=request.user)
+                   
+                        if (prof.area=='' or prof.age=='' or prof.region=='' or prof.sex==''):
+                            return redirect('profil')
+                        else:
+                            return redirect(reverse('homepage'))                       
                     else: 
                         #return render(request,'home.html',locals())
-                        return redirect(reverse('homepage'))
+                        return redirect('profil')
         else:
             error=True
             return render(request,'login.html',{'error':error})
@@ -60,14 +63,19 @@ def loggout(request):
 
 
 def homepage(request):
-    """'affiche la liste des tracks'"""
-    prof = get_object_or_404(Profile, user=request.user)
+    """'affiche la liste des tracks'""" 
+    #prof = get_object_or_404(Profile, user=request.user)
     if request.method=='GET':  
-        if (prof.area=='' or prof.age=='' or prof.region==''):
+        if Profile.objects.filter(user=request.user).exists():
+            prof = get_object_or_404(Profile, user=request.user)
+            #prof=Profile.objects.filter(user=request.user).exists()        
+            if (prof.area=='' or prof.age=='' or prof.region=='' or prof.sex==''):
+                return redirect('profil')
+            else:
+                track_list = Tracks.objects.order_by('track_name')
+                return render(request,'home.html',locals())
+        else:     
             return redirect('profil')
-        else:
-            track_list = Tracks.objects.order_by('track_name')
-            return render(request,'home.html',locals())
     elif request.method=='POST' :
             if 'next_song' in request.POST:  
             #if 'next_song' in request.post:
@@ -77,38 +85,84 @@ def homepage(request):
                 t.user=request.user
                 t.save()           
                 return redirect(reverse('fiche_track',kwargs={'track_pseudo': c}))
+            if 'profil' in request.POST:  
+                track_list = Tracks.objects.order_by('track_name')
+                return render(request,'home.html',locals())
 
-class ProfileFormView(View):
-    form_class=ProfileForm
-    template_name='profil.html'
-    sauvegarde = False  
-
-    @method_decorator(login_required())
-    def get(self,request):
-        form=self.form_class(None)
-        return render(request,self.template_name,{'form':form,'username':request.user})
+def profil(request):  
+    if request.method=='POST':       
+        valid=True
+#        if 'profil' in request.POST:
+#            pp=get_object_or_404(Profile, user=request.user)
+#            #pp=Profile.objects.get(user=request.user)  
+#            return render(request,'profil.html',locals())
+        if 'age' in request.POST:
+            if Profile.objects.filter(user=request.user).exists():   
+                
+                pp=Profile.objects.get(user=request.user)   
+                pp.age=request.POST.get('age','')
+                pp.region=request.POST.get('region','')
+                pp.sex=request.POST.get('sex','')
+                pp.area=request.POST.get('area','')
+              
+                pp.save()
+                return render(request,'profil.html',locals())         
+            else: 
+                profil=ProfileForm
+                form=profil(request.POST) 
+                age=request.POST.get('age','')
+                region=request.POST.get('region','')
+                sex=request.POST.get('sex','')
+                area=request.POST.get('area','')
+                   
+                pp=form.save(commit=False)
+                pp.age=age
+                pp.region=region
+                pp.area=area    
+                pp.sex=sex      
+                pp.user=request.user
+                pp.save() 
+                return render(request,'profil.html',locals())        
+    else:
+        if Profile.objects.filter(user=request.user).exists():   
+            pp=Profile.objects.get(user=request.user)  
+#        if Profile.objects.filter(user=request.user).exists():
+#            has_filled_profil=True            
+        return render(request,'profil.html',locals())
     
-    @method_decorator(login_required())
-    def post(self,request):      
-        ### SUPRA IMPORTANT
-        instance=Profile.objects.get(user=request.user)
-        ### SUPRA IMPORTANT
-        form=self.form_class(request.POST,instance=instance)
-        track_list = Tracks.objects.order_by('track_name')
-        if form.is_valid():   
-            prof=form.save(commit=False)
-            #prof=Profile(user=request.user)
-            prof.area=form.cleaned_data["area"]
-            prof.age=form.cleaned_data["age"]
-            prof.region=form.cleaned_data["region"]
-            #prof.user=request.user
-            prof.save()
-            
-            sauvegarde = True  
-            return redirect(reverse('homepage'))
-            #return render(request,'home.html',locals())
-        else:         
-            return render(request,'profil.html',locals())
+#class ProfileFormView(View):
+#    form_class=ProfileForm
+#    template_name='profil.html'
+#    sauvegarde = False  
+#
+#    @method_decorator(login_required())
+#    def get(self,request):
+#        form=self.form_class(None)
+#        return render(request,self.template_name,{'form':form,'username':request.user})
+#    
+#    @method_decorator(login_required())
+#    def post(self,request):      
+#        ### SUPRA IMPORTANT
+#        instance=Profile.objects.get(user=request.user)
+#        ### SUPRA IMPORTANT
+#        form=self.form_class(request.POST,instance=instance)
+#        track_list = Tracks.objects.order_by('track_name')
+#        if form.is_valid():   
+#            prof=form.save(commit=False)
+#            #prof=Profile(user=request.user)
+#            prof.area=form.cleaned_data["area"]
+#            prof.age=form.cleaned_data["age"]
+#            prof.region=form.cleaned_data["region"]
+#            #prof.user=request.user
+#            prof.save()
+#            
+#            sauvegarde = True  
+#            return redirect(reverse('homepage'))
+#            #return render(request,'home.html',locals())
+#        else:         
+#            return render(request,'profil.html',locals())
+
+
 
 #class UserFormView(View):
 #    form_class=UserForm
@@ -145,8 +199,7 @@ class ProfileFormView(View):
 #                return render(request,'profil.html',{'form2':form,'username':request.user})  
 #        else:
 #            return render(request,'registration_form.html',locals())
-      
-        
+            
 def register(request):
     if request.method=='POST':
         #user_is_created=False
@@ -183,33 +236,31 @@ def fiche_track(request, track_pseudo):
         #REVIEW=get_object_or_404(user=request.user, track_name=track_name)
     except:
         has_yet_rated=False
-        #REVIEW='None'         
+        #REVIEW='None'       
+    load_wordcloud(track_pseudo,'')
     if request.method=='GET':
         # check si existe pas deja
         t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
         length=len(t.path)
-        print '_______________________________'
-        print '_______________________________'
-        print type(t.path[length-1]) 
-        print t.path[length-1] 
-        print type(track_pseudo)
-        print track_pseudo
-        if type(t.path[length-1])==list:
-            print 1               
+#        print type(t.path[length-1]) 
+#        print t.path[length-1] 
+#        print type(track_pseudo)
+#        print track_pseudo
+        if type(t.path[length-1])==list:                      
             t.path.append(track_pseudo)
             t.save() 
             return render(request,'fiche_track.html',locals())
         elif type(t.path[length-1].encode('ascii','ignore'))==str: 
             if t.path[length-1]!=track_pseudo:    
-                print 2
+                
                 t.path.append(track_pseudo)
                 t.save() 
                 return render(request,'fiche_track.html',locals())
             else:  
-                print 3
+                
                 return render(request,'fiche_track.html',locals()) 
         else:  
-            print 4
+            
             return render(request,'fiche_track.html',locals())                
     elif request.method=='POST':
         if 'rating' in request.POST:
@@ -252,6 +303,8 @@ def fiche_track(request, track_pseudo):
                     if wordcloud!='':
                         load_wordcloud(track_pseudo,wordcloud)
                     has_just_commented=True
+                    print '-------------------'
+                    print request.POST.get('time_before_rated','')
                     time_before=float(request.POST.get('time_before_rated',''))             
                 return render(request,'fiche_track.html',locals())
         elif 'queue' in request.POST:
@@ -281,36 +334,37 @@ def fiche_track(request, track_pseudo):
              t.save()
              print 'queue___________'
              
-             if titre_2=='empty':
+             if titre_2=='empty':                                    
                  return redirect(reverse('fiche_track',kwargs={'track_pseudo': titre_1}))
              else:   
+                 print 22
                  print(titre_1)
                  print(titre_2)
                  return redirect(reverse('solo',kwargs={'titre_1': titre_1,'titre_2':titre_2}))
-        elif 'next_song' in request.POST:
-             print 'methode = POST _________________'
-             c=request.POST.get('next_song','')  
-             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]          
-#            ## collecting data        
-             listening_time=request.POST.get('listening_time','') 
-             if listening_time=='':
-                listening_time=0  
-             else:
-                listening_time=round(float(listening_time),2)              
-             percentage=request.POST.get('percentage','')
-             if percentage=='':
-                percentage=0
-             else:
-                percentage=round(float(percentage),2)           
-             
-             ## update the database
-             
-             t.path.append([listening_time,percentage])
-             liste=request.POST.get('liste2','')
-             t.path.append(liste)
-#            t.path.append(track_pseudo)
-             t.save()
-             return redirect(reverse('fiche_track',kwargs={'track_pseudo': c}))
+#        elif 'next_song' in request.POST:
+#             print 'methode = POST _________________'
+#             c=request.POST.get('next_song','')  
+#             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]          
+##            ## collecting data        
+#             listening_time=request.POST.get('listening_time','') 
+#             if listening_time=='':
+#                listening_time=0  
+#             else:
+#                listening_time=round(float(listening_time),2)              
+#             percentage=request.POST.get('percentage','')
+#             if percentage=='':
+#                percentage=0
+#             else:
+#                percentage=round(float(percentage),2)           
+#             
+#             ## update the database
+#             
+#             t.path.append([listening_time,percentage])
+#             liste=request.POST.get('liste2','')
+#             t.path.append(liste)
+##            t.path.append(track_pseudo)
+#             t.save()
+#             return redirect(reverse('fiche_track',kwargs={'track_pseudo': c}))
         elif 'liste' in request.POST:
             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
             
@@ -330,13 +384,36 @@ def fiche_track(request, track_pseudo):
             liste=request.POST.get('liste','')
             t.path.append(liste)
             
+            t.path.append('end')
+            t.save()
+            return redirect(reverse('homepage'))
+        elif 'liste3' in request.POST:
+            t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
+            
+            listening_time=request.POST.get('listening_time2','')
+            percentage=request.POST.get('percentage2','')
+            
+            if listening_time=='':
+                listening_time=0
+            else:
+                listening_time=round(float(listening_time),2)
+            if percentage=='':
+                percentage=0
+            else:
+                percentage=round(float(percentage),2)
+                       
+            t.path.append([listening_time,percentage])
+            liste=request.POST.get('liste3','')
+            t.path.append(liste)
+            
             ## checker si end n est pqs deja mis
             ## voir si on keep track de la note de la zik aussi
             t.path.append('end')
             t.save()
-            return redirect(reverse('homepage'))
+            return redirect(reverse('logout'))
           
 def solo(request,titre_1,titre_2):
+    base_2=True
     track = get_object_or_404(Tracks, track_pseudo=titre_1)
     track2= get_object_or_404(Tracks, track_pseudo=titre_2)
     path='wcloud_pictures/'+titre_1+'.png'
@@ -347,11 +424,13 @@ def solo(request,titre_1,titre_2):
         has_yet_rated=False
     print has_yet_rated
     if request.method=='GET':
+        print 'methode GET____________________'
         # check si existe pas deja
         t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
         length=len(t.path)
         print '_______________________________'
         if type(t.path[length-1])==list:
+            print '_______________________________'
             print 1               
             t.path.append(titre_1)
             t.save() 
@@ -359,6 +438,8 @@ def solo(request,titre_1,titre_2):
         elif type(t.path[length-1].encode('ascii','ignore'))==str: 
             if t.path[length-1]!=titre_1:    
                 print 2
+                print '_______________________________'
+                print '_______________________________'
                 t.path.append(titre_1)
                 t.save() 
         return render(request,'fiche_track2.html',locals())         
@@ -414,8 +495,7 @@ def solo(request,titre_1,titre_2):
              ## update the database
              t.path.append([listening_time,percentage])
              #liste=request.POST.get('liste2','')
-             # pas de rec ici
-             print titre_2
+            
              t.path.append(['None',titre_2])
 #          
              t.save()
@@ -443,15 +523,30 @@ def solo(request,titre_1,titre_2):
             t.path.append('end')
             t.save()
             return redirect(reverse('homepage'))
-         
-        
-        
-    
-    
-    
-    
+        elif 'liste3' in request.POST:
+            t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
             
-        
+            listening_time=request.POST.get('listening_time2','')
+            percentage=request.POST.get('percentage2','')
+            
+            if listening_time=='':
+                listening_time=0
+            else:
+                listening_time=round(float(listening_time),2)
+            if percentage=='':
+                percentage=0
+            else:
+                percentage=round(float(percentage),2)
+            t.path.append([listening_time,percentage])
+            t.path.append(['None',titre_2])
+            
+            ## checker si end n est pqs deja mis
+            ## voir si on keep track de la note de la zik aussi
+            t.path.append('end')
+            t.save()
+            return redirect(reverse('logout'))
+
+
 #def update_restaurant_information(request):
     
 def change_rating(request,track): 
@@ -479,7 +574,11 @@ def change_password(request):
         form=PasswordChangeForm(user=request.user)
         return render(request,'change_password.html',locals())
    
-            
+    
+def grey_color_func(word, font_size, position, orientation, random_state=None,
+                    **kwargs):
+    return "hsl(0, 0%%, %d%%)" % random.randint(60, 100)
+         
 
 def load_wordcloud(track_pseudo,brainstorm):
     #text = open(os.path.join(settings.STATIC_URL+'wordcloud_txt/', track_name+'.txt'), 'a')
@@ -490,9 +589,15 @@ def load_wordcloud(track_pseudo,brainstorm):
     text.close()
     text = open(os.path.join(settings.STATIC_ROOT+'wordcloud_txt/', track_pseudo+'.txt')).read()
     ## now that we have written in the text, let's generate it
-    wordcloud = WordCloud(relative_scaling = 0.9).generate(text)
-    image = wordcloud.to_image()
-    image.save(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', track_pseudo+'.png'),'png')
+#    image = wordcloud.to_image()
+#    image.save(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', track_pseudo+'.png'),'png')  
+    mask = np.array(Image.open(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', 'play_icon'+'.jpg')))
+    #default_colors = wordcloud.to_array()
+    wordcloud = WordCloud(relative_scaling = 0.60,mask=mask).generate(text)
+#    plt.imshow(wordcloud.recolor(color_func=grey_color_func, random_state=1),
+#           interpolation="bilinear")
+    wordcloud.recolor(color_func=grey_color_func, random_state=1)
+    wordcloud.to_file(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', track_pseudo+'.jpg'))
 
 
 

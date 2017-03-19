@@ -22,6 +22,7 @@ $('document').ready(function(){
 // function for getting back the length of the song
 /////////////////////////////////////
 var time = document.getElementById("myAudio");
+
   
   function getCurTime() { 
        alert((time.currentTime/length.duration)*100);   
@@ -57,7 +58,9 @@ function update(player) {
     $('.listening_time').val(time);
     $('.percentage').val(fraction); 
     $('.listening_time2').val(time);
+
     $('.percentage2').val(fraction); 
+    $('.time_before_rated').val(time);
     //$('.percentage').each(function(){
     //  $(this).val(fraction);
     //});
@@ -100,7 +103,81 @@ $.ajax({
         });        
   });
 
- 
+ var song_rate = document.getElementById("song_rate").value;
+ //var song_rate = document.getElementByClassName("song_rate22").value;
+
+//var song_rate = document.getElementById('song-rating').value;
+$(function () { 
+         
+  $('.rating2').each(function(index,value){
+     
+    console.log($('#'+index).text());
+      
+      
+      $(this).rating('rate',$('#'+index).text())
+       });  
+  });
+
+document.getElementById('load2').disabled=true;
+document.getElementById('unload').disabled=true;
+$(function() { 
+
+    
+
+  $('#unload').click(function(){
+     $.each($('.element'), function( index, value ) {
+       $('#element_'+index).show();
+       
+        document.getElementById('unload').disabled=true;
+     });
+    $('#titre_1').text('empty');
+    $('#titre_2').text('empty');
+    document.getElementById('unload').disabled=true;
+    document.getElementById('load2').disabled=true;
+
+  });
+         
+  $('.swtich_page').each(function(index,value){
+    
+      
+     $('#'+'queue_'+index).click(function(){         
+         if ($('#titre_1').text()=='empty') {
+
+                  //console.log('titre_1');  
+                 
+                  $('#titre_1').text($('.next_song_'+index).val());
+                  $('.titre_1').val($('.next_song_'+index).val());
+                  $('#element_'+index).hide();
+                  document.getElementById('load2').disabled=false;
+                  document.getElementById('unload').disabled=false;
+             
+            }else if ($('#titre_2').text()=='empty') {
+              $('#titre_2').text($('.next_song_'+index).val());
+              $('.titre_2').val($('.next_song_'+index).val());
+              $('#element_'+index).hide();
+
+
+            } else if ($('#titre_1').text()!=='empty' && $('#titre_2').text()!=='empty'){
+                alert('queue full ! delete songs');
+               
+      
+              
+
+             
+            }
+
+        
+  
+      
+       });  
+  });
+  });
+
+
+
+
+
+
 
  // token list
  ///////////////////
@@ -129,7 +206,10 @@ $.ajax({
   var rows=text.split('\n'); 
   console.log(rows);
   $.each(rows, function( index, value ) {
-    mot[index]=value;
+    if (value!==""){
+      console.log('99');
+        
+        mot[index]=value;}
   });
   //console.log(mot);
   
@@ -138,11 +218,22 @@ $.ajax({
 // tokenfield
 //////////////////////////
 console.log('3');
+$('#tokenfield22').tokenfield({
+
+  autocomplete: {
+    //source:mot,
+    source: ['awesomeness','lol'],
+    delay: 100
+  },
+  showAutocompleteOnFocus: true
+
+
+});
 $('#tokenfield').tokenfield({
 
   autocomplete: {
     source:mot,
-    //source: ['awesomeness'],
+    //source: ['awesomeness','lol'],
     delay: 100
   },
   showAutocompleteOnFocus: true

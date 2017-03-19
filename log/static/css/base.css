@@ -1,20 +1,73 @@
 h1{
 		text-align:center;
-		color:black;
+		color:white;
+		
 }
-h3{
+h3 
+{
         text-align:center;
-       
+       color:white;
 }
-body{
-
-
+h4 
+{
+       
+       color:white;
 }
 .row
 {
     text-align:center;
 }
-.btn-md
+.btn
 {
-	border:none;
+	border:2px solid black;
+	background-color:transparent;
+	color:black;
+}
+.btn:hover
+{
+	background-color:yellow;
+
+}
+.btn-custom2
+{
+    border:2px solid white;
+    background-color:transparent;
+    color:white;
+}
+
+#grad1 {
+    
+    background: #47484a; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#47484a, #647489); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#47484a, #647489); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#47484a, #647489); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+}
+
+body
+{
+	background-image:url("metal_wallpaper6.jpg");
+}
+#version
+{	
+	position:fixed;
+	bottom:0;
+	margin-right:0;
+	color:white;
+}
+.table
+{
+	background-color:transparent;
+}
+li 
+{
+	color:white;
+}
+label
+{
+	color:white;
+}
+h2{
+    color:white;
+    text-align:center;
 }
