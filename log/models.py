@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
 
-import json
+
 from jsonfield import JSONField
 #from django_mysql.models import ListCharField
 #from django.contrib.postgres.fields import JSONField
@@ -21,33 +21,33 @@ from jsonfield import JSONField
 
 
 
-age_range=[('1','under 20'),
-            ('2','20-25'),
-            ('3','26-30'),
-            ('4','31-40'),
-            ('5','over 40') ]
-           
-                
-
-regions= [ ('1','North America'),
-           ('2','South America'),
-           ('3','Central America'),
-           ('4','Northern Europe'),
-           ('5','Europe'),
-           ('6','Eastern Europe'),
-           ('8','Oceania'),
-           ('9','Asia'),
-           ('10','Southeast Asia'),
-           ('11','Middle East'),
-           ('12','North Africa'),
-           ('13','Southern Africa'),]
-
-Area= [    	(	"	1	"	,	"	Arts & Humanities	"	)	,
-        	(	"	2	"	,	"	Engineering & Technology	"	)	,
-        	(	"	3	"	,	"	Life Sciences & Medicine	"	)	,
-        	(	"	4	"	,	"	Natural Sciences	"	)	,
-        	(	"	5	"	,	"	Social Sciences & Management	"	)	 ] 
-        		
+#age_range=[('1','under 20'),
+#            ('2','20-25'),
+#            ('3','26-30'),
+#            ('4','31-40'),
+#            ('5','over 40') ]
+#           
+#                
+#
+#regions= [ ('1','North America'),
+#           ('2','South America'),
+#           ('3','Central America'),
+#           ('4','Northern Europe'),
+#           ('5','Europe'),
+#           ('6','Eastern Europe'),
+#           ('8','Oceania'),
+#           ('9','Asia'),
+#           ('10','Southeast Asia'),
+#           ('11','Middle East'),
+#           ('12','North Africa'),
+#           ('13','Southern Africa'),]
+#
+#Area= [    	(	"	1	"	,	"	Arts & Humanities	"	)	,
+#        	(	"	2	"	,	"	Engineering & Technology	"	)	,
+#        	(	"	3	"	,	"	Life Sciences & Medicine	"	)	,
+#        	(	"	4	"	,	"	Natural Sciences	"	)	,
+#        	(	"	5	"	,	"	Social Sciences & Management	"	)	 ] 
+#        		
 
    
        
@@ -61,9 +61,11 @@ rates=[('1','1'),
 class Profile(models.Model):  
                 
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # La liaison OneToOne vers le modèle User
-    region = models.CharField(choices=regions, max_length=30)
-    area = models.CharField(choices=Area,max_length=30)
-    age = models.CharField(choices=age_range,max_length=30)
+    region = models.CharField(default='', max_length=30)
+    area = models.CharField(default='',max_length=30)
+    #age = models.CharField(choices=age_range,max_length=30)
+    age = models.CharField(default='',max_length=30)
+    sex = models.CharField(default='',max_length=30)
 
     def __str__(self):
         return "Profil de {0}".format(self.user.username)
