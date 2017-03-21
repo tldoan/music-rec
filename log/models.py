@@ -207,8 +207,11 @@ class Tracks(models.Model):
     duration=models.FloatField(default=0)  ## lenght of the song in ms
     preview=models.URLField(blank=True)  ## preview of 30sec
     nb_rating=models.IntegerField(default=1)
-    
+
+    featuring=models.CharField(default='',max_length=50)
     #wordcloud=models.CharField(default='',max_length=250)
+    
+
     
     def __str__(self):
         return self.track_name
