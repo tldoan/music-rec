@@ -37,7 +37,20 @@
      <!-- tokenfield-->
   
   <link rel="stylesheet" href="{% static 'css/main.css' %}" media="screen">
-      
+  <style>
+  audio::-internal-media-controls-download-button {
+    display:none;
+}
+
+audio::-webkit-media-controls-enclosure {
+    overflow:hidden;
+}
+
+audio::-webkit-media-controls-panel {
+    width: calc(100% + 30px); 
+}
+
+  </style>
   </head>
   <body>
 
@@ -68,11 +81,9 @@
 
 
 <audio id="myAudio" ontimeupdate="update(this)" controls="controls">
- 
 {% with 'music/'|add:track.track_link|add:'.mp3' as sound_static %}
 <source src="{% static sound_static %}" type="audio/mpeg">
 {% endwith %}
-
 </audio>
 
 
@@ -157,6 +168,11 @@ rating form
      <tr>
       <th scope="row">Artist</th>
       <td class='cell_hvr'> {{track.Artist}}  </td>
+     
+    </tr>
+    <tr>
+      <th scope="row">Featuring</th>
+      <td class='cell_hvr'> {{track.featuring}}  </td>
      
     </tr>
     <tr >
