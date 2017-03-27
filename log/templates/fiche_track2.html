@@ -62,81 +62,46 @@
 
 
 
-{% block form %}
-		{% if  has_yet_rated  %}
-
-		
-		<p> you have rated this song {{review.rating}} </p>
-
-	
-
-
-		{% else  %}
-	 
-		<div class='container' id='grad1'>
-		<form id='form_rate' class='form-horizontal' action='' method='post'>
-				{% csrf_token %}
-				{%  if Wrong %}
-             	<h3><strong> Please give rate</strong></h3>
-             	{%  endif %}
-        <input type="text"  class='time_before_rated' name='time_before_rated' value="0">     
-				<input type="hidden" name='rating' class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" />	   
-				<span id='heart-rate' class="label label-danger"></span>
-
-				  <br/>
-				  <br/>
-				 <p> Tells us what do you think about this song: </p>
-
-					<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
-
-					<div class='col-sm-offset-2 col-sm-10'>
-							<button type='submit' class="btn btn-custom2"> Submit</button>
-					</div>
-		</form>
-    </div>
-		
-
-
-
-		{% endif  %}		
-{% endblock %}
-
-
 
  
 
 {% block in_queue2 %}
 
- <div>
-<h3>Next song:</h3>
-  <form id='solo' class='solo' action="" method='post'>
-                        {% csrf_token %}  
-                          <!--  sending variables to django -->
-                          percentage
-                        <input type="text" id='percentage' class='percentage' name='percentage' value="">
-                        <br/>
-                        length
-                        <input type="text" id='listening_time' class='listening_time' name='listening_time' value="">
-                                 
-                        <br/> 
-                        
-                        <span id='artist' class="label label-info" name='artist'>{{track2.Artist}}</span>
-                        <span id='next_song' class="label label-info" name='next_song'>{{titre_2}}</span>
-                        <br/>
-                        <img src= {{track2.Artist_image}} class="img-circle" alt="artist image"> 
-                        <br/>
-                        <!-- <span id='titre_2' class="label label-info" name='titre_2'>empty</span> -->
-                        <input type='text' id='next_song' class='next_song' name='solo' value={{titre_2}}>
-                        <br/> 
+ 
+ <div class="col-sm-5  col-md-5  col-lg-5 " id='queue__'>
+    <h1><span class="glyphicon glyphicon-expand"></span> Next song</h1>
 
-                      <br/>
-                      <button id='load2' class="btn btn-custom2 btn-sm" >
-                       <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-                      <br/> 
-                       Play                
-                      </button>
-   </form>
+        <form id='solo' class='solo' action="" method='post'>
+                              {% csrf_token %}  
+                                <!--  sending variables to django -->
+                                
+                              <input type="hidden" id='percentage' class='percentage' name='percentage' value="">
+                              
+                              
+                              <input type="hidden" id='listening_time' class='listening_time' name='listening_time' value="">
+                                       
+                              <br/> 
+                              
+                              <span id='artist' class="label label-custom2" name='artist'>{{track2.Artist}}</span>
+                              <span id='next_song' class="label label-custom2" name='next_song'>{{titre_2}}</span>
+                              <br/>
+                              <img src= {{track2.Artist_image}} class="img-circle" alt="artist image"> 
+                              <br/>
+                              <!-- <span id='titre_2' class="label label-info" name='titre_2'>empty</span> -->
+                              <input type='hidden' id='next_song' class='next_song' name='solo' value={{titre_2}}>
+                              <br/> 
 
-<div>
+                            <br/>
+                            <button id='load2' class="btn btn-custom2 btn-sm" >
+                             <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+                            <br/> 
+                             Play                
+                            </button>
+         </form>
+          </button> 
+           
+
+</div>
+
 
 {% endblock %}

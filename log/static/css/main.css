@@ -23,6 +23,7 @@ width:300px;
  {
     display: flex;
     justify-content: space-around;
+
   
  }
  #listening_time
@@ -30,22 +31,8 @@ width:300px;
     background-color:yellow; 
   
  }
-.element{
-    flex:1 1 0;
-    overflow:auto; 
-    text-align: center;
-    background-color:white;
-    border: 3px black double;
- }
- .element1{
-    flex-grow:1;
-    flex-shrink:0;
-    flex-basis:1;
-    overflow:0; 
-    text-align: center;
-    background-color:white;
-    border: 3px black double;
- }
+
+ 
  
 
 .glyphicon-heart{
@@ -71,28 +58,42 @@ width:300px;
 
 color:#b0c619;
 font-size: 80px;
+text-align:center;
+}
+#star
+{
+   background-color:#b0c619; 
+   color:black;
 }
 
 .cell_hvr:hover {
         background-color: grey ;
 }
 
-.progress-bar-vertical {
-  
+/*.progress-bar-vertical {
 
+-webkit-transform: rotate(90deg);
 transform: rotate(90deg);
-width: 150%;
-  height: 2%;
+width: 4000%;
+position:relative;
+bottom:1280px;
+right:1285px;
+
 
   
 }
+#myProgress
+{
+    border:solid black;
+}*/
+
 #grad1 
  {
     
     background: #47484a; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(#92909a, #2f353f); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#92909a, #2f353f); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#92909a, #2f353f); /* For Firefox 3.6 to 15 */
+    background: -webkit-linear-gradient(-90deg,#92909a, #2f353f); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(-90deg,#92909a, #2f353f); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(-90deg,#92909a, #2f353f); /* For Firefox 3.6 to 15 */
     background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
 }
 body
@@ -119,26 +120,138 @@ h3
 h4 
 {
     color:white;
+
 }
 h1
 {
     color:white;
+    text-align:center;
+}
+h2
+{
+ text-align:center;
+ color:white;
+
+}
+h5
+{
+color:#b0c619;  
 }
 .btn-custom2
 {
-    border:2px solid white;
+    border:2px white solid;
     background-color:transparent;
+    color:white;
+}
+.btn-custom3
+{
+    border:4px solid white;
+    background-color:red;
     color:white;
 }
 
 p{
-    color:white;
+    color:black;
 }
 .table
 {
     background-color:transparent;
+
+
 }
 .container
 {
     background-color:grey;
 }
+
+#queue__
+{
+background: navy; /* For browsers that do not support gradients */
+background: -webkit-linear-gradient(-90deg,navy, #2f353f); /* For Safari 5.1 to 6.0 */
+background: -o-linear-gradient(-90deg,navy, #2f353f); /* For Opera 11.1 to 12.0 */
+background: -moz-linear-gradient(-90deg,navy, #2f353f); /* For Firefox 3.6 to 15 */
+background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+border:4px inset white;
+
+}
+
+#rating3
+{   
+    
+    border:4px outset white;
+}
+#rating4
+{
+background: #2f353f; /* For browsers that do not support gradients */
+background: -webkit-linear-gradient(-90deg,#0588E6, #2f353f); /* For Safari 5.1 to 6.0 */
+background: -o-linear-gradient(-90deg,#0588E6, #2f353f); /* For Opera 11.1 to 12.0 */
+background: -moz-linear-gradient(-90deg,#0588E6, #2f353f); /* For Firefox 3.6 to 15 */
+background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+
+}
+
+
+
+
+.element{
+    flex:1 1 0;
+    overflow:auto; 
+    text-align: center;
+    background-color:white;
+    border: 3px black double;
+ }
+ .label-custom
+ {
+    background-color:grey;
+ }
+  .label-custom2
+ {
+    background-color:green;
+ }
+#lyrics
+{   
+    text-align:center;
+    background-color:white;
+    border: 2px black double;
+}
+
+.glyphicon-chevron-right{
+    color:red;
+    font-size:1em;
+
+}
+#player1
+{
+    border:10px white outset;
+    background: #ff5fe2; /* For browsers that do not support gradients */
+background: -webkit-linear-gradient(-90deg,#ff5fe2, #2f353f); /* For Safari 5.1 to 6.0 */
+background: -o-linear-gradient(-90deg,#ff5fe2, #2f353f); /* For Opera 11.1 to 12.0 */
+background: -moz-linear-gradient(-90deg,#ff5fe2, #2f353f); /* For Firefox 3.6 to 15 */
+background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+}
+
+
+.glyphicon-info-sign
+{
+    color:red;
+    font-size:2.7em;
+
+}
+.tolltip-inner{
+white-space:pre-wrap;
+}
+
+
+#myAudio
+{
+    display: table;
+    margin: 0 auto;
+}
+
+
+
+
+
+
+
+

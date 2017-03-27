@@ -51,43 +51,7 @@
 
 
 
-{% block form %}
-		{% if  has_yet_rated  %}
 
-		
-		<p> you have rated this song {{REVIEW.rating}} </p>
-
-	
-
-
-		{% else  %}
-	 
-	<div class='container' id='grad1'>	
-		<form id='form_rate' class='form-horizontal' action='' method='post'>
-				{% csrf_token %}
-				{%  if Wrong %}
-             	<h3><strong> Please give rate</strong>></h3>
-             	{%  endif %}
-             	<input type="text"  class='time_before_rated' name='time_before_rated' value="0">
-				<input type="hidden" name='rating' class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" />	   
-				<span id='heart-rate' class="label label-danger"></span>
-
-				  <br/>
-				  <br/>
-				 <p> Tells us what do you think about this song: </p>
-
-					<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
-
-					<div class='col-sm-offset-2 col-sm-10'>
-							<button type='submit' class="btn btn-custom2"> Submit</button>
-					</div>
-		</form>
-		</div>
-
-
-
-		{% endif  %}		
-{% endblock  %}
 
 
 
@@ -115,15 +79,24 @@
                  <h4>You may also like:</h4>
                     </div>
                       <div class="panel-main-body" >
-                        <div id="conteneur">
-
-
+                        
+                      		
+                      			<div id="conteneur">
 								{% for x in liste %}
+								
+										
 								<!-- rate de la chanson -->
+
 										<input type="hidden" class='song_rate' id="song_rate" name="song_rate" value="{{ x.track_popularity }}">
 
-		                            <div id='element_{{forloop.counter0}}' class="element">
-		                                  <h4> {{ x.Artist}} - {{ x.track_name}} </h4>
+		                            	<div id='element_{{forloop.counter0}}' class="element">
+		                            	<br/>
+
+		                            	<span class="label label-custom"> {{ x.Artist}} - {{ x.track_name}} </span>
+		                            	<br/>
+		                            	
+
+		                                  
 		                                  
 		                                  <img src="{{ x.Artist_image}}" class='img-circle' alt="photos of the artist" > 
 		                                  <br/>
@@ -131,7 +104,7 @@
 
 				   						    <input type="hidden" class="rating2" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" data-readonly data-fractions="3"  value=4/>	
 				   						    <br/>	                                  	   
-				   							<span id='{{forloop.counter0}}' class="label label-danger">{{ x.track_popularity }}</span>
+				   							<span id='{{forloop.counter0}}' class="label label-danger">{{x.track_popularity| floatformat:2}}</span>
 
 				   							
 				   							<br/>		
@@ -153,7 +126,7 @@
 										<button id='queue_{{forloop.counter0}}' class="btn btn-custom btn-sm" >
 				   						<span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 				   						<br/>
-				   						 In-Queue		
+				   						 Select		
                       					</button>
 
 
@@ -162,14 +135,17 @@
 		                                 
 		                                  
 		                                  <br/>
-		                            </div>
+		                                 
+		                            	</div>
+		                            		
 		                        {% endfor %}
+		                         </div>
 
-		                          </div>
+		                         
                        </div>
 
-</div>
-		             
+</div>    
+		       
 {% endblock %}
 
 
@@ -183,49 +159,105 @@
 
 {% block in_queue %}
 
- <div>
-<h1>Queue:</h1>
-  <form id='swtich_page2' class='swtich_page2' action="" method='post'>
-                        {% csrf_token %}  
-                          <!--  sending variables to django -->
-                         percentage
-                        <input type="text" id='percentage' class='percentage' name='percentage' value="">
-                        <br/>
-                        length
-                        <input type="text" id='listening_time' class='listening_time' name='listening_time' value="">
-                        <br/>
-                        <input type='text' class='liste2' name='liste2' value="{{l}}">
-                        <br/> 
-                        <input type='text' class='queue' name='queue' value="None"> 
-                        <br/> 
-                        <span  class="label label-info" >1.</span>
-                        <span id='titre_1' class="label label-info" name='titre_1'>empty</span>
-                        <br/>
-                        <span  class="label label-info" >2.</span>
-                        <span id='titre_2' class="label label-info" name='titre_2'>empty</span>
-                        <br/>
-                        <input type='text' id='titre_1' class='titre_1' name='titre_1' value="empty">
-                        <br/> 
-                        <input type='text' id='titre_2' class='titre_2' name='titre_2' value="empty"> 
-                        <br/> 
-                        <!--<input type="hidden" id="next_song" name="next_song" value="time"> -->
-                      <br/>
-                      <button id='load2' class="btn btn-custom2 btn-sm" >
-                       <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-                      <br/> 
-                       Play                
-                      </button>
-   </form>               
-                                  
 
-   					<button id='unload' class="btn btn-custom2 btn-sm" >
-						<span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"></span>
-						<br/>
-						 clear queue		
-  					  </button>
+ 
+ <div class="col-sm-5  col-md-5  col-lg-5 " id='queue__'>
+		<h3><span class="glyphicon glyphicon-expand"></span> Next songs</h3>
+		
+		  <form id='swtich_page2' class='swtich_page2' action="" method='post'>
+		                        {% csrf_token %}  
+		                          <!--  sending variables to django -->
+		                         
+		                        <input type="hidden" id='percentage' class='percentage' name='percentage' value="">
+		                        
+		                        
+		                        <input type="hidden" id='listening_time' class='listening_time' name='listening_time' value="">
+		                        
+		                        <input type='hidden' class='liste2' name='liste2' value="{{l}}">
+		                        <br/> 
+		                        <input type='hidden' class='queue' name='queue' value="None"> 
+		                        
+		                        <span  class="label label-custom2" >1.</span>
+		                        <span id='titre_1' class="label label-custom2" name='titre_1'>empty</span>
+		                        <br/>
+		                        <span  class="label label-custom2" >2.</span>
+		                        <span id='titre_2' class="label label-custom2" name='titre_2'>empty</span>
+		                        <br/>
+		                        <input type='hidden' id='titre_1' class='titre_1' name='titre_1' value="empty">
+		                        <br/> 
+		                        <input type='hidden' id='titre_2' class='titre_2' name='titre_2' value="empty"> 
+		                        <br/> 
+		                        <!--<input type="hidden" id="next_song" name="next_song" value="time"> -->
+		                      
+		                      <button id='load2' class="btn btn-custom2 btn-sm" >
+		                       <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+		                      <br/> 
+		                       Play                
+		                      </button>
+		                      
+		   </form>           
+
+		   <button id='unload' class="btn btn-custom2 btn-sm" >
+								<span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"></span>
+								<br/>
+								 clear 		
+		  					  </button> 
+			  <button type="button" class="btn btn-custom2 btn-sm" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Load one or     
+two songs 
+from bottom 
+recomendations">
+				  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+			</button>
+
+		  					
+		  					 
+  
+		   </div>                               
+
+		   					
 
 
 
-<div>
+
+
+
 
 {% endblock  %}
+
+
+
+
+		<!-- <div class="col-sm-3 col-md-3 col-lg-3 col-sm-push-2 col-md-push-2 col-lg-push-3">
+		<button type="button" class="btn btn-lg btn-custom3" data-toggle="modal" data-target="#myModal">Instructions</button>
+		</div>
+
+		<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      
+      <div class="modal-content">
+        <div class="modal-header" id='grad1'>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3 class="modal-title">Instructions</h3>
+        </div>
+        <div class="modal-body">
+          <h2>Welcome to the song page !</h2>
+          <br/>
+          <ul>
+          <li>You can listen to the songs with the Audio Player panel (red)</li>
+          <li>Lyrics are included, give it a try !</li>
+          <li>Please rate the songs and also brainstorm :)</li>
+          <li>For choosing next songs, refer to the info sign below</li>
+          </ul>
+          <br/>
+
+                                          <p>Enjoy!</p>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div> -->

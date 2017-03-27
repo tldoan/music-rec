@@ -1,18 +1,22 @@
 $('document').ready(function(){ 
 
     $('.panel-body').hide();
-    $('#hide').hide();
+    
+    $('#hide2').hide();
 
-    $('#hide').click(function(){
+    $('#hide2').click(function(){
         $('.panel-body').hide();
-        $('#hide').hide();
+       
+        $('#hide2').hide();
         $('#show').show();
         });
 
     $('#show').click(function(){
         $('.panel-body').show();
         $('#show').hide();
-        $('#hide').show();
+       
+        $('#hide2').show();
+       
     
     });
 
@@ -25,7 +29,7 @@ var time = document.getElementById("myAudio");
 
   
   function getCurTime() { 
-       alert((time.currentTime/length.duration)*100);   
+       alert((time.currentTime));   
          
       // $('#lol2').text(time.currentTime); 
        //$('#listening_time').text(time.currentTime); 
@@ -47,11 +51,12 @@ function update(player) {
 
     var fraction = time / duration;
     var percent  = Math.ceil(fraction * 100);
-    var progress = document.querySelector('.progress-bar');
-    progress.style.width = percent + '%';
+   // var progress = document.querySelector('.progress-bar');
+   // progress.style.width = percent + '%';
 
-    progress.textContent = percent + '%';  
-    $('#lol2').text(fraction); 
+    //progress.textContent = percent + '%';  
+   
+    //$('#lol2').text(time); 
     //$('.listening_time').each(function(){
     //$(this).val(time);
     //}); 
@@ -65,6 +70,7 @@ function update(player) {
     //  $(this).val(fraction);
     //});
 };
+
 
 ///////////////// text lyrics
 $(function () { 
@@ -132,6 +138,11 @@ $(function() {
      });
     $('#titre_1').text('empty');
     $('#titre_2').text('empty');
+    $('.titre_1').val($('#titre_1').text());
+    $('.titre_2').val($('#titre_2').text());
+
+
+
     document.getElementById('unload').disabled=true;
     document.getElementById('load2').disabled=true;
 

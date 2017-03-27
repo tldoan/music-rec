@@ -50,6 +50,7 @@ audio::-webkit-media-controls-panel {
     width: calc(100% + 30px); 
 }
 
+
   </style>
   </head>
   <body>
@@ -59,153 +60,294 @@ audio::-webkit-media-controls-panel {
 
 
 <!-- HEAD TITLE -->
+<h1>  {{track.Artist}} - {{track.track_name}}</h1>
+<br/>
+<br/>
+<div class='row'>
 
- <h1>  {{track.Artist}} - {{track.track_name}}</h1>
+<div class="col-sm-4 col-md-4 col-lg-4">
+ 	
+ 	<div class='col-sm-1 col-md-1 col-lg-1'> </div>
+
+ 	<div class="col-sm-10 col-md-10 col-lg-10">
+
+		 <img src={{track.Album_cover}}  class="img-thumbnail" alt="artist image"> 
+		 <br/>
+		 <br/>
+
+
+
+				 
+
+				 
+		 				
+						<div class='row' id='player1'>
+						
+							<h2><span class="glyphicon glyphicon-headphones"></span> Audio Player</h2>
+							
+
+
+							<br/>
+								
+									<audio id="myAudio" ontimeupdate="update(this)" controls="controls">
+									{% with 'music/'|add:track.track_link|add:'.mp3' as sound_static %}
+									<source src="{% static sound_static %}" type="audio/mpeg">
+									{% endwith %}
+									</audio>
+									<br/>
+								
+											 .
+
+						</div>
+
+											{% if  has_yet_rated  %}
+
+				
+				<h3> you have rated this song {{REVIEW.rating}} stars </h3>
+
+			
+
+
+								{% else  %}
+							 
+							
+							<div class='row' id='rating3'>
+							
+							<div class="panel-heading" id ='rating4'><h2>Give us your opinion</h2></div>
+								 
+								<form id='form_rate' class='form-horizontal' action='' method='post'>
+										{% csrf_token %}
+										{%  if Wrong %}
+						             	<h4><strong> Please give rate</strong></h4>
+						             	{%  endif %}
+						             	<h5> Rate the song: </h5>
+						             	<input type="hidden"  class='time_before_rated' name='time_before_rated' value="0">
+										<input type="hidden" name='rating' class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" />	   
+										<span id='heart-rate' class="label label-danger"></span>
+
+										  <br/>
+										  
+										 <h5> This song makes me think of: </h5>
+
+											<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
+											<br/>
+											<div class='col-sm-offset-4 col-sm-10'>
+													<button type='submit' class="btn btn-lg btn-custom2"> Submit</button>
+											</div>
+											 <br/>
+											 .
+								</form>
+								<button type="button" class="btn btn-custom2"  data-toggle="tooltip" data-placement="bottom" title="Write any words
+that come 
+to your mind
+when listening 
+this songs">
+									  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								</button>
+								 
+								
+						 			</div> 
+								
+
+
+
+								{% endif  %}
+			</div>		
+</div>	
+		
+		
+		<div class="col-sm-4 col-md-4 col-lg-4" id='wcloud'>
+
+		  {% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
+		<img src="{% static image_static %}" alt="My image" style="width:80%" />
+		{% endwith %}
+		
+		<h4> <span class="label label-default">most frequent tag words used for this song</span></h4>
+
+		
+
+
+
+			 
+		<br/>
+		<br/>
+		<br/>
+	 
+	 	
+
+	 	<div class="col-sm-6 col-md-7 col-lg-7">
+		 <table class="table    table-inverse table-responsive">
+					  <thead>
+					  <tr> <th colspan="2" class='title'><h3><strong>About the track</strong></h3></th>  
+					  </tr>
+					    <tr>   
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr>
+					      <th scope="row">Album </th>
+					      <td class='cell_hvr'>{{track.Album_name}}   </td>      
+					    </tr>
+					     <tr>
+					      <th scope="row">Artist</th>
+					      <td class='cell_hvr'> {{track.Artist}}  </td>
+					     
+					    </tr>
+					    <tr>
+					      <th scope="row">Featuring</th>
+					      <td class='cell_hvr'> {{track.featuring}}  </td>
+					    </tr>
+					    <tr >
+					      <th scope="row">Artist popularity</th>
+					      <td class='cell_hvr'> {{track.Artist_popularity| floatformat:0}}   </td>     
+					    </tr>
+					    <tr>
+					      <th scope="row">Name</th>
+					      <td class='cell_hvr'>  {{track.track_name}}  </td>  
+					    </tr>
+					  </tbody>
+					</table>
+					<br/>
+		<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> 	 
+	 	<span class="label label-danger" id='star'>Song Rating: {{track.track_popularity| floatformat:2}}/5.00</span>
+		</div>					
+					
+
+					
+	 				{% block in_queue %}
+					{% endblock  %}
+
+					{% block in_queue2 %}
+					{% endblock  %}
+
+						
+
+	 	<br/>
+	 	<br/>
+	 	<br/>
+	 	<br/>
+	 	<br/>
+	 	
+	 	<br/>
+	 	
+
+	 		
+
+
+			
+
+					
+	 	
+	 			<!-- 	<div class="col-sm-4 col-md-4 col-lg-4"> -->
+			
+		
+					   
+						  
+			<!-- </div> -->	
+<!-- <button  onclick="getCurTime()">Get current time position</button>
+<button onclick="myFunction()" type="button">Get video length</button><br> -->
+	 		 
+		</div>
+
+
+<div class="col-sm-4 col-md-4 col-lg-4">
+	<div class="col-sm-12 col-md-12 col-lg-12">
+		  		<div class="panel panel-custom" >
+							        <div class="panel-heading" id='grad1'><h4>Lyrics  <button id='hide2' class='btn btn-custom2'>hide</button> <button id='show' class='btn btn-custom2'>show</button></h4></div>		
+
+									     <div class="panel-body" id='lyrics'>
+
+											                		<div class="col-sm-4 col-md-4 col-lg-4" >
+											                
+											                        <div class='lyrics' >
+											                        lyrics
+											                        </div> 
+											                        </div>  
+											                   <!-- lyrics variable -->
+											<input type="hidden" id="lyrics_var" name="lyrics_var" value="{{track.track_link}}">
+			    						</div>
+			               
+			    </div> 	
+	</div>	   
+	<div class="col-sm-1 col-md-1 col-lg-1">aa</div>
+
+
+		
+	
+
+
+
+		
+		</div>
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+<div class='row'>
+
+
+
+			  <div class="col-sm-4 col-md-4 col-lg-4 ">
+			  	
+			  	
+	
+					
+			  	
+			  	
+			  	<br/>
+			  	<br/>
+
+			
+
+				<br/>
+					</div>
+
+
+
+
+			
+						
+
+
+
+
+
+			  </div>
+
+ 
+
+<br/>
+
+<br/>
+
+
+
+
+
+
 
 
  
-<div>
- <img src={{track.Album_cover}}  class="img-thumbnail" alt="artist image"> 
-
-
-
-  <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> 
-
-
-  {{track.track_popularity| floatformat:2}}
-
-
-
-<br/>
-
-
-
-<audio id="myAudio" ontimeupdate="update(this)" controls="controls">
-{% with 'music/'|add:track.track_link|add:'.mp3' as sound_static %}
-<source src="{% static sound_static %}" type="audio/mpeg">
-{% endwith %}
-</audio>
-
-
-
-
-<button onclick="getCurTime()">Get current time position</button>
-<button onclick="myFunction()" type="button">Get video length</button><br>
-
-
-
-
-
-fraction
-<p id='lol2'>0</p>
-
-
-{% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
-<img src="{% static image_static %}" alt="My image" style="width:30%" />
-{% endwith %}
-
-
-
-
-  <div class="panel panel-custom" id='grad1'>
-        <div class="panel-heading"><h4>Lyrics  <button id='hide' class='btn btn-custom2'>hide</button> <button id='show' class='btn btn-custom2'>show</button></h4></div>
-    <div class="panel-body">
-                <div id="conteneur">
-                        <div class="element1">
-                        <div class="progress progress-bar-vertical">
-                            <div  class='progress-bar progress-bar-success progress-bar-striped active' role="progressbar">Pas de lecture</div>
-                        </div>
-                        </div>
-                
-                        <div class="element">
-                        <div class='lyrics' id='lyrics'>
-                        lyrics
-                        </div> 
-                        </div>   
-                </div> 
-
-
-    </div>
-    
-  </div>
-  <!-- lyrics variable -->
-<input type="hidden" id="lyrics_var" name="lyrics_var" value="{{track.track_link}}">
-
-<br/>
-{% block form %}
-rating form
-{% endblock  %}
-<br/>
-<br/>
-<br/>
-
-
-
-
-
-
-
-<br/>
-
-<br/>
-  <!-- 
-// TABLE INFORMATION -->
-  <table class="table    table-inverse table-responsive">
-  <thead>
-  <tr> <th colspan="2" class='title'><h3><strong>About the track</strong></h3></th>  
-  </tr>
-    <tr>  
-     
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Album </th>
-      <td class='cell_hvr'>{{track.Album_name}}   </td>
-      
-      
-    </tr>
-     <tr>
-      <th scope="row">Artist</th>
-      <td class='cell_hvr'> {{track.Artist}}  </td>
-     
-    </tr>
-    <tr>
-      <th scope="row">Featuring</th>
-      <td class='cell_hvr'> {{track.featuring}}  </td>
-     
-    </tr>
-    <tr >
-      <th scope="row">Artist popularity</th>
-      <td class='cell_hvr'> {{track.Artist_popularity| floatformat:0}}   </td>
-      
-      <td></td>
-    </tr>
-    <tr>
-      <th scope="row">name</th>
-      <td class='cell_hvr'>  {{track.track_name}}  </td>
-     
-    </tr>
-   
-  </tbody>
-</table>
-
-
-<br/>
-
-
-{% block in_queue %}
-
-{% endblock  %}
-
-{% block in_queue2 %}
-
-{% endblock  %}
-
-                                
+<div class="container2">                   
 {%  block recommendations  %}
 {% endblock %}
-                   
+</div>
+
+
+<script>
+$(document).ready(function(){
+   
+ $('[data-toggle="tooltip"]').tooltip()
+
+});
+</script>          
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 

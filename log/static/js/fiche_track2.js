@@ -1,18 +1,18 @@
 $('document').ready(function(){ 
 
     $('.panel-body').hide();
-    $('#hide').hide();
+    $('#hide2').hide();
 
-    $('#hide').click(function(){
+    $('#hide2').click(function(){
         $('.panel-body').hide();
-        $('#hide').hide();
+        $('#hide2').hide();
         $('#show').show();
         });
 
     $('#show').click(function(){
         $('.panel-body').show();
         $('#show').hide();
-        $('#hide').show();
+        $('#hide2').show();
     
     });
 
@@ -46,11 +46,11 @@ function update(player) {
 
     var fraction = time / duration;
     var percent  = Math.ceil(fraction * 100);
-    var progress = document.querySelector('.progress-bar');
-    progress.style.width = percent + '%';
+   // var progress = document.querySelector('.progress-bar');
+    // progress.style.width = percent + '%';
 
-    progress.textContent = percent + '%';  
-    $('#lol2').text(fraction); 
+    // progress.textContent = percent + '%';  
+    //$('#lol2').text(fraction); 
     //$('.listening_time').each(function(){
     //$(this).val(time);
     //}); 
