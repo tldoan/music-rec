@@ -15,6 +15,7 @@ import unicodedata
 
 from PyLyrics import *
 from log.models import Tracks
+from spotipy.oauth2 import SpotifyClientCredentials
 
 
 
@@ -23,14 +24,19 @@ from log.models import Tracks
 class Command(BaseCommand):
     def _create_tracks(self):
         print os.getcwd()
-        sp = spotipy.Spotify()
+        client_credentials_manager = SpotifyClientCredentials('980cf3bf846147ef8ed6f1a108a3507b', '01d3ffa8764d4b53951280395b4c488d')
+        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+        #sp = spotipy.Spotify()
+        sp.trace=False
         with open('log/static/list/song_list.csv', 'rb') as csvfile:
             text = csv.reader(csvfile, delimiter=';')
             next(text)
             ## on skip la 1ere ligne/header
             for row in text:
-#                print row[0]
-                results = sp.search(q=row[0], limit=1,type='track')
+                print 'loool'
+                print row[0]+' - '+row[1]
+                
+                results = sp.search(q=row[0]+' - '+row[1], limit=1,type='track')
                 d=results['tracks']['items'][0]['name']
                 dd=unicodedata.normalize('NFKD',d).encode('ascii','ignore')
                 
@@ -55,6 +61,9 @@ class Command(BaseCommand):
                 track_link=Artist.replace(' ','_')+'_'+track_name.replace(' ','_')
                 
                 
+                id_=results['tracks']['items'][0]['id'].encode('utf-8')
+                
+                
                 results = sp.search(q=row[1],type='artist')
                 Artist_image=results['artists']['items'][0]['images'][2]['url'].encode('utf-8')
                 Artist_popularity=results['artists']['items'][0]['popularity']
@@ -67,6 +76,34 @@ class Command(BaseCommand):
                 print track_name
                 print Artist_image
                 print Artist_popularity
+                
+                
+                features = sp.audio_features(id_)
+                
+                
+                acousticness=features[0]['acousticness']
+                danceability=features[0]['danceability']
+                energy=features[0]['energy']
+                instrumentalness=features[0]['instrumentalness']
+                key=features[0]['key']
+                liveness=features[0]['liveness']
+                loudness=features[0]['loudness']
+                speechiness=features[0]['speechiness']
+                tempo=features[0]['tempo']
+                time_signature=features[0]['time_signature']
+                valence=features[0]['valence']
+                print acousticness
+                print danceability
+                print energy
+                print instrumentalness
+                print key
+                print liveness
+                print loudness
+                print speechiness
+                print tempo
+                print time_signature
+                print valence
+                
                 
 #                a=Tracks(
 #                        track_name=track_name,
@@ -81,7 +118,22 @@ class Command(BaseCommand):
 #                        Album_cover=Album_cover,
 #                        duration=row[2],
 #                        preview=preview,
-#                        featuring=featuring)
+#                        featuring=featuring,
+    #                    acousticness=acousticness,
+    #                    danceability=danceability,
+    #                    energy=energy,
+    #                    instrumentalness=instrumentalness,
+    #                    key=key,
+    #                    liveness=liveness,
+    #                    loudness=loudness,
+    #                    speechiness=speechiness,
+    #                    tempo=tempo,
+    #                    time_signature=time_signature,
+    #                    valence=valence )
+
+
+
+
 #                a.save()
 #                print os.path.join(os.getcwd(), "log/static/lyrics/" + track_link+ ".txt")
                 

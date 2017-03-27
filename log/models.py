@@ -207,11 +207,21 @@ class Tracks(models.Model):
     duration=models.FloatField(default=0)  ## lenght of the song in ms
     preview=models.URLField(blank=True)  ## preview of 30sec
     nb_rating=models.IntegerField(default=1)
-
+    
     featuring=models.CharField(default='',max_length=50)
     #wordcloud=models.CharField(default='',max_length=250)
     
-
+    acousticness=models.FloatField(default=0)
+    danceability=models.FloatField(default=0) 
+    energy=models.FloatField(default=0)
+    instrumentalness=models.FloatField(default=0)
+    key=models.IntegerField(default=0)
+    liveness=models.FloatField(default=0)
+    loudness=models.IntegerField(default=0)
+    speechiness=models.FloatField(default=0)
+    tempo=models.FloatField(default=0)
+    time_signature=models.IntegerField(default=0)
+    valence=models.FloatField(default=0)
     
     def __str__(self):
         return self.track_name
