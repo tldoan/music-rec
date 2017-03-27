@@ -18,9 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'music-rec'
+
 
 
 
@@ -45,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
-    'django.contrib.staticfiles','log','storages',
+    'django.contrib.staticfiles','log',
 
     
    
@@ -150,6 +148,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+#AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+#AWS_ACCESS_KEY_ID ='AKIAJXOZ53C5ASDRD2TQ'
+
+#AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+#AWS_SECRET_ACCESS_KEY='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'
+#AWS_S3_BUCKET_NAME = os.environ.get("AWS_S3_BUCKET_NAME")
+#AWS_STORAGE_BUCKET_NAME = 'music-rec'
+#AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+#AWS_QUERYSTRING_AUTH = False
+#AWS_HEADERS = {
+#  'Cache-Control': 'max-age=86400',
+#}
 
 
 TEMPLATE_DIRS = (
@@ -157,12 +167,21 @@ TEMPLATE_DIRS = (
 )
 
 STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
+
 #STATIC_ROOT = os.path.join(PROJECT_ROOT, '../log/')
 
 
-#STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
-STATIC_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+#STATIC_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+#STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 
 
@@ -177,13 +196,14 @@ STATIC_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
 
 
-#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+
+#ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+
+
+
 
 
 

@@ -1,0 +1,133 @@
+
+hawai
+hawai
+
+hawai
+hawai
+
+hawai
+hawai
+
+voiture
+voiture
+
+
+bleu
+
+borwn
+
+hawai
+hawai
+
+hawai
+hawai
+
+hawai
+hawai
+
+voiture
+voiture
+
+
+bleu
+
+borwn
+
+hawai
+hawai
+
+hawai
+hawai
+
+hawai
+hawai
+
+voiture
+voiture
+
+
+bleu
+
+borwn
+
+hawai
+hawai
+
+hawai
+hawai
+
+hawai
+hawai
+
+voiture
+voiture
+
+
+bleu
+
+borwn
+
+hawai
+hawai
+
+hawai
+hawai
+
+hawai
+hawai
+
+voiture
+voiture
+
+
+bleu
+
+borwn
+     
+def fiche_track(request, track_pseudo):
+    track = get_object_or_404(Tracks, track_pseudo=track_pseudo)
+    has_yet_rated=True  
+    path='wcloud_pictures/'+track_pseudo+'.png'
+    l=['shape_of_you','the_hills','closer']
+    liste=[]
+    for i in range(len(l)):
+        liste.append(get_object_or_404(Tracks, track_pseudo=l[i]))    
+    try:
+        REVIEW=Track_Coments.objects.get(user=request.user,track=track)  
+        #REVIEW=get_object_or_404(user=request.user, track_name=track_name)
+    except:
+        has_yet_rated=False
+        #REVIEW='None'       
+    load_wordcloud(track_pseudo,'')
+    if request.method=='GET':
+        # check si existe pas deja
+        t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
+        length=len(t.path)
+#        print type(t.path[length-1]) 
+#        print t.path[length-1] 
+#        print type(track_pseudo)
+#        print track_pseudo
+        if type(t.path[length-1])==list:                      
+            t.path.append(track_pseudo)
+            t.save() 
+            return render(request,'fiche_track.html',locals())
+        elif type(t.path[length-1].encode('ascii','ignore'))==str: 
+            if t.path[length-1]!=track_pseudo:    
+                
+                t.path.append(track_pseudo)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
