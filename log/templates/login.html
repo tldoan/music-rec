@@ -70,10 +70,10 @@
 <br/>
 <br/>
 
-<div class='container'>
-
+<!-- <div class='container'> -->
+<!-- <div class="col-sm-8 col-md-8  col-lg-8 "> -->
 	
-	<div class="panel panel-custom" style="width:50%">
+	<div class="panel panel-custom" id='login_panel' style="width:30%">
 		<div class="panel-heading" id='grad1'>
 		<h1> Account  </h1>
 		</div>
@@ -90,17 +90,17 @@
 								<form action="auth" method="post"> 
 				    				{% csrf_token %}
 				    			<div class='row'>
-				    			<div class="form-group  col-md-offset-4 col-md-5">
+				    			<div class="form-group" style="width:40%">
 
 							    <div class='input-group'>
 							    <span class="input-group-addon" id="basic-addon1"><t class='glyphicon glyphicon-user'></t></span>
 							    <input type="text" name='username' value='' class="form-control" placeholder="Username" id="username" aria-describedby="basic-addon1" >
 							    </div>
 							</div>
-
+								<br/>
 							</div>
 							  <div class='row'>
-							  	<div class="form-group col-md-offset-4 col-md-5">
+							  	<div class="form-group" style="width:40%">
 							  		<div class='input-group'>		    	
 							    	<span class="input-group-addon" id="basic-addon1"><t class='glyphicon glyphicon-lock'></t></span>
 							    	<input type="password" name='password' class="form-control"  value='' id="Password1" placeholder="Password">
@@ -111,7 +111,7 @@
 								<br/>
 								<div class='row'>
 					    		
-					    		<button class="btn btn-custom">Log in</button>
+					    		<button class="btn btn-custom" style="width:40%">Log in</button>
 					    		
 					    		
 					    		</div>
@@ -123,8 +123,8 @@
 						</div>
 			
 			
-		
-	</div>
+	<!-- </div> -->
+	<!-- </div> -->
 
 
 

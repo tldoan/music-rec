@@ -71,3 +71,11 @@ h2{
     color:white;
     text-align:center;
 }
+#login_panel
+{
+	margin:0 auto;
+}
+.form-group
+{
+	margin:0 auto;
+}
