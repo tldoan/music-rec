@@ -199,8 +199,8 @@ MEDIA_URL='/media/'
 
 
 
-LOGIN_URL = '/m/login'
-LOGIN_REDIRECT_url='m/login'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_url='/login'
 
 AUTH_PROFILE_MODULE='log.Profile'
 
