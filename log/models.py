@@ -230,7 +230,7 @@ class Tracks(models.Model):
 class Track_Coments(models.Model):
     user=models.ForeignKey(User)
     track=models.ForeignKey(Tracks, on_delete=models.CASCADE)
-    rating=models.CharField(choices=rates, max_length=6)
+    rating=models.FloatField(default=0)
     wordcloud=models.CharField(default='',max_length=250)
     time=models.DateTimeField()
     

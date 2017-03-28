@@ -20,7 +20,7 @@
   
    <!--  <link rel="stylesheet" href="{% static 'css/bootstrap37.min.css' %}"> -->
 
-    <script src= '//cdnjs.cloudflare.com/ajax/libs/bootstrap-rating/1.4.0/bootstrap-rating.min.css'></script> 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-rating/1.4.0/bootstrap-rating.min.css"></script> 
     <!-- bootstrap -->
 
     <!-- jquery UI-->
@@ -115,7 +115,7 @@ audio::-webkit-media-controls-panel {
 											{% if  has_yet_rated  %}
 
 				
-				<h3> you have rated this song {{REVIEW.rating}} stars </h3>
+				<h3> you have rated this song {{REVIEW.rating| floatformat:0}} stars </h3>
 
 			
 

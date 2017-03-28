@@ -62,6 +62,7 @@ def loggout(request):
     return redirect(reverse('login'))
 
 
+@login_required
 def homepage(request):
     """'affiche la liste des tracks'""" 
     #prof = get_object_or_404(Profile, user=request.user)
@@ -89,6 +90,7 @@ def homepage(request):
                 track_list = Tracks.objects.order_by('track_name')
                 return render(request,'home.html',locals())
 
+@login_required
 def profil(request):  
     if request.method=='POST':       
         valid=True
@@ -129,77 +131,7 @@ def profil(request):
 #        if Profile.objects.filter(user=request.user).exists():
 #            has_filled_profil=True            
         return render(request,'profil.html',locals())
-    
-#class ProfileFormView(View):
-#    form_class=ProfileForm
-#    template_name='profil.html'
-#    sauvegarde = False  
-#
-#    @method_decorator(login_required())
-#    def get(self,request):
-#        form=self.form_class(None)
-#        return render(request,self.template_name,{'form':form,'username':request.user})
-#    
-#    @method_decorator(login_required())
-#    def post(self,request):      
-#        ### SUPRA IMPORTANT
-#        instance=Profile.objects.get(user=request.user)
-#        ### SUPRA IMPORTANT
-#        form=self.form_class(request.POST,instance=instance)
-#        track_list = Tracks.objects.order_by('track_name')
-#        if form.is_valid():   
-#            prof=form.save(commit=False)
-#            #prof=Profile(user=request.user)
-#            prof.area=form.cleaned_data["area"]
-#            prof.age=form.cleaned_data["age"]
-#            prof.region=form.cleaned_data["region"]
-#            #prof.user=request.user
-#            prof.save()
-#            
-#            sauvegarde = True  
-#            return redirect(reverse('homepage'))
-#            #return render(request,'home.html',locals())
-#        else:         
-#            return render(request,'profil.html',locals())
-
-
-
-#class UserFormView(View):
-#    form_class=UserForm
-#    #form_class2=ProfileForm
-#    #sauvegarde=False  
-#    template_name='registration_form.html'  
-#    def get(self,request):
-#        form=self.form_class(None)
-#        #form2=self.form_class2(None)    
-#        return render(request,self.template_name,{'form':form})
-#        
-#    def post(self,request):
-#        user_is_created=False
-#        form=self.form_class(request.POST)
-#        #instance=Profile.objects.get(user=request.user)              
-#        if form.is_valid():
-#            user=form.save(commit=False)
-#            username=form.cleaned_data['username']
-#            password=form.cleaned_data['password']
-#            #mail=form.cleaned_data['email']
-#            user.set_password(password)
-#            user.save()
-#            user_is_created=True
-#            user=authenticate(username=username,password=password)
-#            login(request,user)
-#            if user.is_authenticated():
-#                
-#                form2=ProfileForm(None)
-#                #instance=Profile.objects.get(user=request.user)
-#                #form2=self.form_class2(request.POST,instance)          
-#                return render(request,'profil.html',{'form2':form,'username':request.user})  
-#            else:
-#                login(request,user)
-#                return render(request,'profil.html',{'form2':form,'username':request.user})  
-#        else:
-#            return render(request,'registration_form.html',locals())
-            
+               
 def register(request):
     if request.method=='POST':
         #user_is_created=False
@@ -222,7 +154,8 @@ def register(request):
     else:
         form=UserForm(None)
         return render(request,'registration_form.html',{'form':form})
-        
+ 
+@login_required       
 def fiche_track(request, track_pseudo):
     track = get_object_or_404(Tracks, track_pseudo=track_pseudo)
     has_yet_rated=True  
@@ -281,23 +214,26 @@ def fiche_track(request, track_pseudo):
                     rev.track=track
                     rev.time=datetime.datetime.now()
                     rev.wordcloud=wordcloud
-                    rev.save()            
+                    rev.save() 
+                    
                     ### s il existe des lignes on fait la moyenne en faisant un loop up dans la db
-                    if Track_Coments.objects.filter(track=track).exists():                        
+                    if Track_Coments.objects.filter(track=track).count()>=10:                        
                         ## it is a dictionnary convert it now to float  
                         ## il existera toujours car le mec vient de submit en fait 
-                        track.track_popularity=Track_Coments.objects.filter(track=track).aggregate(Avg('rating'))['rating__avg']
-                    else:
-                    ########## sinon c est juste la moyenne entre le rate et le prior rate du depart   
-                        print '----------------------------------------'
-                        print '----------------------------------------'
-                        print float(track.track_popularity)
-                        print float(rating)
-                        print float(track.track_popularity)+float(rating)
-                        print (float(track.track_popularity)+float(rating))/2
-                        track.track_popularity=(float(track.track_popularity)+float(rating))/2
                         
-                    track.nb_rating+=1
+                        track.track_popularity=Track_Coments.objects.filter(track=track).aggregate(Avg('rating'))['rating__avg']
+#                    else:
+                    ########## sinon c est juste la moyenne entre le rate et le prior rate du depart   
+#                        print '----------------------------------------'
+#                        print '----------------------------------------'
+#                        print float(track.track_popularity)
+#                        print float(rating)
+#                        print float(track.track_popularity)+float(rating)
+#                        print (float(track.track_popularity)+float(rating))/2
+#                        track.track_popularity=(float(track.track_popularity)+float(rating))/2
+                        
+#                    track.nb_rating+=1
+                    Track_Coments.objects.filter(track=track).count()
                     track.save()  
                     has_yet_rated=True
                     if wordcloud!='':
@@ -411,7 +347,7 @@ def fiche_track(request, track_pseudo):
             t.path.append('end')
             t.save()
             return redirect(reverse('logout'))
-          
+@login_required         
 def solo(request,titre_1,titre_2):
     base_2=True
     track = get_object_or_404(Tracks, track_pseudo=titre_1)
@@ -457,19 +393,20 @@ def solo(request,titre_1,titre_2):
                 if rating !='':
                     wrong=False
                     rev=form.save(commit=False)
-                    rev.rating=rating
+                    rev.rating=float(rating)
                     rev.user=request.user
                     rev.track=track
                     rev.time=datetime.datetime.now()
                     rev.wordcloud=wordcloud
                     rev.save()            
                     ### s il existe des lignes on fait la moyenne en faisant un loop up dans la db
-                    if Track_Coments.objects.filter(track=track).exists():                        
+                    print Track_Coments.objects.filter(track=track).count()
+                    if Track_Coments.objects.filter(track=track).count()>=10:                        
                         ## it is a dictionnary convert it now to float  
                         ## il existera toujours car le mec vient de submit en fait 
                         track.track_popularity=Track_Coments.objects.filter(track=track).aggregate(Avg('rating'))['rating__avg']
 
-                    track.nb_rating+=1
+#                    track.nb_rating+=1
                     track.save()  
                     has_yet_rated=True
                     if wordcloud!='':
@@ -548,7 +485,7 @@ def solo(request,titre_1,titre_2):
 
 
 #def update_restaurant_information(request):
-    
+@login_required    
 def change_rating(request,track): 
     TRACK = get_object_or_404(Tracks, track_name=track)
     REVIEW=Track_Coments.objects.get(user=request.user,track=TRACK)
