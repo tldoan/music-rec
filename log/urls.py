@@ -6,7 +6,8 @@ from . import views
 
 urlpatterns = [
   
-      url(r'^login$', views.loggin, name='login'),
+    #  url(r'^login$', views.loggin, name='login'),
+     url(r'^$', views.loggin, name='login'),
      # url(r'^fiche/(?P<pseudo>\w+)$', views.fiche_resto, name='fiche_resto'),
      
       url(r'^fiche/(?P<track_pseudo>\w+)$', views.fiche_track, name='fiche_track'),
