@@ -209,7 +209,7 @@ def fiche_track(request, track_pseudo):
                 if rating !='':
                     wrong=False
                     rev=form.save(commit=False)
-                    rev.rating=rating
+                    rev.rating=float(rating)
                     rev.user=request.user
                     rev.track=track
                     rev.time=datetime.datetime.now()
