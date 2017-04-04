@@ -1,11 +1,11 @@
 $('document').ready(function(){ 
-$('.cc').hide();
+$('#cc').hide();
 
 $('#cancel').hide();
 	$('#change_settings').click(function(){
 
         $('#change_settings').hide();
-        $('.cc').show();
+        $('#cc').show();
         $('#cancel').show();
         
         });
@@ -13,7 +13,7 @@ $('#cancel').hide();
 	$('#cancel').click(function(){
 		$('#change_settings').show();
 		$('#cancel').hide();
-		$('.cc').hide();
+		$('#cc').hide();
 
 
 	});

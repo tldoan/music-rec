@@ -7,7 +7,7 @@
      <ul class="nav navbar-nav navbar-right">
       <li class="active">     
        <form action="/home" method="get">
-            {% csrf_token %}     
+             
             <input type="hidden"  name='profil' value="0">
             <button class="btn btn-custom btn-md" id="homee">
               <span class="glyphicon  glyphicon glyphicon-home" aria-hidden="true"></span>               
@@ -17,24 +17,14 @@
     	</form>         
       </li>
       <li>
-         <form action="/change_password" method="post">
-                {% csrf_token %}                   
+         <form action="/change_password" method="get">
+                               
                 <button class="btn btn-custom btn-md" id='homee2'>
                 reset    
                 password</button>
             </form>
             </li>
-      <!--      
-           <li>  
-           <form action="/logout" method="post">
-                {% csrf_token %}
-                 <button class="btn btn-custom btn-md">
-                     <span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>                  
-                   logout                
-                   </button>  
-     
-            </form>
-      		</li>   -->
+  
       </ul> 
   </div>
 </nav>
@@ -94,7 +84,7 @@
     
      <tr>
       <th scope="row">sex</th>
-      <td class='sexx'><div class='sex' id='sex'>{{pp.sex}}</div> </td>
+      <td class='sexx'><div class='sex' id='sex' >{{pp.sex}}</div> </td>
      
     </tr>
     <tr>
@@ -118,21 +108,27 @@
 </table>
 <button type='submit' id='change_settings' class="btn btn-custom2"> Change</button>
 <button type='submit' id='cancel' class="btn btn-custom2"> Cancel</button>
-		
-						<div class='cc'>
-						<div class='container' id='grad1'> 	
-						<div class="panel-heading">   </div>
+						
+
+						<div class="panel panel-custom" id='cc' style="width:22%">
+						
+
+						<div class="panel-heading" id='grad1'> <h1> Profil  </h1>  </div>
 						<div class="panel-body">
 						 <div id="conteneur">
 							<form id='form_rate' class='form-horizontal' action='' method='post'>
 							{% csrf_token %}
-						<h4>sex:</h4>
-						<select id="id_sex" name="sex" class="form-control">
+						<div class='row'>	
+						<h5>sex:</h5>
+						  <select id="id_sex" name="sex" class="form-group" style="width:40%">
 							  <option value="M">M</option>
 							  <option value="F">F</option>
-						</select>	  
-						<h4>age:</h4>
-						<select id="id_age" name="age" class="form-control">
+						</select>	
+						</div>
+
+						<div class='row'>  
+						<h5>age:</h5>
+						<select id="id_age" name="age" class="form-group" style="width:40%">
 
 							  
 							  <option value="under 20">under 20</option>
@@ -142,55 +138,44 @@
 							  <option value="over 40">over 40</option>
 
 						</select>
-						<h4>region:</h4>
-						<select id="id_region" name="region" class="form-control">
+						</div>
+
+						<div class='row'>
+						<h5>region:</h5>
+						<select id="id_region" name="region" class="form-group" style="width:40%">
 							  <option value="Europe">Europe</option>
 							  <option value="Asia">Asia</option>
 						</select>
+						</div>
 						
 						
-							<h4>area:</h4>
-							<select id="id_area" name="area" class="form-control">
+							
+							<div class='row'>
+							<h5>area:</h5>
+							<select id="id_area" name="area" class="form-group" style="width:40%">
 							  
 							  <option value="Management">Management</option>
 							  <option value="Science">Science</option>
 							  
 							</select>
-							<button type='submit' class="btn btn-custom2" id="changes"> Submit</button>
-
+							</div>
+							
+							  <br/>
+							  <br/>
+							 <div class='row'>
+							<button type='submit' class="btn btn-custom" id="changes" style="width:40%"> Submit</button>
+							 </div>
 						</form>
 						</div>
 						</div>
 						</div>
-						</div>	
-
-
-
+					
 						
-					<!-- 	{% for field in form %}						
-						<div class='form-group'>
-								<div class='col-sm-offset-2 col-sm-10'>
-									<span class='text-danger'> {{field.errors}} </span>
-								</div>
-								<label class='control-label' >{{field.label_tag}} </label>
 
-								<div  id='valeur' class='col-md-10'>{{field}}  </div>								
-						</div>
 
-						{% endfor %}
-						
-						
-						<div class='col-sm-offset-2 col-sm-10'>
-								<button type='submit' class="btn btn-custom"> Submit </button>
-						</div>
-					</form>
-			</div>
-		</div>
-		</div>
-	</div>
+
 
 		
-<script src="profil_script.js"></script> 	 -->
 
 
 

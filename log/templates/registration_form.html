@@ -1,43 +1,77 @@
 {% extends "base.html" %}
 
+{% block nav_bar %}
+<nav class="navbar navbar-custom" id='grad1'>
+ <div class="container-fluid">
+     <ul class="nav navbar-nav navbar-right">
+      <li class="active">     
+       <form action="/home" method="post">
+            {% csrf_token %}     
+            <input type="hidden"  name='profil' value="0">
+            <button class="btn btn-custom btn-md">
+              <span class="glyphicon  glyphicon glyphicon-home" aria-hidden="true"></span>               
+                    Home
+            </button>  
+      
+    	</form>         
+      </li>
+     
+
+      </ul> 
+  </div>
+</nav>
+{% endblock  %}
+
+
 {% block content %}
 
 <br/>
+
 <br/>
-<h1>  Registration </h1>
+<br/>
+<br/>
+<br/>
 <br/>
 <br/>
 
 
-<div class='row'>
-		<div class='panel panel-default'>
-			<div class='panel-body'>
+
+<div class="panel panel-custom" id='login_panel' style="width:22%">
+		<div class="panel-heading" id='grad1'> <h1> Registration  </h1>  </div>
+		<div class="panel-body">
+			<div id="conteneur">
+
 					<form class='form-horizontal' action='' method='post'>
 						{% csrf_token %}
 						
 						{% for field in form %}
-
-						<div class='form-gorup'>
-								<div class='col-sm-offset-2 col-sm-10'>
-									<span class='text-danger'> {{field.errors}} </span>
-								</div>
-
-								<label class='control-label' >{{field.label_tag}} </label>
-
-								<div class='col-md-10'>{{field}}  </div>
+						<div class='row'>
+						
 								
+									<span class='text-danger'> {{field.errors}} </span>
+								
+								
+								<h4><span class='label label-default'>{{field.label_tag}} </span></h4>
+								
+
+								<div class="form-group">{{field}} </div>
+						</div>
+						
+						
 
 
 						{% endfor %}
 
 						
-											
-						<button style="width:80px" class="btn btn-success">Submit</button>
-						
+						<br/>
+						<br/>
+								
+						<div class='row'>			
+						<button  class="btn btn-custom" style="width:52%">Submit</button>
+						</div>
 					</form>
-
-
 			</div>
+
 		</div>
 
 	</div>
