@@ -16,7 +16,7 @@ import unicodedata
 from PyLyrics import *
 from log.models import Tracks
 from spotipy.oauth2 import SpotifyClientCredentials
-
+import spotipy
 
 
 
