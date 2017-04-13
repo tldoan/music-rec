@@ -246,6 +246,17 @@ class Traj(models.Model):
 
     def __str__(self):  # __unicode__ on Python 2
        return 'trajectory'
+   
+
+class history(models.Model):
+    user=models.ForeignKey(User)
+    path=JSONField(default=my_default)
+    start_time = models.DateTimeField(auto_now_add=True, auto_now=False) 
+    def append(self,txt):
+        self.path.append(txt)
+
+    def __str__(self):  # __unicode__ on Python 2
+       return 'trajectory'
     
 #    from log.models import Trajectories
 #    Trajectories.objects.create(path=['4',('a','b'),'90%'])

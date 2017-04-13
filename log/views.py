@@ -2,10 +2,10 @@ from django.shortcuts import render,redirect, get_object_or_404
 from .forms import (
         ProfileForm,
         UserForm, ComentsForm,TracksForm)
-    
+
+from django.utils import timezone
         
-from .models import Profile,Restaurant,Coments, Tracks, Track_Coments  , Traj
-from django.views.generic import View
+from .models import Profile,Restaurant,Coments, Tracks, Track_Coments  , Traj , history
 from django.urls import reverse
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
@@ -65,11 +65,10 @@ def loggout(request):
 @login_required
 def homepage(request):
     """'affiche la liste des tracks'""" 
-    #prof = get_object_or_404(Profile, user=request.user)
+
     if request.method=='GET':  
         if Profile.objects.filter(user=request.user).exists():
             prof = get_object_or_404(Profile, user=request.user)
-            #prof=Profile.objects.filter(user=request.user).exists()        
             if (prof.area=='' or prof.age=='' or prof.region=='' or prof.sex==''):
                 return redirect('profil')
             else:
@@ -84,7 +83,26 @@ def homepage(request):
                 c=request.POST.get('next_song','')             
                 t=Traj(path=['start']) 
                 t.user=request.user
-                t.save()           
+                t.save()          
+                print 'loooooooooooooool'
+                try:
+                    
+                    t=Traj.objects.filter(user=request.user).order_by('-start_time')[1]
+                    print timezone.now()
+                    print t.start_time
+        
+                    if (timezone.now()-t.start_time).seconds >=1800:
+                    ## 1800 sec= 30 min
+                        t2=history(path=['start'])
+                        t2.user=request.user
+                        t2.save()
+                        print 'try marche'
+                                                                
+                except:
+                    t2=history(path=['start']) 
+                    t2.user=request.user
+                    t2.save() 
+                    print 'except'
                 return redirect(reverse('fiche_track',kwargs={'track_pseudo': c}))
             if 'profil' in request.POST:  
                 track_list = Tracks.objects.order_by('track_name')
@@ -94,10 +112,6 @@ def homepage(request):
 def profil(request):  
     if request.method=='POST':       
         valid=True
-#        if 'profil' in request.POST:
-#            pp=get_object_or_404(Profile, user=request.user)
-#            #pp=Profile.objects.get(user=request.user)  
-#            return render(request,'profil.html',locals())
         if 'age' in request.POST:
             if Profile.objects.filter(user=request.user).exists():   
                 
@@ -148,7 +162,6 @@ def register(request):
             user=authenticate(username=username,password=password)
             login(request,user)
             return redirect('profil')  
-        #,{'username':username,'user':user}
         else:
             return render(request,'registration_form.html',{'form':form})
     else:
@@ -165,20 +178,14 @@ def fiche_track(request, track_pseudo):
     for i in range(len(l)):
         liste.append(get_object_or_404(Tracks, track_pseudo=l[i]))    
     try:
-        REVIEW=Track_Coments.objects.get(user=request.user,track=track)  
-        #REVIEW=get_object_or_404(user=request.user, track_name=track_name)
+        REVIEW=Track_Coments.objects.get(user=request.user,track=track)        
     except:
-        has_yet_rated=False
-        #REVIEW='None'       
+        has_yet_rated=False              
     load_wordcloud(track_pseudo,'')
     if request.method=='GET':
         # check si existe pas deja
         t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
         length=len(t.path)
-#        print type(t.path[length-1]) 
-#        print t.path[length-1] 
-#        print type(track_pseudo)
-#        print track_pseudo
         if type(t.path[length-1])==list:                      
             t.path.append(track_pseudo)
             t.save() 
@@ -222,17 +229,7 @@ def fiche_track(request, track_pseudo):
                         ## il existera toujours car le mec vient de submit en fait 
                         
                         track.track_popularity=Track_Coments.objects.filter(track=track).aggregate(Avg('rating'))['rating__avg']
-#                    else:
-                    ########## sinon c est juste la moyenne entre le rate et le prior rate du depart   
-#                        print '----------------------------------------'
-#                        print '----------------------------------------'
-#                        print float(track.track_popularity)
-#                        print float(rating)
-#                        print float(track.track_popularity)+float(rating)
-#                        print (float(track.track_popularity)+float(rating))/2
-#                        track.track_popularity=(float(track.track_popularity)+float(rating))/2
-                        
-#                    track.nb_rating+=1
+
                     Track_Coments.objects.filter(track=track).count()
                     track.save()  
                     has_yet_rated=True
@@ -243,14 +240,19 @@ def fiche_track(request, track_pseudo):
                     print request.POST.get('time_before_rated','')
                     time_before=float(request.POST.get('time_before_rated',''))             
                 return render(request,'fiche_track.html',locals())
+        
         elif 'queue' in request.POST:
              print 'methode = POST  titre_1_________________'
              #c=request.POST.get('next_song','') 
              titre_1=request.POST.get('titre_1','')
              titre_2=request.POST.get('titre_2','')
-             print(titre_1)
-             print(titre_2)
-             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]          
+             
+             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]  
+             name=str(t.path[len(t.path)-1])
+             
+             
+             
+             
 #            ## collecting data        
              listening_time=request.POST.get('listening_time','') 
              if listening_time=='':
@@ -268,42 +270,29 @@ def fiche_track(request, track_pseudo):
              t.path.append(liste)
 #            t.path.append(track_pseudo)
              t.save()
+             
+             #### history registering
+             t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
+             # on cherche le type de la musique
+             
+             genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre) 
+             # on inscrit le nom du track           
+             t2.path.append([name,genre])    
+             t2.path.append([listening_time,percentage])
+             t2.save()
+             
              print 'queue___________'
              
              if titre_2=='empty':                                    
                  return redirect(reverse('fiche_track',kwargs={'track_pseudo': titre_1}))
              else:   
-                 print 22
-                 print(titre_1)
-                 print(titre_2)
+                 
                  return redirect(reverse('solo',kwargs={'titre_1': titre_1,'titre_2':titre_2}))
-#        elif 'next_song' in request.POST:
-#             print 'methode = POST _________________'
-#             c=request.POST.get('next_song','')  
-#             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]          
-##            ## collecting data        
-#             listening_time=request.POST.get('listening_time','') 
-#             if listening_time=='':
-#                listening_time=0  
-#             else:
-#                listening_time=round(float(listening_time),2)              
-#             percentage=request.POST.get('percentage','')
-#             if percentage=='':
-#                percentage=0
-#             else:
-#                percentage=round(float(percentage),2)           
-#             
-#             ## update the database
-#             
-#             t.path.append([listening_time,percentage])
-#             liste=request.POST.get('liste2','')
-#             t.path.append(liste)
-##            t.path.append(track_pseudo)
-#             t.save()
-#             return redirect(reverse('fiche_track',kwargs={'track_pseudo': c}))
+
+## homepage
         elif 'liste' in request.POST:
             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
-            
+            name=str(t.path[len(t.path)-1])
             listening_time=request.POST.get('listening_time2','')
             percentage=request.POST.get('percentage2','')
             
@@ -322,10 +311,22 @@ def fiche_track(request, track_pseudo):
             
             t.path.append('end')
             t.save()
+            
+            #### history registering
+            t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
+            # on cherche le type de la musique
+            
+            genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
+            # on inscrit le nom du track           
+            t2.path.append([name,genre])    
+            t2.path.append([listening_time,percentage])
+            t2.save()
             return redirect(reverse('homepage'))
+        
+## logout        
         elif 'liste3' in request.POST:
             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
-            
+            name=str(t.path[len(t.path)-1])
             listening_time=request.POST.get('listening_time2','')
             percentage=request.POST.get('percentage2','')
             
@@ -346,7 +347,17 @@ def fiche_track(request, track_pseudo):
             ## voir si on keep track de la note de la zik aussi
             t.path.append('end')
             t.save()
+            #### history registering
+            t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
+            # on cherche le type de la musique
+            
+            genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
+            # on inscrit le nom du track           
+            t2.path.append([name,genre])    
+            t2.path.append([listening_time,percentage])
+            t2.save()
             return redirect(reverse('logout'))
+        
 @login_required         
 def solo(request,titre_1,titre_2):
     base_2=True
@@ -417,7 +428,9 @@ def solo(request,titre_1,titre_2):
         elif 'solo' in request.POST:
              print 'methode = POST _solo________________'
              #c=request.POST.get('titre_2','')  
-             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]          
+             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]   
+             
+             name=str(t.path[len(t.path)-1])
 #            ## collecting data        
              listening_time=request.POST.get('listening_time','') 
              if listening_time=='':
@@ -436,9 +449,21 @@ def solo(request,titre_1,titre_2):
              t.path.append(['None',titre_2])
 #          
              t.save()
+             t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
+             # on cherche le type de la musique
+            
+             genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
+             # on inscrit le nom du track           
+             t2.path.append([name,genre])    
+             t2.path.append([listening_time,percentage])
+             t2.save()
              return redirect(reverse('fiche_track',kwargs={'track_pseudo': titre_2}))
+# homepage
+
         elif 'home' in request.POST:
-            t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]         
+            t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]   
+            
+            name=str(t.path[len(t.path)-1])
             listening_time=request.POST.get('listening_time2','')
             percentage=request.POST.get('percentage2','')
             
@@ -459,9 +484,22 @@ def solo(request,titre_1,titre_2):
             ## voir si on keep track de la note de la zik aussi
             t.path.append('end')
             t.save()
+            
+            t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
+            # on cherche le type de la musique
+            
+            genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
+            # on inscrit le nom du track           
+            t2.path.append([name,genre])    
+            t2.path.append([listening_time,percentage])
+            t2.save()
             return redirect(reverse('homepage'))
+# logout
+
         elif 'liste3' in request.POST:
             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
+            
+            name=str(t.path[len(t.path)-1])
             
             listening_time=request.POST.get('listening_time2','')
             percentage=request.POST.get('percentage2','')
@@ -481,6 +519,15 @@ def solo(request,titre_1,titre_2):
             ## voir si on keep track de la note de la zik aussi
             t.path.append('end')
             t.save()
+            
+            t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
+            # on cherche le type de la musique
+            
+            genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
+            # on inscrit le nom du track           
+            t2.path.append([name,genre])    
+            t2.path.append([listening_time,percentage])
+            t2.save()
             return redirect(reverse('logout'))
 
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 # Register your models here.
-from .models import Profile, Restaurant, Coments, Tracks,Track_Coments  , Traj
+from .models import Profile, Restaurant, Coments, Tracks,Track_Coments  , Traj,history
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user','area', 'age','region','sex')
@@ -59,3 +59,12 @@ class TrajAdmin(admin.ModelAdmin):
     search_fields = ('user','start_time', )
     
 admin.site.register(Traj, TrajAdmin)
+
+
+class historyAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in history._meta.fields]
+    list_filter = ('user','start_time', )
+    
+    search_fields = ('user','start_time', )
+    
+admin.site.register(history, historyAdmin)
