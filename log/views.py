@@ -20,7 +20,7 @@ from datetime import time
 from django.conf import settings
 import os
 from wordcloud import WordCloud
-import random
+import random,string
 #import matplotlib.pyplot as plt
 
 from PIL import Image
@@ -78,32 +78,40 @@ def homepage(request):
             return redirect('profil')
     elif request.method=='POST' :
             if 'next_song' in request.POST:  
-            #if 'next_song' in request.post:
             ## start creating the trajectory  
+                caracteres = string.ascii_letters + string.digits
+                aleatoire = [random.choice(caracteres) for _ in range(6)]
                 c=request.POST.get('next_song','')             
                 t=Traj(path=['start']) 
                 t.user=request.user
+                t.key=''.join(aleatoire)
                 t.save()          
-                print 'loooooooooooooool'
-                try:
-                    
-                    t=Traj.objects.filter(user=request.user).order_by('-start_time')[1]
-                    print timezone.now()
-                    print t.start_time
-        
-                    if (timezone.now()-t.start_time).seconds >=1800:
-                    ## 1800 sec= 30 min
+                
+                try:      
+                    t3=Traj.objects.filter(user=request.user).order_by('-start_time')[1]                   
+                    if (timezone.now()-t3.start_time).seconds >=1800:
+                    ## was the last conexion of the user more than 30min ago?
                         t2=history(path=['start'])
                         t2.user=request.user
-                        t2.save()
-                        print 'try marche'
-                                                                
+                        t2.save()              
                 except:
+                    ## si pas de history
                     t2=history(path=['start']) 
                     t2.user=request.user
-                    t2.save() 
-                    print 'except'
+                    t2.save()                    
+                try:
+                    t2=history.objects.filter(user=request.user).order_by('-start_time')[0]
+                    
+                except:
+                    t2=history(path=['start']) 
+                    t2.user=request.user               
+                ## delimiteur 
+                t2.append('XXX')
+                t2.append_key(str(t.key))
+                t2.save()
+                    
                 return redirect(reverse('fiche_track',kwargs={'track_pseudo': c}))
+            
             if 'profil' in request.POST:  
                 track_list = Tracks.objects.order_by('track_name')
                 return render(request,'home.html',locals())
@@ -317,7 +325,10 @@ def fiche_track(request, track_pseudo):
             # on cherche le type de la musique
             
             genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
-            # on inscrit le nom du track           
+            # on inscrit le nom du track     
+            print genre
+            print name
+            
             t2.path.append([name,genre])    
             t2.path.append([listening_time,percentage])
             t2.save()

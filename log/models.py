@@ -8,46 +8,6 @@ from django import forms
 
 
 from jsonfield import JSONField
-#from django_mysql.models import ListCharField
-#from django.contrib.postgres.fields import JSONField
-
-#from django.contrib.postgres.fields import JSONField
-
-#neighborhoods= (
-#    ('1', 'downtown'),
-#    ('2', 'plateau'),
-#    ('3', 'westmount'),
-#)
-
-
-
-#age_range=[('1','under 20'),
-#            ('2','20-25'),
-#            ('3','26-30'),
-#            ('4','31-40'),
-#            ('5','over 40') ]
-#           
-#                
-#
-#regions= [ ('1','North America'),
-#           ('2','South America'),
-#           ('3','Central America'),
-#           ('4','Northern Europe'),
-#           ('5','Europe'),
-#           ('6','Eastern Europe'),
-#           ('8','Oceania'),
-#           ('9','Asia'),
-#           ('10','Southeast Asia'),
-#           ('11','Middle East'),
-#           ('12','North Africa'),
-#           ('13','Southern Africa'),]
-#
-#Area= [    	(	"	1	"	,	"	Arts & Humanities	"	)	,
-#        	(	"	2	"	,	"	Engineering & Technology	"	)	,
-#        	(	"	3	"	,	"	Life Sciences & Medicine	"	)	,
-#        	(	"	4	"	,	"	Natural Sciences	"	)	,
-#        	(	"	5	"	,	"	Social Sciences & Management	"	)	 ] 
-#        		
 
    
        
@@ -236,32 +196,40 @@ class Track_Coments(models.Model):
     
 def my_default():
     return ['']
+
+#def gen():
+#    caracteres = string.ascii_letters + string.digits
+#    aleatoire = [random.choice(caracteres) for _ in range(6)]
+#    return ''.join(aleatoire)
  
 class Traj(models.Model):
     user=models.ForeignKey(User)
     path=JSONField(default=my_default)
     start_time = models.DateTimeField(auto_now_add=True, auto_now=False) 
+    key=models.CharField(default='',max_length=50)
     def append(self,txt):
         self.path.append(txt)
 
     def __str__(self):  # __unicode__ on Python 2
-       return 'trajectory'
+       return self.key
    
 
 class history(models.Model):
     user=models.ForeignKey(User)
     path=JSONField(default=my_default)
     start_time = models.DateTimeField(auto_now_add=True, auto_now=False) 
+    key_traj=JSONField(default=my_default)
+    
     def append(self,txt):
         self.path.append(txt)
-
+        
+    def append_key(self,txt):
+        self.key_traj.append(txt)
+        
     def __str__(self):  # __unicode__ on Python 2
-       return 'trajectory'
+       return 'history'
     
-#    from log.models import Trajectories
-#    Trajectories.objects.create(path=['4',('a','b'),'90%'])
-#   c=Trajectories(path=['4',('a','b'),'90%'])
-# c.path.append('blabla')
+
     
     
     
