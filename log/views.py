@@ -291,7 +291,7 @@ def fiche_track(request, track_pseudo):
 #        print np.shape(y[0])
 #        print 'the choice isss :'
 #        print np.random.choice(len(y[0]),1,p=(y/np.sum(y))[0]  )
-         choice=np.random.choice(len(y[0]),1,p=(y/np.sum(y))[0]  )
+        choice=np.random.choice(len(y[0]),1,p=(y/np.sum(y))[0]  )
 
       
         
