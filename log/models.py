@@ -168,7 +168,7 @@ class Tracks(models.Model):
     preview=models.URLField(blank=True)  ## preview of 30sec
     nb_rating=models.IntegerField(default=1)
     
-    featuring=models.CharField(default='',max_length=50)
+    featuring=models.CharField(default='',max_length=50,blank=True)
     #wordcloud=models.CharField(default='',max_length=250)
     
     acousticness=models.FloatField(default=0)

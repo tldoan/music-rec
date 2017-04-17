@@ -28,6 +28,15 @@ import numpy as np
 
 from django.db.models import Avg
 
+
+import csv
+from keras.models import Sequential
+from keras.layers import Dense, Activation, Input
+import keras
+
+
+
+
 def loggin(request):  
     logout(request)
     #form=UserForm(None)
@@ -181,35 +190,147 @@ def fiche_track(request, track_pseudo):
     track = get_object_or_404(Tracks, track_pseudo=track_pseudo)
     has_yet_rated=True  
     path='wcloud_pictures/'+track_pseudo+'.png'
+    
     l=['shape_of_you','the_hills','closer']
     liste=[]
+    
     for i in range(len(l)):
-        liste.append(get_object_or_404(Tracks, track_pseudo=l[i]))    
+        liste.append(get_object_or_404(Tracks, track_pseudo=l[i]))   
+        
+        
     try:
         REVIEW=Track_Coments.objects.get(user=request.user,track=track)        
     except:
-        has_yet_rated=False              
+        has_yet_rated=False        
+        
+        
     load_wordcloud(track_pseudo,'')
     if request.method=='GET':
         # check si existe pas deja
         t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
+        
+################################################################
+     
+   
+        h=history.objects.filter(user=request.user).order_by('-start_time')[0]
+        
+        url=os.path.join(settings.STATIC_ROOT, 'data/genre_list.csv')
+        hist=h.path
+        with open(url, 'rb') as csvfile:
+            text = csv.reader(csvfile, delimiter=',')
+            genre_dict = {rows[0]:rows[1] for rows in text}       
+        historic=np.ones(len(genre_dict))
+        temps=0
+        power=0
+        weight=0.9
+        for i in reversed(hist):
+            if type(i)==list:
+                if type(i[0])==float:
+                    temps=i[0]*np.power(weight,power) 
+                    power+=1
+                if type(i[0])==unicode:
+                    historic[int(genre_dict[i[1]])]+=temps                
+        print historic        
+        historic=historic/np.sum(historic)
+        print historic
+        
+        
+        songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
+        #songs[track_pseudo]
+        
+        ##  s[0][2]: trak popularity , s[0][13]: nb rating
+        
+        ## wordcloud??
+        with open('/media/thang-long/UUI/psycopg2/user_features_list.csv', 'rb') as csvfile:
+            text = csv.reader(csvfile, delimiter=',')
+            user_features_dict = {rows[0]:rows[1] for rows in text}            
+        user_dim=len(user_features_dict)
+#
+        user_features=np.zeros(user_dim)
+        
+        profile=get_object_or_404(Profile, user=request.user)   
+        ## fill up the matrix
+        user_features[int(user_features_dict[profile.region])]=1
+        user_features[int(user_features_dict[profile.sex])]=1
+        user_features[int(user_features_dict[profile.age])]=1
+        user_features[int(user_features_dict[profile.area])]=1
+        
+        state=np.concatenate((historic,songs[track_pseudo],user_features,[track.track_popularity],[track.nb_rating]))  
+
+        ss=state.reshape(1,len(state))
+
+        model=Sequential()
+        model.add(Dense(100,input_shape=(len(state),),use_bias=True,bias_initializer=
+                        keras.initializers.RandomUniform(minval=0, maxval=5, seed=None),
+                        init=
+                        keras.initializers.RandomUniform(minval=-0, maxval=5, seed=None)))
+        
+       
+        
+
+        model.add(Dense(90,activation='relu',use_bias=True,bias_initializer=
+                        keras.initializers.RandomUniform(minval=0, maxval=5, seed=None),
+                        init=
+                        keras.initializers.RandomUniform(minval=-0, maxval=5, seed=None)))
+        
+        
+        ## final layers 
+        model.add(Dense(56,use_bias=True,bias_initializer=
+                        keras.initializers.RandomUniform(minval=0, maxval=5, seed=None),
+                        init=
+                        keras.initializers.RandomUniform(minval=-0, maxval=5, seed=None)))
+        
+        
+        
+        #print model.predict(ss)
+        y=model.predict(ss).astype('float32')
+#        print y/np.sum(y)
+#        print len(y[0])
+#        print type(y)
+#        print np.shape(y)
+#        print np.shape(y[0])
+#        print 'the choice isss :'
+#        print np.random.choice(len(y[0]),1,p=(y/np.sum(y))[0]  )
+         choice=np.random.choice(len(y[0]),1,p=(y/np.sum(y))[0]  )
+
+      
+        
+        
+        
+        
+        
+###############################################################        
         length=len(t.path)
         if type(t.path[length-1])==list:                      
             t.path.append(track_pseudo)
-            t.save() 
-            return render(request,'fiche_track.html',locals())
+            t.save()                    
         elif type(t.path[length-1].encode('ascii','ignore'))==str: 
-            if t.path[length-1]!=track_pseudo:    
-                
+            if t.path[length-1]!=track_pseudo:             
                 t.path.append(track_pseudo)
-                t.save() 
-                return render(request,'fiche_track.html',locals())
-            else:  
-                
-                return render(request,'fiche_track.html',locals()) 
-        else:  
-            
-            return render(request,'fiche_track.html',locals())                
+                t.save()                         
+        return render(request,'fiche_track.html',locals())
+        
+#        length=len(t.path)
+#        if type(t.path[length-1])==list:                      
+#            t.path.append(track_pseudo)
+#            t.save() 
+#            return render(request,'fiche_track.html',locals())
+#            
+#        elif type(t.path[length-1].encode('ascii','ignore'))==str: 
+#            if t.path[length-1]!=track_pseudo:    
+#                
+#                t.path.append(track_pseudo)
+#                t.save() 
+#                return render(request,'fiche_track.html',locals())
+#            else:  
+#                
+#                return render(request,'fiche_track.html',locals()) 
+#        else:  
+#            
+#            return render(request,'fiche_track.html',locals())   
+        
+
+             
     elif request.method=='POST':
         if 'rating' in request.POST:
             if Track_Coments.objects.filter(user=request.user,track=track).exists():
@@ -258,8 +379,7 @@ def fiche_track(request, track_pseudo):
              t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]  
              name=str(t.path[len(t.path)-1])
              
-             
-             
+                  
              
 #            ## collecting data        
              listening_time=request.POST.get('listening_time','') 
@@ -326,8 +446,6 @@ def fiche_track(request, track_pseudo):
             
             genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
             # on inscrit le nom du track     
-            print genre
-            print name
             
             t2.path.append([name,genre])    
             t2.path.append([listening_time,percentage])
