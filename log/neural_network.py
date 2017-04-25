@@ -102,7 +102,7 @@ def predict_type(user,historic,track):
 def evaluate_actions(user,historic,track,w):
         
     user_features=w[1]
-    w[0]=['Latin','Rock','Pop','Country']
+    w[0]=['Latin','Rock','Pop']
     
     url=os.path.join(settings.STATIC_ROOT, 'csv/genre_list.csv')
     with open(url, 'rb') as csvfile:
