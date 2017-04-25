@@ -8,12 +8,13 @@ urlpatterns = [
   
     #  url(r'^login$', views.loggin, name='login'),
      url(r'^$', views.loggin, name='login'),
-     # url(r'^fiche/(?P<pseudo>\w+)$', views.fiche_resto, name='fiche_resto'),
+
      
-      url(r'^fiche/(?P<track_pseudo>\w+)$', views.fiche_track, name='fiche_track'),
+#      url(r'^fiche/(?P<track_pseudo>\w+)$', views.fiche_track, name='fiche_track'),
+     url(r'^fiche/(?P<track_pseudo>.*)$', views.fiche_track, name='fiche_track'),
       
       
-      url(r'^(?P<titre_1>\w+)/(?P<titre_2>\w+)$', views.solo, name='solo'),
+      url(r'^(?P<titre_1>.*)/(?P<titre_2>.*)$', views.solo, name='solo'),
       
       
       
