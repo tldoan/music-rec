@@ -450,7 +450,16 @@ def PulpSolve(N,w,historic,user_features):
 #    prob.solve()
 #    prob.solve(pulp.PULP_CBC_CMD(dual=True))
 #    prob.solve(pulp.PULP_CBC_CMD())
-    prob.solve(pulp.PULP_CBC_CMD(dual=True))
+
+
+    pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
+    solver = pulp.COIN_CMD(path=pa,dual=True)
+    prob.solve(solver)
+
+
+
+
+#    prob.solve(pulp.PULP_CBC_CMD(dual=True))
 # pulp.pulpTestAll()
 #    print pulp.value(prob.objective)
     print 'constraints'
