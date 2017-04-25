@@ -33,3 +33,4 @@ wordcloud==1.2.1
 keras==2.0.3
 PuLp==1.6.5
 tensorflow==1.0.1
+h5py==2.6.0
