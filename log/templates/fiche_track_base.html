@@ -102,7 +102,7 @@ audio::-webkit-media-controls-panel {
 									<br/> -->
 
 									<audio id="myAudio" ontimeupdate="update(this)" controls="controls">
-									{% with 'https://s3.ca-central-1.amazonaws.com/music-rec/'|add:track.track_link|add:'.mp3' as sound_static %}
+									{% with 'https://s3.ca-central-1.amazonaws.com/music-rec/'|add:track.track_link|add:'.m4a' as sound_static %}
 									<source src="{{sound_static}}" type="audio/mpeg">
 									{% endwith %}
 									</audio>
@@ -171,7 +171,7 @@ this songs">
 		<div class="col-sm-4 col-md-4 col-lg-4" id='wcloud'>
 
 		  {% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
-		<img src="{% static image_static %}" alt="My image" style="width:80%" />
+		<img src="{% static image_static %}" alt="Be the first to brainstorm" style="width:80%" />
 		{% endwith %}
 		
 		<h4> <span class="label label-default">most frequent tag words used for this song</span></h4>
@@ -199,23 +199,25 @@ this songs">
 					    <tr>
 					      <th scope="row">Album </th>
 					      <td class='cell_hvr'>{{track.Album_name}}   </td>      
+					    </tr>					    				    					    
+					    <tr>
+					      <th scope="row">Track</th>
+					      <td class='cell_hvr'>  {{track.track_name}}  </td>  
 					    </tr>
-					     <tr>
+					    <th scope="row">Genre</th>
+					      <td class='cell_hvr'>  {{track.track_genre}}  </td>  
+					    </tr>
+					    <tr>
 					      <th scope="row">Artist</th>
-					      <td class='cell_hvr'> {{track.Artist}}  </td>
-					     
+					      <td class='cell_hvr'> {{track.Artist}}  </td>  
+					    </tr>
+					    <tr >
+					      <th scope="row">Artist rating</th>
+					      <td class='cell_hvr'> {{track.Artist_popularity| floatformat:0}}   </td>     
 					    </tr>
 					    <tr>
 					      <th scope="row">Featuring</th>
 					      <td class='cell_hvr'> {{track.featuring}}  </td>
-					    </tr>
-					    <tr >
-					      <th scope="row">Artist popularity</th>
-					      <td class='cell_hvr'> {{track.Artist_popularity| floatformat:0}}   </td>     
-					    </tr>
-					    <tr>
-					      <th scope="row">Name</th>
-					      <td class='cell_hvr'>  {{track.track_name}}  </td>  
 					    </tr>
 					  </tbody>
 					</table>

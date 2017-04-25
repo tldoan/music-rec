@@ -207,7 +207,7 @@ $.ajax({
    success: function(text){parseTxt(text);},
    error: function(){
     alert('can t open file or doesn t exist');
-   }
+   },
    });
  //alert('2');
  console.log('2');

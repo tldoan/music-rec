@@ -28,12 +28,19 @@ import numpy as np
 
 from django.db.models import Avg
 
+from itertools import *
 
-import csv
+#import csv
+
+
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Input
 import keras
+import tensorflow
 
+from neural_network import predict_type, history_update,evaluate_actions
+
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
 
 
@@ -71,11 +78,12 @@ def loggout(request):
     return redirect(reverse('login'))
 
 
-@login_required
+@login_required 
 def homepage(request):
     """'affiche la liste des tracks'""" 
 
     if request.method=='GET':  
+      
         if Profile.objects.filter(user=request.user).exists():
             prof = get_object_or_404(Profile, user=request.user)
             if (prof.area=='' or prof.age=='' or prof.region=='' or prof.sex==''):
@@ -87,6 +95,7 @@ def homepage(request):
             return redirect('profil')
     elif request.method=='POST' :
             if 'next_song' in request.POST:  
+                
             ## start creating the trajectory  
                 caracteres = string.ascii_letters + string.digits
                 aleatoire = [random.choice(caracteres) for _ in range(6)]
@@ -118,7 +127,7 @@ def homepage(request):
                 t2.append('XXX')
                 t2.append_key(str(t.key))
                 t2.save()
-                    
+               
                 return redirect(reverse('fiche_track',kwargs={'track_pseudo': c}))
             
             if 'profil' in request.POST:  
@@ -185,19 +194,22 @@ def register(request):
         form=UserForm(None)
         return render(request,'registration_form.html',{'form':form})
  
+    
 @login_required       
 def fiche_track(request, track_pseudo):
+    
+
+
+
+
+
+
+    
+    
     track = get_object_or_404(Tracks, track_pseudo=track_pseudo)
     has_yet_rated=True  
     path='wcloud_pictures/'+track_pseudo+'.png'
     
-    l=['shape_of_you','the_hills','closer']
-    liste=[]
-    
-    for i in range(len(l)):
-        liste.append(get_object_or_404(Tracks, track_pseudo=l[i]))   
-        
-        
     try:
         REVIEW=Track_Coments.objects.get(user=request.user,track=track)        
     except:
@@ -206,100 +218,42 @@ def fiche_track(request, track_pseudo):
         
     load_wordcloud(track_pseudo,'')
     if request.method=='GET':
-        # check si existe pas deja
-        t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
+       
+
+        ## apply weight to the historic
         
+        
+        historic=history_update(request.user)
+        
+
+        ## w is a list that contains [r[choice[0]],user_features]
+        w=predict_type(request.user,historic,track)
+
+#        ## w[1]=user_features
+     
+        l=evaluate_actions(request.user,historic,track,w)
+        
+#        l=['closer','close','alone']
+#        print l
+        liste=[]
+        for i in range(len(l)):
+            liste.append(get_object_or_404(Tracks, track_pseudo=l[i]))   
+#       
+        # N number of songs to recommend 
+#        N=4
+#        solve_linprog(N,values,historic)
+
 ################################################################
      
-   
-        h=history.objects.filter(user=request.user).order_by('-start_time')[0]
-        
-        url=os.path.join(settings.STATIC_ROOT, 'data/genre_list.csv')
-        hist=h.path
-        with open(url, 'rb') as csvfile:
-            text = csv.reader(csvfile, delimiter=',')
-            genre_dict = {rows[0]:rows[1] for rows in text}       
-        historic=np.ones(len(genre_dict))
-        temps=0
-        power=0
-        weight=0.9
-        for i in reversed(hist):
-            if type(i)==list:
-                if type(i[0])==float:
-                    temps=i[0]*np.power(weight,power) 
-                    power+=1
-                if type(i[0])==unicode:
-                    historic[int(genre_dict[i[1]])]+=temps                
-        print historic        
-        historic=historic/np.sum(historic)
-        print historic
-        
-        
-        songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
-        #songs[track_pseudo]
-        
-        ##  s[0][2]: trak popularity , s[0][13]: nb rating
-        
-        ## wordcloud??
-        with open('/media/thang-long/UUI/psycopg2/user_features_list.csv', 'rb') as csvfile:
-            text = csv.reader(csvfile, delimiter=',')
-            user_features_dict = {rows[0]:rows[1] for rows in text}            
-        user_dim=len(user_features_dict)
-#
-        user_features=np.zeros(user_dim)
-        
-        profile=get_object_or_404(Profile, user=request.user)   
-        ## fill up the matrix
-        user_features[int(user_features_dict[profile.region])]=1
-        user_features[int(user_features_dict[profile.sex])]=1
-        user_features[int(user_features_dict[profile.age])]=1
-        user_features[int(user_features_dict[profile.area])]=1
-        
-        state=np.concatenate((historic,songs[track_pseudo],user_features,[track.track_popularity],[track.nb_rating]))  
 
-        ss=state.reshape(1,len(state))
-
-        model=Sequential()
-        model.add(Dense(100,input_shape=(len(state),),use_bias=True,bias_initializer=
-                        keras.initializers.RandomUniform(minval=0, maxval=5, seed=None),
-                        init=
-                        keras.initializers.RandomUniform(minval=-0, maxval=5, seed=None)))
-        
-       
-        
-
-        model.add(Dense(90,activation='relu',use_bias=True,bias_initializer=
-                        keras.initializers.RandomUniform(minval=0, maxval=5, seed=None),
-                        init=
-                        keras.initializers.RandomUniform(minval=-0, maxval=5, seed=None)))
-        
-        
-        ## final layers 
-        model.add(Dense(56,use_bias=True,bias_initializer=
-                        keras.initializers.RandomUniform(minval=0, maxval=5, seed=None),
-                        init=
-                        keras.initializers.RandomUniform(minval=-0, maxval=5, seed=None)))
-        
-        
-        
-        #print model.predict(ss)
-        y=model.predict(ss).astype('float32')
-#        print y/np.sum(y)
-#        print len(y[0])
-#        print type(y)
-#        print np.shape(y)
-#        print np.shape(y[0])
-#        print 'the choice isss :'
-#        print np.random.choice(len(y[0]),1,p=(y/np.sum(y))[0]  )
-        choice=np.random.choice(len(y[0]),1,p=(y/np.sum(y))[0]  )
 
       
+
         
         
         
-        
-        
-###############################################################        
+###############################################################    
+        t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]    
         length=len(t.path)
         if type(t.path[length-1])==list:                      
             t.path.append(track_pseudo)
@@ -307,27 +261,13 @@ def fiche_track(request, track_pseudo):
         elif type(t.path[length-1].encode('ascii','ignore'))==str: 
             if t.path[length-1]!=track_pseudo:             
                 t.path.append(track_pseudo)
-                t.save()                         
+                t.save()      
+                
+   
+               
         return render(request,'fiche_track.html',locals())
         
-#        length=len(t.path)
-#        if type(t.path[length-1])==list:                      
-#            t.path.append(track_pseudo)
-#            t.save() 
-#            return render(request,'fiche_track.html',locals())
-#            
-#        elif type(t.path[length-1].encode('ascii','ignore'))==str: 
-#            if t.path[length-1]!=track_pseudo:    
-#                
-#                t.path.append(track_pseudo)
-#                t.save() 
-#                return render(request,'fiche_track.html',locals())
-#            else:  
-#                
-#                return render(request,'fiche_track.html',locals()) 
-#        else:  
-#            
-#            return render(request,'fiche_track.html',locals())   
+  
         
 
              
@@ -371,7 +311,7 @@ def fiche_track(request, track_pseudo):
                 return render(request,'fiche_track.html',locals())
         
         elif 'queue' in request.POST:
-             print 'methode = POST  titre_1_________________'
+   
              #c=request.POST.get('next_song','') 
              titre_1=request.POST.get('titre_1','')
              titre_2=request.POST.get('titre_2','')
@@ -409,7 +349,7 @@ def fiche_track(request, track_pseudo):
              t2.path.append([listening_time,percentage])
              t2.save()
              
-             print 'queue___________'
+           
              
              if titre_2=='empty':                                    
                  return redirect(reverse('fiche_track',kwargs={'track_pseudo': titre_1}))
@@ -476,16 +416,24 @@ def fiche_track(request, track_pseudo):
             ## voir si on keep track de la note de la zik aussi
             t.path.append('end')
             t.save()
+            
             #### history registering
             t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
-            # on cherche le type de la musique
-            
+            # on cherche le type de la musique   
             genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
             # on inscrit le nom du track           
             t2.path.append([name,genre])    
             t2.path.append([listening_time,percentage])
             t2.save()
             return redirect(reverse('logout'))
+        
+    
+################################################################
+     
+   
+        
+###############################################################         
+
         
 @login_required         
 def solo(request,titre_1,titre_2):
@@ -694,23 +642,24 @@ def grey_color_func(word, font_size, position, orientation, random_state=None,
          
 
 def load_wordcloud(track_pseudo,brainstorm):
-    #text = open(os.path.join(settings.STATIC_URL+'wordcloud_txt/', track_name+'.txt'), 'a')
-    text=open(os.path.join(settings.STATIC_ROOT, "wordcloud_txt/" + track_pseudo+ ".txt"), 'a')
-    ## add words 
-    text.write('\n')
-    text.write(brainstorm)
-    text.close()
-    text = open(os.path.join(settings.STATIC_ROOT+'wordcloud_txt/', track_pseudo+'.txt')).read()
-    ## now that we have written in the text, let's generate it
-#    image = wordcloud.to_image()
-#    image.save(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', track_pseudo+'.png'),'png')  
-    mask = np.array(Image.open(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', 'play_icon'+'.jpg')))
-    #default_colors = wordcloud.to_array()
-    wordcloud = WordCloud(relative_scaling = 0.60,mask=mask).generate(text)
-#    plt.imshow(wordcloud.recolor(color_func=grey_color_func, random_state=1),
-#           interpolation="bilinear")
-    wordcloud.recolor(color_func=grey_color_func, random_state=1)
-    wordcloud.to_file(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', track_pseudo+'.jpg'))
+    if brainstorm!='':     
+        #text = open(os.path.join(settings.STATIC_URL+'wordcloud_txt/', track_name+'.txt'), 'a')
+        text=open(os.path.join(settings.STATIC_ROOT, "wordcloud_txt/" + track_pseudo+ ".txt"), 'a')
+        ## add words 
+        text.write('\n')
+        text.write(brainstorm)
+        text.close()
+        text = open(os.path.join(settings.STATIC_ROOT+'wordcloud_txt/', track_pseudo+'.txt')).read()
+        ## now that we have written in the text, let's generate it
+    #    image = wordcloud.to_image()
+    #    image.save(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', track_pseudo+'.png'),'png')  
+        mask = np.array(Image.open(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', 'play_icon'+'.jpg')))
+        #default_colors = wordcloud.to_array()
+        wordcloud = WordCloud(relative_scaling = 0.60,mask=mask).generate(text)
+    #    plt.imshow(wordcloud.recolor(color_func=grey_color_func, random_state=1),
+    #           interpolation="bilinear")
+        wordcloud.recolor(color_func=grey_color_func, random_state=1)
+        wordcloud.to_file(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/',track_pseudo+'.jpg'))
 
 
 

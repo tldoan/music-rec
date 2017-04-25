@@ -145,21 +145,21 @@ class Coments(models.Model):
 ## 0 = MONDAY
 
 class Tracks(models.Model):
-    track_name=models.CharField(default='',max_length=50)
-    track_pseudo=models.CharField(default='',max_length=50)
+    track_name=models.CharField(default='',max_length=250)
+    track_pseudo=models.CharField(default='',max_length=250)
     track_popularity=models.FloatField(default=0)
-    track_genre=models.CharField(default='pop',max_length=50)
+    track_genre=models.CharField(default='pop',max_length=250)
     
     
-    Artist=models.CharField(default='',max_length=50)
+    Artist=models.CharField(default='',max_length=250)
     
-    track_link=models.CharField(default='',max_length=50)
+    track_link=models.CharField(default='',max_length=250)
     
     Artist_popularity=models.FloatField(default=0)
     #Artist_genre=models.CharField(default='',max_length=50)
     Artist_image=models.URLField(blank=True)
     
-    Album_name=models.CharField(default='',max_length=50)
+    Album_name=models.CharField(default='',max_length=250)
     Album_cover=models.URLField(blank=True)
     
     #lyrics=models.CharField(default='',max_length=250) ## save in a text file
@@ -168,7 +168,7 @@ class Tracks(models.Model):
     preview=models.URLField(blank=True)  ## preview of 30sec
     nb_rating=models.IntegerField(default=1)
     
-    featuring=models.CharField(default='',max_length=50,blank=True)
+    featuring=models.CharField(default='',max_length=250,blank=True)
     #wordcloud=models.CharField(default='',max_length=250)
     
     acousticness=models.FloatField(default=0)

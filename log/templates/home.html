@@ -136,16 +136,20 @@
 {% endblock %}
 
 {% block track_list %}
+
 <div class="container">
+
+
  <table class="table   table-inverse table-responsive">
   <thead>
-  <tr> <th colspan="5" class='title'><h3><strong>Tracks we have for you</strong></h3></th>  
+  <tr> <th colspan="4" class='title'><h3><strong>Tracks we have for you</strong></h3></th>  
  
     <tr> 
      <th scope="row">Track name </th>
-     <th scope="row">From Album</th>
      <th scope="row">Artist </th>
-     <th scope="row">Featuring</th>
+     <th scope="row">Genre</th>   
+     
+ <!---     <th scope="row">Featuring</th>-->
      
      </tr>
 
@@ -159,9 +163,10 @@
     <tr>
       
       <td class='cell_hvr'>{{ x.track_name }} </td>
-      <td class='cell_hvr'>{{ x.Album_name }} </td> 
       <td class='cell_hvr'>{{ x.Artist }}     </td>
-      <td class='cell_hvr'>{{ x.featuring }}  </td>
+      <td class='cell_hvr'>{{ x.track_genre }} </td> 
+      
+ <!---      <td class='cell_hvr'>{{ x.featuring }}  </td>-->
       <td class='cell_hvr'> 
 
           
@@ -190,6 +195,7 @@
   </tbody>
 </table>
 </div>
+
 
 
 
