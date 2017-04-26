@@ -485,16 +485,16 @@ def PulpSolve(N,w,historic,user_features,t2):
     print stop - start 
     
     start = timeit.default_timer()
-    prob.solve(pulp.COIN_CMD(dual=True))
+#    prob.solve(pulp.COIN_CMD(dual=True))
 
 #    prob.solve(pulp.GLPK())
     
     
     
-#    pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
-#    solver = pulp.COIN_CMD(path=pa,dual=True)
-##
-#    prob.solve(solver)
+    pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
+    solver = pulp.COIN_CMD(path=pa,dual=True)
+#
+    prob.solve(solver)
     
     stop = timeit.default_timer()
     print "tps de solve"
