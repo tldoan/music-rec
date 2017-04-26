@@ -1,12 +1,13 @@
 import numpy as np
 import csv
-from django.conf import settings
+
 from .models import history, Profile, Tracks
+from django.conf import settings
 import os
 from django.shortcuts import render,redirect, get_object_or_404
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Input
-from scipy.optimize import linprog
+
 import keras
 import tensorflow as tf
 
@@ -15,6 +16,11 @@ import h5py
 from pulp import *
 from operator import itemgetter
 import pulp
+
+
+import timeit
+
+
 
 
 def history_update(user):
@@ -99,10 +105,12 @@ def predict_type(user,historic,track):
 
 
 ## compute the values of all actions
-def evaluate_actions(user,historic,track,w):
+def evaluate_actions(user,historic,track,w,t2):
+    
+    
         
     user_features=w[1]
-    w[0]=['Latin','Rock','Pop']
+    w[0]=['Country','Pop','Rock']
     
     url=os.path.join(settings.STATIC_ROOT, 'csv/genre_list.csv')
     with open(url, 'rb') as csvfile:
@@ -128,7 +136,7 @@ def evaluate_actions(user,historic,track,w):
             
             ######## 4 types differents
             choice=[]
-            value=0
+#            value=0
             single_action_values={}
             for i in w[0]:
                 
@@ -144,21 +152,28 @@ def evaluate_actions(user,historic,track,w):
                 # load weights into new model
                 single_action_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/single_action/single_action_weights_'+str(jj)+'.h5'))
      
-               
-                single_action_values[i]=single_action_model.predict(r).astype('float32')
+#                print single_action_model.predict(r).astype('float32')
+#                print np.array(t2.novelty[i])
+#                print np.exp(np.array(t2.novelty[i]).astype('float32')/4)
+                print 'multiplication'
+#                print type(np.multiply(single_action_model.predict(r).astype('float32'),2*np.exp(np.array(t2.novelty[i]).astype('float32')/4)))
+#                print np.shape(np.multiply(single_action_model.predict(r).astype('float32'),2*np.exp(np.array(t2.novelty[i]).astype('float32')/4)))
+                ddd=np.multiply(single_action_model.predict(r).astype('float32'),2*np.exp(np.array(t2.novelty[i]).astype('float32')/4))
+#                single_action_values[i]=single_action_model.predict(r).astype('float32')
+                single_action_values[i]=ddd
                 cc=np.argmax(single_action_values[i])
-                value+=single_action_values[i][cc][0]*historic[int(jj)]
+#                value+=single_action_values[i][cc][0]*historic[int(jj)]
 #                print single_action_values[i]
 #                print 'i ' +i
 #                print 'argmax '+ str(cc)
 #                print songs_list[i][cc]
                 choice.append(songs_list[i][cc])
-            print 'value  len=4'
-            print value 
+#            print 'value  len=4'
+#            print value 
             return choice
         
         else:
-            choice=PulpSolve(4,w,historic,user_features)
+            choice=PulpSolve(4,w,historic,user_features,t2)
             return choice
             
 #        if len(w[0])==1:
@@ -317,8 +332,10 @@ def evaluate_actions(user,historic,track,w):
        
 
 
-def PulpSolve(N,w,historic,user_features):
+def PulpSolve(N,w,historic,user_features,t2):
+    
 
+    songs_keys=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_keys.npy')).item() 
 ############### loading values ##############
     url=os.path.join(settings.STATIC_ROOT, 'csv/genre_list.csv')
     with open(url, 'rb') as csvfile:
@@ -348,12 +365,16 @@ def PulpSolve(N,w,historic,user_features):
     
     double_action_values={}
     single_action_values={}
-    
+    start = timeit.default_timer()  
     prob = LpProblem("Songs recommendation",LpMaximize)
     var={}
     c=0    
+    nb={}
+    d=0 
+    start = timeit.default_timer()
     for i in w[0]:
-      
+        cc=0
+        nb[i]=1
         var[i]={}
            
     ###########
@@ -381,13 +402,11 @@ def PulpSolve(N,w,historic,user_features):
                     
         # load weights into new model
         single_action_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/single_action/single_action_weights_'+str(jj)+'.h5'))     
-        single_action_values[i]=single_action_model.predict(rr).astype('float32')
         
+        ddd=np.multiply(single_action_model.predict(rr).astype('float32'),2*np.exp(np.array(t2.novelty[i]).astype('float32')/4))
+#        single_action_values[i]=single_action_model.predict(rr).astype('float32')
+        single_action_values[i]=ddd
   
-    
-#        print np.shape(double_action_values[i])
-#        print np.shape(single_action_values[i])
-        
         
         
         L=songs_by_type[i].keys()
@@ -401,30 +420,7 @@ def PulpSolve(N,w,historic,user_features):
         var[i]['X']=LpVariable.dicts("x", L, 0, 1, LpContinuous)
         var[i]['L']=LpVariable.dicts("l", L, 0, 1, LpContinuous)
         var[i]['n']=LpVariable.dicts("n", L, 0, 1, LpContinuous)
-        ## ojective function
-        c+= lpSum(historic[int(jj)]*var[i]['Y'][(r)]*double_action_values[i][list_correlations[i].index(r)] for r in z)
-        +lpSum(historic[int(jj)]*var[i]['X'][(r)]*single_action_values[i][songs_list[i].index(r)] for r in L)
-        -lpSum(historic[int(jj)]*(-var[i]['L'][(r)])*single_action_values[i][songs_list[i].index(r)] for r in L)
-        ## objective value
-    
-    prob+=c     
-#        
-#        prob += lpSum(historic[int(jj)]*var[i]['X'][(r)]*single_action_values[i][list_correlations[i].index(r)] for r in L)
-#        prob += lpSum(historic[int(jj)]*(-var[i]['L'][(r)])*single_action_values[i][list_correlations[i].index(r)] for r in L)
-
-         
-    d=0   
-    nb={}
-    for i in w[0]:
-        nb[i]=1
-        L=songs_by_type[i].keys()
-#        z = list(combination(L,2))
-        z=list_correlations[i]
-        corr=[(r) for r in z]
         
-#        prob += 10*lpSum(var[i]['Y'][(r)] for r in z)+lpSum(var[i]['X'][(r)] for r in L)-lpSum((var[i]['L'][(r)]) for r in L)
-#        prob += lpSum(var[i]['X'][(r)] for r in L)
-#        prob += lpSum((-var[i]['L'][(r)]) for r in L)
         
         prob += lpSum(var[i]['X'][(r)]  for r in L) ==1
         
@@ -437,38 +433,89 @@ def PulpSolve(N,w,historic,user_features):
         
         for r in L:
             prob+=var[i]['X'][r] <= var[i]['n'][r]
-    
-            
+        
+        ## ojective function
+        
         d+= lpSum(var[i]['n'][r] for r in L) 
-    prob+=d==N       
+     
+        cc+= lpSum(var[i]['Y'][(r)]*double_action_values[i][list_correlations[i].index(r)]*2*np.exp(t2.novelty[i][songs_keys[i][r[0]]][0])*np.exp(t2.novelty[i][songs_keys[i][r[1]]][0]) for r in z)
+        +lpSum((var[i]['X'][(r)]-var[i]['L'][(r)])*single_action_values[i][songs_list[i].index(r)] for r in L)
+#        -lpSum((-var[i]['L'][(r)])*single_action_values[i][songs_list[i].index(r)] for r in L)
+        c+=cc*historic[int(jj)]
+        ## objective value
+    prob+=d==N 
+    prob+=c     
+#        
+#        prob += lpSum(historic[int(jj)]*var[i]['X'][(r)]*single_action_values[i][list_correlations[i].index(r)] for r in L)
+#        prob += lpSum(historic[int(jj)]*(-var[i]['L'][(r)])*single_action_values[i][list_correlations[i].index(r)] for r in L)
+
+       
+#    d=0   
+#   
+#    for i in w[0]:
+##        nb[i]=1
+#        L=songs_by_type[i].keys()
+###        z = list(combination(L,2))
+##        z=list_correlations[i]
+##        corr=[(r) for r in z]
+#        
+#        
+##        prob += lpSum(var[i]['X'][(r)]  for r in L) ==1
+##        
+##        
+##        for r in z:
+##            prob += var[i]['Y'][(r)]  <= var[i]['X'][r[0]]
+##            prob += var[i]['Y'][(r)]  <= var[i]['X'][r[1]]
+##            prob += var[i]['Y'][(r)]  <= var[i]['L'][r[0]]
+##            prob += var[i]['Y'][(r)]  <= var[i]['L'][r[1]]
+##        
+##        for r in L:
+##            prob+=var[i]['X'][r] <= var[i]['n'][r]
+#    
+#            
+#        d+= lpSum(var[i]['n'][r] for r in L) 
+#    prob+=d==N       
             
         
 #    prob.writeLP(os.path.join(settings.STATIC_ROOT, 'lol.lp'))
 #        prob.writeLP('lol.lp')
-#    prob.solve(pulp.GLPK())
-#    prob.solve(pulp.COIN_CMD(dual=True))
-#    prob.solve()
-#    prob.solve(pulp.PULP_CBC_CMD(dual=True))
-#    prob.solve(pulp.PULP_CBC_CMD())
-
-
-    path=os.path.join(settings.STATIC_ROOT, 'cbc') 
-    solver = pulp.COIN_CMD(path=path,dual=True)
-    prob.solve(solver)
-    
-    
 #    prob.solve(pulp.GUROBI(dual=True))
+    stop = timeit.default_timer()
+    print 'tps pr add constraints'
+    print stop - start 
+    
+    start = timeit.default_timer()
+    prob.solve(pulp.COIN_CMD(dual=True))
 
+#    prob.solve(pulp.GLPK())
+    
+    
+    
+#    pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
+#    solver = pulp.COIN_CMD(path=pa,dual=True)
+##
+#    prob.solve(solver)
+    
+    stop = timeit.default_timer()
+    print "tps de solve"
+    print stop - start 
+
+
+
+#    prob.solve(pulp.solvers.LpSolver())
 
 
 
 #    prob.solve(pulp.PULP_CBC_CMD(dual=True))
-# pulp.pulpTestAll()
+    
+#    prob.solve(pulp.PULP_CBC_CMD(dual=True))
+
 #    print pulp.value(prob.objective)
-    print 'constraints'
-    print len(prob.constraints)
-    print 'variables'
-    print len(prob.variables())
+
+#    print 'constraints'
+#    print len(prob.constraints)
+#    print 'variables'
+#    print len(prob.variables())
 #    q=0
 #    for v in prob.variables():
 #        if v.varValue>0:
@@ -477,6 +524,7 @@ def PulpSolve(N,w,historic,user_features):
 #                
 #    print 'q = ' +str(q)
 #    print pulp.value(prob.objective)
+    start = timeit.default_timer()
     c=np.zeros(len(w[0]))
     for i in range(len(w[0])):
         c[i]=historic[int(genre_dict[w[0][i]])]
@@ -484,15 +532,15 @@ def PulpSolve(N,w,historic,user_features):
     y={}
 #        n={}
     restant=N-len(w[0])
-    print 'historic'
-    print historic
-    print c
-    print c/np.sum(c)
-    print 'restant'
-    print restant
+#    print 'historic'
+#    print historic
+#    print c
+#    print c/np.sum(c)
+#    print 'restant'
+#    print restant
     pion=np.random.choice(len(c),restant,p=c/np.sum(c),replace=True)
-    print pion
-    print 'pion'
+#    print pion
+#    print 'pion'
     
     for i in pion:
         nb[w[0][i]]+=1
@@ -525,6 +573,9 @@ def PulpSolve(N,w,historic,user_features):
            
             for ii in z:         
                 choice.append(x[i].keys()[ii])
+    stop = timeit.default_timer()
+    print "fin du prg"
+    print stop - start 
         #print x[i].keys()[z]
 #    print len(choice)
 #   

@@ -8,7 +8,9 @@ from django import forms
 
 
 from jsonfield import JSONField
-
+from django.conf import settings
+import os
+import numpy as np
    
        
 rates=[('1','1'),
@@ -212,13 +214,24 @@ class Traj(models.Model):
 
     def __str__(self):  # __unicode__ on Python 2
        return self.key
-   
 
+   
+def default_songs():
+    songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
+    novelty={}
+    for i in songs_list:
+        novelty[i]=np.zeros(shape=(len(songs_list[i]),1))
+    return novelty
+    
+    
+    
+    
 class history(models.Model):
     user=models.ForeignKey(User)
     path=JSONField(default=my_default)
     start_time = models.DateTimeField(auto_now_add=True, auto_now=False) 
     key_traj=JSONField(default=my_default)
+    novelty=JSONField(default=default_songs)
     
     def append(self,txt):
         self.path.append(txt)

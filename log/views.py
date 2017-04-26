@@ -33,16 +33,16 @@ from itertools import *
 #import csv
 
 
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Input
-import keras
-import tensorflow
+#from keras.models import Sequential
+#from keras.layers import Dense, Activation, Input
+#import keras
+#import tensorflow
 
 from neural_network import predict_type, history_update,evaluate_actions
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
-
+import timeit
 
 def loggin(request):  
     logout(request)
@@ -197,41 +197,40 @@ def register(request):
     
 @login_required       
 def fiche_track(request, track_pseudo):
+    novelty_parameters=2
+    novelty_limit=60
     
-
-
-
-
-
-
-    
-    
+    songs_keys=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_keys.npy')).item()   
     track = get_object_or_404(Tracks, track_pseudo=track_pseudo)
+    print 'track'
+    print track.track_genre
+    print track.track_pseudo
     has_yet_rated=True  
     path='wcloud_pictures/'+track_pseudo+'.png'
     
     try:
         REVIEW=Track_Coments.objects.get(user=request.user,track=track)        
     except:
-        has_yet_rated=False        
-        
+        has_yet_rated=False             
         
     load_wordcloud(track_pseudo,'')
-    if request.method=='GET':
-       
-
-        ## apply weight to the historic
-        
-        
-        historic=history_update(request.user)
-        
-
+    if request.method=='GET':      
+        ## apply weight to the historic           
+        historic=history_update(request.user)      
         ## w is a list that contains [r[choice[0]],user_features]
+        t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
+        
+        
+       
+    
+        start = timeit.default_timer()
+    
         w=predict_type(request.user,historic,track)
-
-#        ## w[1]=user_features
-     
-        l=evaluate_actions(request.user,historic,track,w)
+        stop = timeit.default_timer()
+        print "tps de predict_type"
+        print stop - start 
+#        ## w[1]=user_features    
+        l=evaluate_actions(request.user,historic,track,w,t2)
         
 #        l=['closer','close','alone']
 #        print l
@@ -239,19 +238,7 @@ def fiche_track(request, track_pseudo):
         for i in range(len(l)):
             liste.append(get_object_or_404(Tracks, track_pseudo=l[i]))   
 #       
-        # N number of songs to recommend 
-#        N=4
-#        solve_linprog(N,values,historic)
 
-################################################################
-     
-
-
-      
-
-        
-        
-        
 ###############################################################    
         t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]    
         length=len(t.path)
@@ -261,15 +248,10 @@ def fiche_track(request, track_pseudo):
         elif type(t.path[length-1].encode('ascii','ignore'))==str: 
             if t.path[length-1]!=track_pseudo:             
                 t.path.append(track_pseudo)
-                t.save()      
-                
-   
+                t.save()                      
                
         return render(request,'fiche_track.html',locals())
         
-  
-        
-
              
     elif request.method=='POST':
         if 'rating' in request.POST:
@@ -337,19 +319,26 @@ def fiche_track(request, track_pseudo):
              liste=request.POST.get('liste2','')
              t.path.append(liste)
 #            t.path.append(track_pseudo)
-             t.save()
-             
+             t.save()       
              #### history registering
              t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
-             # on cherche le type de la musique
-             
+             # on cherche le type de la musique 
              genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre) 
              # on inscrit le nom du track           
              t2.path.append([name,genre])    
              t2.path.append([listening_time,percentage])
+             if float(listening_time)>=novelty_limit:
+                 print np.array(t2.novelty[track.track_genre])
+#                 print np.shape(np.array(t2.novelty[track.track_genre])
+                 
+                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]<=novelty_parameters:                
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]+=1          
+                 else:
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0
+             
+                     
              t2.save()
              
-           
              
              if titre_2=='empty':                                    
                  return redirect(reverse('fiche_track',kwargs={'track_pseudo': titre_1}))
@@ -389,6 +378,18 @@ def fiche_track(request, track_pseudo):
             
             t2.path.append([name,genre])    
             t2.path.append([listening_time,percentage])
+           
+            
+            
+            if float(listening_time)>=novelty_limit:
+#                 print np.array(t2.novelty[track.track_genre])
+#                 print np.shape(np.array(t2.novelty[track.track_genre])
+                 
+                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]<=novelty_parameters:                
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]+=1          
+                 else:
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0
+                     
             t2.save()
             return redirect(reverse('homepage'))
         
@@ -424,10 +425,17 @@ def fiche_track(request, track_pseudo):
             # on inscrit le nom du track           
             t2.path.append([name,genre])    
             t2.path.append([listening_time,percentage])
+            if float(listening_time)>=novelty_limit:
+                 print np.array(t2.novelty[track.track_genre])
+#                 print np.shape(np.array(t2.novelty[track.track_genre])
+                 
+                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]<=novelty_parameters:                
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]+=1          
+                 else:
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0
             t2.save()
             return redirect(reverse('logout'))
         
-    
 ################################################################
      
    
@@ -437,6 +445,9 @@ def fiche_track(request, track_pseudo):
         
 @login_required         
 def solo(request,titre_1,titre_2):
+    novelty_parameters=2
+    novelty_limit=60
+    songs_keys=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_keys.npy')).item()  
     base_2=True
     track = get_object_or_404(Tracks, track_pseudo=titre_1)
     track2= get_object_or_404(Tracks, track_pseudo=titre_2)
@@ -493,7 +504,6 @@ def solo(request,titre_1,titre_2):
                         ## it is a dictionnary convert it now to float  
                         ## il existera toujours car le mec vient de submit en fait 
                         track.track_popularity=Track_Coments.objects.filter(track=track).aggregate(Avg('rating'))['rating__avg']
-
 #                    track.nb_rating+=1
                     track.save()  
                     has_yet_rated=True
@@ -533,6 +543,14 @@ def solo(request,titre_1,titre_2):
              # on inscrit le nom du track           
              t2.path.append([name,genre])    
              t2.path.append([listening_time,percentage])
+             if float(listening_time)>=novelty_limit:
+               
+#                 print np.shape(np.array(t2.novelty[track.track_genre])
+                 
+                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]<=novelty_parameters:                
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]+=1          
+                 else:
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0
              t2.save()
              return redirect(reverse('fiche_track',kwargs={'track_pseudo': titre_2}))
 # homepage
@@ -569,6 +587,14 @@ def solo(request,titre_1,titre_2):
             # on inscrit le nom du track           
             t2.path.append([name,genre])    
             t2.path.append([listening_time,percentage])
+            if float(listening_time)>=novelty_limit:
+                
+#                 print np.shape(np.array(t2.novelty[track.track_genre])
+                 
+                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]<=novelty_parameters:                
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]+=1          
+                 else:
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0
             t2.save()
             return redirect(reverse('homepage'))
 # logout
@@ -604,9 +630,16 @@ def solo(request,titre_1,titre_2):
             # on inscrit le nom du track           
             t2.path.append([name,genre])    
             t2.path.append([listening_time,percentage])
+            if float(listening_time)>=novelty_limit:
+                 
+#                 print np.shape(np.array(t2.novelty[track.track_genre])
+                 
+                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]<=novelty_parameters:                
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]+=1          
+                 else:
+                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0
             t2.save()
             return redirect(reverse('logout'))
-
 
 #def update_restaurant_information(request):
 @login_required    
