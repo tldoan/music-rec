@@ -1,20 +1,58 @@
 $('document').ready(function(){ 
+var tracksss= document.getElementById('TRACK').innerText;
+var pictures=document.getElementById('wcloud_picture1').src;
 
-    $('.panel-body').hide();
-    $('#hide2').hide();
+       
+     
+     
+      $('#submit').click(function(){
+        
+        if($('.rating').val()>0){
 
-    $('#hide2').click(function(){
-        $('.panel-body').hide();
-        $('#hide2').hide();
-        $('#show').show();
-        });
+       $('#rating3').hide();
+        
+        console.log('hide');
+        $.ajax({
+      type: "POST",
+      url:"/save_rating",  
+      async : false,
+     data: { rating: $('.rating').val(),  
+   wordcloud: $('#tokenfield').val(), track_pseudo:tracksss},  
+     dataType: 'json',
+     success:function(jsons){
 
-    $('#show').click(function(){
-        $('.panel-body').show();
-        $('#show').hide();
-        $('#hide2').show();
-    
+      var data = JSON.stringify(jsons);
+        var data2=JSON.parse(data);    
+
+        if (data2['update_wcloud']){
+          alert('Thanks for your coments !');
+          document.getElementById('wcloud_picture1').src="https://s3.ca-central-1.amazonaws.com/music-rec/wait.gif"
+         
+          setTimeout(function() {
+              
+           document.getElementById('wcloud_picture1').src=pictures;
+    }, 1000);
+         
+         
+          
+              
+
+      }else{
+        alert('pas d update');
+      }
+     },
+     error: function(){
+      alert('error during the callback');
+     },
     });
+   }else{
+    alert('please give a rating !');
+   }
+
+ });
+  
+
+
 
 });
 
@@ -66,29 +104,7 @@ function update(player) {
 };
 
 ///////////////// text lyrics
-$(function () { 
-var myVar = document.getElementById("lyrics_var").value;
-//console.log(myVar);
-$.ajax({
-    type: "GET",
 
-    url:"/static/lyrics/"+myVar+".txt",
-    
-    dataType: "text",
-    async : false,
-   success: function(text){lyrics(text);},
-   error: function(){
-    alert('can t open file or doesn t exist');
-   }
-   });
- //alert('2');
- console.log('2');
- function lyrics(text){
-  var rows=text.split('\n'); 
-  //console.log(rows);
-  $('#lyrics').html(rows).text();
-}
-});
   
 
 // rating
@@ -110,7 +126,7 @@ $.ajax({
 var mot=[];
 
 $(function () { 
-console.log('1');
+//console.log('1');
 $.ajax({
     type: "GET",
 
@@ -124,27 +140,29 @@ $.ajax({
    },
    });
  //alert('2');
- console.log('2');
+// console.log('2');
  function parseTxt(text){
   //alert('success');
 
   var rows=text.split('\n'); 
-  console.log(rows);
+  //console.log(rows);
+
   $.each(rows, function( index, value ) {
-    mot[index]=value;
+    
+    mot[index]=value.replace(' ','');
+   
   });
-  //console.log(mot);
+  
   
   };
-  console.log(mot);
+ // console.log(mot);
 // tokenfield
 //////////////////////////
-console.log('3');
+//console.log('3');
 $('#tokenfield').tokenfield({
 
   autocomplete: {
     source:mot,
-    //source: ['awesomeness'],
     delay: 100
   },
   showAutocompleteOnFocus: true
@@ -161,26 +179,29 @@ $('#tokenfield').on('tokenfield:createtoken', function (event) {
 });
 
 $('#tokenfield').on('tokenfield:createtoken', function (event) {
-  console.log(mot);
-    //var available_tokens = ['red','blue','green','yellow','violet','brown','purple','black','white','awesomeness'];
+  //console.log(mot);
+   
     var exists = false;
     $.each(mot, function( index, value ) {
             //console.log(value+","+event.attrs.value);
 
-             if (value.replace('\r', '')==String(event.attrs.value)) {
-              //console.log('equals');
-              // console.log(value);
+             // if (value.replace('\r', '')==String(event.attrs.value)) {
+              if (value.replace(' ','')==String(event.attrs.value)) {
+     
                exists = true;
+          
+               
+            
             }
-            // bizare si on retire value ca ne marche plus !!
-            //console.log(event.attrs.value);
+          
                    
     });
     if(exists === false)
         event.preventDefault();
+      // console.log(exists);
+      // console.log(mot[16]);
 });
 
        
 
 });
-

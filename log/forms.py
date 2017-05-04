@@ -1,26 +1,9 @@
 from django.contrib.auth.models import User
 from django import forms
-from .models import Profile, Coments, Track_Coments, Traj
+from .models import Profile, Track_Coments, Traj
 
 
 
-#occupations= (
-#    ('1', 'undergraduate'),
-#    ('2', 'graduate'),
-#    ('3', 'faculty'),
-#    ('4', 'other'),
-#)
-#neighborhoods= (
-#    ('1', 'downtown'),
-#    ('2', 'plateau'),
-#    ('3', 'westmount'),
-#)
-#
-#regions= (
-#    ('1', 'America'),
-#    ('2', 'Europe'),
-#    ('3', 'Asia'),
-#)
 
 
 
@@ -47,12 +30,7 @@ class UserForm(forms.ModelForm):
 #        labels={'username': 'username'
 #                ,}
 
-class ComentsForm(forms.ModelForm):
-    review=forms.CharField(widget=forms.Textarea,required=False)
-    class Meta:
-        model=Coments
-        fields = ('rating',)  
-        
+
         
 class TracksForm(forms.ModelForm):   
     class Meta:

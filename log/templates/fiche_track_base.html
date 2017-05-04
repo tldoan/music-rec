@@ -65,10 +65,17 @@ audio::-webkit-media-controls-panel {
 
 
 <!-- HEAD TITLE -->
-<h1>  {{track.Artist}} - {{track.track_name}}</h1>
+<h1>  {{track.Artist}} - {{track.track_name}} </h1>
+<div id='TRACK' style="display:none">{{track.track_pseudo}}</div>
+
+
+       
+    
 <br/>
 <br/>
 <div class='row'>
+
+
 
 <div class="col-sm-4 col-md-4 col-lg-4">
  	
@@ -111,86 +118,41 @@ audio::-webkit-media-controls-panel {
 											 
 
 						</div>
-
-											{% if  has_yet_rated  %}
-
-				
-				<h3> you have rated this song {{REVIEW.rating| floatformat:0}} stars </h3>
-
-			
+						<br/>
+						<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> 	 
+	 	<span class="label label-danger" id='star'>Song Rating: {{track.track_popularity| floatformat:2}}/5.00</span>
 
 
-								{% else  %}
-							 
-							
-							<div class='row' id='rating3'>
-							
-							<div class="panel-heading" id ='rating4'><h2>Give us your opinion</h2></div>
-								 
-								<form id='form_rate' class='form-horizontal' action='' method='post'>
-										{% csrf_token %}
-										{%  if Wrong %}
-						             	<h4><strong> Please give rate</strong></h4>
-						             	{%  endif %}
-						             	<h5> Rate the song: </h5>
-						             	<input type="hidden"  class='time_before_rated' name='time_before_rated' value="0">
-										<input type="hidden" name='rating' class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" />	   
-										<span id='heart-rate' class="label label-danger"></span>
-
-										  <br/>
-										  
-										 <h5> This song makes me think of: </h5>
-
-											<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
-											<br/>
-											<div class='col-sm-offset-4 col-sm-10'>
-													<button type='submit' class="btn btn-lg btn-custom2"> Submit</button>
-											</div>
-											 <br/>
-											 .
-								</form>
-								<button type="button" class="btn btn-custom2"  data-toggle="tooltip" data-placement="bottom" title="Write any words
-that come 
-to your mind
-when listening 
-this songs">
-									  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								</button>
-								 
-								
-						 			</div> 
-								
-
-
-
-								{% endif  %}
 			</div>		
 </div>	
+
+
+											
 		
 		
 		<div class="col-sm-4 col-md-4 col-lg-4" id='wcloud'>
 
-		  {% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
-		<img src="{% static image_static %}" alt="Be the first to brainstorm" style="width:80%" />
-		{% endwith %}
 		
-		<h4> <span class="label label-default">most frequent tag words used for this song</span></h4>
-
+		
 		
 
 
 
 			 
-		<br/>
-		<br/>
-		<br/>
+
 	 
 	 	
 
-	 	<div class="col-sm-6 col-md-7 col-lg-7">
-		 <table class="table    table-inverse table-responsive">
+	 	<div class="col-sm-9 col-md-9 col-lg-9">
+	 	
+	 	{% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
+		<img src="{% static image_static %}"  id='wcloud_picture1' alt="Be the first to brainstorm" style="width:100%" />
+		{% endwith %}
+		<h4> <span class="label label-default">most frequent tag words used </span></h4>	
+		 <!-- <table class="table  table-inverse table-responsive"> -->
+		  <table class="table table-inverse">
 					  <thead>
-					  <tr> <th colspan="2" class='title'><h3><strong>About the track</strong></h3></th>  
+					  <tr> <th colspan="3" class='title'><h3><strong>About the track</strong></h3></th>  
 					  </tr>
 					    <tr>   
 					    </tr>
@@ -222,17 +184,11 @@ this songs">
 					  </tbody>
 					</table>
 					<br/>
-		<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> 	 
-	 	<span class="label label-danger" id='star'>Song Rating: {{track.track_popularity| floatformat:2}}/5.00</span>
+		
 		</div>					
 					
 
 					
-	 				{% block in_queue %}
-					{% endblock  %}
-
-					{% block in_queue2 %}
-					{% endblock  %}
 
 						
 
@@ -265,8 +221,13 @@ this songs">
 
 
 <div class="col-sm-4 col-md-4 col-lg-4">
-	<div class="col-sm-12 col-md-12 col-lg-12">
-		  		<div class="panel panel-custom" >
+
+
+	<div class="col-sm-10 col-md-10 col-lg-10 ">
+
+
+	 			 
+		  		<!-- <div class="panel panel-custom" >
 							        <div class="panel-heading" id='grad1'><h4>Lyrics  <button id='hide2' class='btn btn-custom2'>hide</button> <button id='show' class='btn btn-custom2'>show</button></h4></div>		
 
 									     <div class="panel-body" id='lyrics'>
@@ -277,13 +238,79 @@ this songs">
 											                        lyrics
 											                        </div> 
 											                        </div>  
-											                   <!-- lyrics variable -->
+											                  
 											<input type="hidden" id="lyrics_var" name="lyrics_var" value="{{track.track_link}}">
 			    						</div>
 			               
-			    </div> 	
-	</div>	   
-	<div class="col-sm-1 col-md-1 col-lg-1">aa</div>
+			    </div> 
+ -->
+
+						{% if  has_yet_rated  %}
+
+				
+				<h3> you have rated this song {{REVIEW.rating| floatformat:0}} stars </h3>
+
+			
+
+
+								{% else  %}
+							 
+							
+							<div class='row' id='rating3'>
+							
+							<div class="panel-heading" id ='rating4'><h2>Give us your opinion</h2></div>
+								 
+								<!-- <form id='form_rate' class='form-horizontal' action='' method='post'>
+										{% csrf_token %} -->
+										{%  if Wrong %}
+						             	<h4><strong> Please give a rating</strong></h4>
+						             	{%  endif %}
+						             	<h5> Rate the song: </h5>
+						             	<input type="hidden"  class='time_before_rated' name='time_before_rated' value="0">
+										<input type="hidden" name='rating' class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" />	   
+										<span id='heart-rate' class="label label-danger"></span>
+
+										  <br/>
+										  
+										 <h5> This song makes me think of: </h5>
+
+											<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
+											<br/>
+											<div class='col-sm-offset-4 col-sm-10'>
+													<button type='submit' class="btn btn-lg btn-custom2" id='submit'> Submit</button>
+											</div>
+											 <br/>
+											 
+								<!-- </form> -->
+								<button type="button" class="btn btn-custom2"  data-toggle="tooltip" data-placement="bottom" title="Write any words
+that come 
+to your mind
+when listening 
+this songs">
+									  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								</button>
+								 
+								
+						 			</div> 
+								
+
+
+
+								{% endif  %}
+
+		  			 {% block in_queue %}
+					{% endblock  %}
+
+					{% block in_queue2 %}
+					{% endblock  %}
+		
+		
+
+	</div>	
+
+
+
+
 
 
 		
@@ -365,32 +392,34 @@ $(document).ready(function(){
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<!-- <script type='text/javascript' src="{% static 'js/jquery.min.js' %}"></script>  -->
+<!-- <script src="//code.jquery.com/ui/1.7.3/jquery-ui.min.js"
+			  integrity="sha256-pYKd3m/N09PCc1/MM/f1Nk4PnaHrShF5ehtyZ0kdDds="
+			  crossorigin="anonymous"></script> -->
 
-<!-- <script type='text/javascript' src="{% static 'js/jquery-ui.min.js' %}"></script> -->
+
 
 
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"
         integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 
-<!-- <script type='text/javascript' src="{% static 'js/bootstrap400.min.js' %}"></script>
- -->
+
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
  
-<!-- <script type='text/javascript' src="{% static 'js/bootstrap-tokenfield.min.js' %}"></script>   -->
+
 
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/bootstrap-tokenfield.min.js"></script>
-<!--
-<script type='text/javascript' src="{% static 'js/bootstrap-rating.min.js' %}"></script> 
--->
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-rating/1.4.0/bootstrap-rating.min.js" integrity="sha256-2f3IfcCoAqV8FwRQhw1v/r4MLDQ1A3TQiYGtRUfW/l8=" crossorigin="anonymous"></script>
 <!-- rating -->
- <script type='text/javascript' src="{% static 'js/fiche_track.js' %}"></script>   
+ 
 {% if base_2  %}
 <script type='text/javascript' src="{% static 'js/fiche_track2.js' %}"></script>   
 
+
+{% else  %}
+<script type='text/javascript' src="{% static 'js/fiche_track.js' %}"></script>   
 {% endif %}
 
 {% if has_just_commented %}
@@ -402,5 +431,5 @@ y.currentTime={{time_before}};
 
 {% endif %}
           
-    </body>
+ </body>
 </html>

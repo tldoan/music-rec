@@ -158,7 +158,10 @@ p{
     background-color:transparent;
 
 
+
+
 }
+
 .container
 {
     background-color:grey;
@@ -174,7 +177,10 @@ background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must b
 border:4px inset white;
 
 }
-
+.label-default
+{
+  
+}
 #rating3
 {   
     
@@ -220,6 +226,9 @@ background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must b
     font-size:1em;
 
 }
+.glyphicon-expand{
+font-size:2em;
+}
 #player1
 {
     border:10px white outset;
@@ -234,7 +243,7 @@ background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must b
 .glyphicon-info-sign
 {
     color:red;
-    font-size:2.7em;
+    font-size:2em;
 
 }
 .tolltip-inner{
@@ -247,7 +256,6 @@ white-space:pre-wrap;
     display: table;
     margin: 0 auto;
 }
-
 
 
 

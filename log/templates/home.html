@@ -28,17 +28,7 @@
             </form>         
       </li>
   
-   <!--    <li>
 
-         <form action="/change_password" method="post">
-                {% csrf_token %}
-                      
-                <button class="btn btn-custom btn-md">
-                reset
-                 
-                password</button>
-            </form>
-      </li> -->
      
           <li>
      
@@ -73,6 +63,8 @@
 {% block content %}
  <h1>  Welcome home {{ user}}  </h1>
 
+  <h1>  Select a song :  </h1>
+
 
 
 <br/>
@@ -89,41 +81,6 @@
 
 
 
-       <!--  <div class="  col-md-offset-4 col-md-6"> -->
-        <!--
-            <form action="/m/profil" method="post">
-            {% csrf_token %}
-                
-             <button style="width:90px" class="btn btn-info">Edit profil</button> 
-            <button class="btn btn-success btn-md">
-                    <!-- <span class="glyphicon  glyphicon glyphicon-user" aria-hidden="true"></span> 
-                    <br/> 
-                    Profil
-            </button> 
-
-           
-            </form> -->
-        <!-- </div> -->
-
-        
-         <!--    <form action="/m/logout" method="post">
-                {% csrf_token %}
-                 <button class="btn btn-danger btn-md">
-                    <span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span> 
-                    <br/>
-                    logout
-                  </button> 
-               
-            </form> -->
-        
-
-        <!-- <div class=" col-md-offset-7 col-md-12">    -->
-          <!--   <form action="/m/change_password" method="post">
-                {% csrf_token %}
-                      
-                <button style="width:90px" class="btn btn-warning">change password</button>
-            </form> -->
-        <!-- </div> -->   
 
  
 
@@ -136,11 +93,50 @@
 {% endblock %}
 
 {% block track_list %}
+<div class='boutons'>
+<button class="btn btn-custom2" id='List' >
+     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> List
+
+</button>
+
+<button class="btn btn-custom2" id='Icons'>
+     <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Icons
+
+</button>
+<br/>
+<br/>
+
+<button class="btn btn-custom2" id='type_0'>
+  Country
+</button>
+<button class="btn btn-custom2" id='type_1'>
+  Dance/Electronic 
+</button>
+<button class="btn btn-custom2" id='type_2'>
+  Hip-Hop/R&B 
+</button>
+<button class="btn btn-custom2" id='type_3'>
+  Latin
+</button>
+<button class="btn btn-custom2" id='type_4'>
+  Pop
+</button>
+<button class="btn btn-custom2" id='type_5'>
+  Rock
+</button>
+<button class="btn btn-custom2" id='type_6'>
+  All
+</button>
+<br/>
+<h1 class='genre_display'> Genre </h1>
+
+</div>
+
 
 <div class="container">
 
 
- <table class="table   table-inverse table-responsive">
+ <table class="table   table-inverse table-responsive" id='liste_songs'>
   <thead>
   <tr> <th colspan="4" class='title'><h3><strong>Tracks we have for you</strong></h3></th>  
  
@@ -158,6 +154,7 @@
     
   </thead>
   <tbody>
+
         {% for x in track_list %}
         
     <tr>
@@ -195,6 +192,70 @@
   </tbody>
 </table>
 </div>
+
+{% for y in L %}
+    
+
+
+  <div class="gallery" id='gallery_{{forloop.counter0}}'>
+ 
+  {% for p in y %}
+
+  <div class='item'> 
+  <form id='record' class='record' action='' method='post'>
+
+  {% csrf_token %} 
+  <input type='image' src="{{p.Album_cover}}"  class='img-circle'>
+  <br/>
+  <figcaption>
+  <h4>{{p.Artist}}</h4> 
+  <h4>{{p.track_name}}</h4>
+  </figcaption>
+  <br/>
+
+
+
+  <input type="hidden" id='next_song' class='next_song' name='next_song' value="{{p.track_pseudo}}">                                     
+  </form>
+  </div>
+    
+  
+  {% empty %}
+       <tr> <th colspan="3" class='title'><h3><strong>No track in the database</strong></h3></th>  </tr>
+       
+    {% endfor %}
+</div>
+   
+{% endfor %}
+
+
+
+<!-- <div class="gallery">
+ {% for x in track_list %}
+
+<div class='item'> 
+<form id='record' class='record' action='' method='post'>
+
+{% csrf_token %} 
+<input type='image' src="{{x.Album_cover}}"  class='img-circle'>
+<br/>
+<figcaption>
+<h4>{{x.Artist}}</h4> 
+<h4>{{x.track_name}}</h4>
+</figcaption>
+<br/>
+
+
+
+<input type="hidden" id='next_song' class='next_song' name='next_song' value="{{x.track_pseudo}}">                                     
+</form>
+</div>
+
+
+ {% empty %}
+       <tr> <th colspan="3" class='title'><h3><strong>No track in the database</strong></h3></th>  </tr>
+       
+        {% endfor %} -->
 
 
 

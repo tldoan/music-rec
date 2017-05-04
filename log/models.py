@@ -13,12 +13,6 @@ import os
 import numpy as np
    
        
-rates=[('1','1'),
-       ('2','2'),
-       ('3','3'),
-       ('4','4'),
-       ('5','5'),
-     ]
 
 class Profile(models.Model):  
                 
@@ -46,105 +40,6 @@ User.profile = property(lambda u:Profile.objects.get_or_create(user=u)[0])
 
 
 
-class Restaurant(models.Model):  
-    
-    # name of the restaurant
-    name=models.CharField(max_length=50, unique=True)
-    pseudo=models.CharField(max_length=50, unique=True,default='')
-     
-    # URL 
-    site_web=models.URLField(blank=True)
-    yelp_website=models.URLField(blank=True)  
-     
-    #   mosaiq of photos
-    main_photos=models.URLField(blank=True)  
-    photos_url=models.URLField(blank=True) 
-    
-    #type of restaurant
-    type_of_food=models.CharField(max_length=50,default='')
-    
-    # reviews and ratings
-    nb_reviews=models.IntegerField(default=0)
-    rating=models.FloatField(default=0)
-    
-    
-    price_range=models.IntegerField( default=1)
-    price_range_display=models.CharField( max_length=15,default='')
-    price_coments=models.CharField( max_length=15,default='')
-    
-    nb_rating=models.IntegerField(default=0)
-    nb_rating_1=models.IntegerField(default=0)
-    nb_rating_2=models.IntegerField(default=0)
-    nb_rating_3=models.IntegerField(default=0)
-    nb_rating_4=models.IntegerField(default=0)
-    nb_rating_5=models.IntegerField(default=0)
-    
-    ###############  add state code 
-    
-    # contact informations
-    address=models.CharField(max_length=40)
-    address_display=models.CharField(max_length=60,default='')
-    postal_code = models.CharField(null=True, blank=True,max_length=7)
-    country=models.CharField(max_length=20,default='')
-    neighborhood = models.CharField(max_length=50)
-    phone_number=models.CharField(max_length=15)
-    longitude=models.FloatField(null=True)
-    latitude=models.FloatField(null=True)
-    state=models.CharField(max_length=10,default='')
-    
-    biz_hours=models.CharField(max_length=10000,default='')
-    ############# biz hours
-    ### morning
-    morning_day0_start=models.CharField(max_length=10,default='Closed')
-    morning_day0_end=models.CharField(max_length=10,default='Closed')
-    morning_day1_start=models.CharField(max_length=10,default='Closed')
-    morning_day1_end=models.CharField(max_length=10,default='Closed')
-    morning_day2_start=models.CharField(max_length=10,default='Closed')
-    morning_day2_end=models.CharField(max_length=10,default='Closed')
-    morning_day3_start=models.CharField(max_length=10,default='Closed')
-    morning_day3_end=models.CharField(max_length=10,default='Closed')
-    morning_day4_start=models.CharField(max_length=10,default='Closed')
-    morning_day4_end=models.CharField(max_length=10,default='Closed')
-    morning_day5_start=models.CharField(max_length=10,default='Closed')
-    morning_day5_end=models.CharField(max_length=10,default='Closed')
-    morning_day6_start=models.CharField(max_length=10,default='Closed')
-    morning_day6_end=models.CharField(max_length=10,default='Closed')
-    
-    
-    ### night
-    night_day0_start=models.CharField(max_length=10,default='Closed')
-    night_day0_end=models.CharField(max_length=10,default='Closed')
-    night_day1_start=models.CharField(max_length=10,default='Closed')
-    night_day1_end=models.CharField(max_length=10,default='Closed')
-    night_day2_start=models.CharField(max_length=10,default='Closed')
-    night_day2_end=models.CharField(max_length=10,default='Closed')
-    night_day3_start=models.CharField(max_length=10,default='Closed')
-    night_day3_end=models.CharField(max_length=10,default='Closed')
-    night_day4_start=models.CharField(max_length=10,default='Closed')
-    night_day4_end=models.CharField(max_length=10,default='Closed')
-    night_day5_start=models.CharField(max_length=10,default='Closed')
-    night_day5_end=models.CharField(max_length=10,default='Closed')
-    night_day6_start=models.CharField(max_length=10,default='Closed')
-    night_day6_end=models.CharField(max_length=10,default='Closed')
-    
-
-    def __str__(self):
-        return self.name
-    
-class Coments(models.Model):
-    user=models.ForeignKey(User)
-    restaurant=models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    restaurant_name=models.CharField(default='',max_length=30)
-    rating=models.CharField(choices=rates, max_length=3)
-    review=models.CharField(default='',max_length=300)
-
-
-## import datetime
-## day of the week 
-## datetime.datetime.today().weekday()
-## date 
-## datetime.date.today()
-## 0 = MONDAY
 
 class Tracks(models.Model):
     track_name=models.CharField(default='',max_length=250)
@@ -220,7 +115,7 @@ def default_songs():
     songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
     novelty={}
     for i in songs_list:
-        novelty[i]=np.zeros(shape=(len(songs_list[i]),1))
+        novelty[i]=np.ones(shape=(len(songs_list[i]),1))*5
     return novelty
     
     

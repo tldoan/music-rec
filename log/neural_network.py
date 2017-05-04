@@ -1,18 +1,30 @@
 import numpy as np
 import csv
 
-from .models import history, Profile, Tracks
+
 from django.conf import settings
 import os
-from django.shortcuts import render,redirect, get_object_or_404
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Input
 
-import keras
+
+import timeit
+
+
+from keras.models import model_from_json,load_model
+
+
+
+
+
+
+
+from django.shortcuts import render,redirect, get_object_or_404
+from .models import Profile, Tracks , Traj , history
 import tensorflow as tf
 
-from keras.models import model_from_json
-import h5py
+
+
+
+
 from pulp import *
 from operator import itemgetter
 import pulp
@@ -23,9 +35,8 @@ import timeit
 
 
 
-def history_update(user):
+def history_update(h):
         
-        h=history.objects.filter(user=user).order_by('-start_time')[0]  
         url=os.path.join(settings.STATIC_ROOT, 'csv/genre_list.csv')
         hist=h.path
         with open(url, 'rb') as csvfile:
@@ -80,13 +91,14 @@ def predict_type(user,historic,track):
         ### load neural network
         with tf.Session() as sess:
      
-                url=os.path.join(settings.STATIC_ROOT, 'model/state/state_model.json')
-                json_file = open(url, 'r')
-                type_actor = json_file.read()
-                json_file.close()
-                type_model = model_from_json(type_actor)
+#                url=os.path.join(settings.STATIC_ROOT, 'model/state/state_model.json')
+#                json_file = open(url, 'r')
+#                type_actor = json_file.read()
+#                json_file.close()
+#                type_model = model_from_json(type_actor)
                 
                 # load weights into new model
+                type_model=load_model(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.h5'))
                 type_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
  
         
@@ -110,7 +122,7 @@ def evaluate_actions(user,historic,track,w,t2):
     
         
     user_features=w[1]
-    w[0]=['Country','Pop','Rock']
+    w[0]=['Country','Rock','Pop']
     
     url=os.path.join(settings.STATIC_ROOT, 'csv/genre_list.csv')
     with open(url, 'rb') as csvfile:
@@ -158,8 +170,10 @@ def evaluate_actions(user,historic,track,w,t2):
                 print 'multiplication'
 #                print type(np.multiply(single_action_model.predict(r).astype('float32'),2*np.exp(np.array(t2.novelty[i]).astype('float32')/4)))
 #                print np.shape(np.multiply(single_action_model.predict(r).astype('float32'),2*np.exp(np.array(t2.novelty[i]).astype('float32')/4)))
-                ddd=np.multiply(single_action_model.predict(r).astype('float32'),2*np.exp(np.array(t2.novelty[i]).astype('float32')/4))
+                
+                ddd=np.multiply(single_action_model.predict(r).astype('float32'),nov_recovery((np.array(t2.novelty[i]).astype('float32'))))
 #                single_action_values[i]=single_action_model.predict(r).astype('float32')
+                
                 single_action_values[i]=ddd
                 cc=np.argmax(single_action_values[i])
 #                value+=single_action_values[i][cc][0]*historic[int(jj)]
@@ -334,7 +348,7 @@ def evaluate_actions(user,historic,track,w,t2):
 
 def PulpSolve(N,w,historic,user_features,t2):
     
-
+    start = timeit.default_timer()
     songs_keys=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_keys.npy')).item() 
 ############### loading values ##############
     url=os.path.join(settings.STATIC_ROOT, 'csv/genre_list.csv')
@@ -371,7 +385,7 @@ def PulpSolve(N,w,historic,user_features,t2):
     c=0    
     nb={}
     d=0 
-    start = timeit.default_timer()
+
     for i in w[0]:
         cc=0
         nb[i]=1
@@ -402,8 +416,8 @@ def PulpSolve(N,w,historic,user_features,t2):
                     
         # load weights into new model
         single_action_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/single_action/single_action_weights_'+str(jj)+'.h5'))     
-        
-        ddd=np.multiply(single_action_model.predict(rr).astype('float32'),2*np.exp(np.array(t2.novelty[i]).astype('float32')/4))
+            
+        ddd=np.multiply(single_action_model.predict(rr).astype('float32'),nov_recovery(np.array(t2.novelty[i]).astype('float32')))
 #        single_action_values[i]=single_action_model.predict(rr).astype('float32')
         single_action_values[i]=ddd
   
@@ -431,6 +445,7 @@ def PulpSolve(N,w,historic,user_features,t2):
             prob += var[i]['Y'][(r)]  <= var[i]['L'][r[0]]
             prob += var[i]['Y'][(r)]  <= var[i]['L'][r[1]]
         
+  
         for r in L:
             prob+=var[i]['X'][r] <= var[i]['n'][r]
         
@@ -438,7 +453,7 @@ def PulpSolve(N,w,historic,user_features,t2):
         
         d+= lpSum(var[i]['n'][r] for r in L) 
      
-        cc+= lpSum(var[i]['Y'][(r)]*double_action_values[i][list_correlations[i].index(r)]*2*np.exp(t2.novelty[i][songs_keys[i][r[0]]][0])*np.exp(t2.novelty[i][songs_keys[i][r[1]]][0]) for r in z)
+        cc+= lpSum(var[i]['Y'][(r)]*double_action_values[i][list_correlations[i].index(r)]*nov_recovery(t2.novelty[i][songs_keys[i][r[0]]][0])*nov_recovery(t2.novelty[i][songs_keys[i][r[1]]][0]) for r in z)
         +lpSum((var[i]['X'][(r)]-var[i]['L'][(r)])*single_action_values[i][songs_list[i].index(r)] for r in L)
 #        -lpSum((-var[i]['L'][(r)])*single_action_values[i][songs_list[i].index(r)] for r in L)
         c+=cc*historic[int(jj)]
@@ -479,22 +494,32 @@ def PulpSolve(N,w,historic,user_features,t2):
         
 #    prob.writeLP(os.path.join(settings.STATIC_ROOT, 'lol.lp'))
 #        prob.writeLP('lol.lp')
-#    prob.solve(pulp.GUROBI(dual=True))
+#    
     stop = timeit.default_timer()
     print 'tps pr add constraints'
     print stop - start 
-    
+#    
     start = timeit.default_timer()
-#    prob.solve(pulp.COIN_CMD(dual=True))
+#    prob.solve(pulp.COIN_CMD(dual=True,mip=1,msg=1))
 
-#    prob.solve(pulp.GLPK())
+
+
+
+#    prob.solve(pulp.GLPK(mip=1))
     
     
-    
+
+
+
+#    prob.solve(pulp.GUROBI(mip=1))
+
+
+
     pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
-    solver = pulp.COIN_CMD(path=pa,dual=True)
-#
+    solver = pulp.COIN_CMD(path=pa,mip=1)
+
     prob.solve(solver)
+
     
     stop = timeit.default_timer()
     print "tps de solve"
@@ -549,7 +574,7 @@ def PulpSolve(N,w,historic,user_features,t2):
     choice=[]
     for i in w[0]:
         
-        print type(var[i]['X'])
+#        print type(var[i]['X'])
         x[i]={}
         y[i]={}
         for j in songs_by_type[i]:
@@ -562,14 +587,14 @@ def PulpSolve(N,w,historic,user_features,t2):
 #            choice.append(x[i].keys()[z])
 #            print z
         if nb[i]==2:
-            print '22222222222222'
+            
             z=np.random.choice(len(y[i]),1,replace=False,p=(y[i].values()/np.sum(y[i].values())) )[0] 
-            print z
-            print y[i].keys()[z]
+#            print z
+#            print y[i].keys()[z]
             choice.extend(y[i].keys()[z])
         else:
             z=np.random.choice(len(x[i]),nb[i],replace=False,p=(x[i].values()/np.sum(x[i].values())) )
-            print z
+#            print z
            
             for ii in z:         
                 choice.append(x[i].keys()[ii])
@@ -584,143 +609,15 @@ def PulpSolve(N,w,historic,user_features,t2):
     return choice
 
         
-#    for i in songs_by_type:
-#            x[i]=X[i].value()
-#    for i in list_correlations['Latin']:
-#            y[i]=Y[i].value()
-#    print x
-            
-#        rr=sorted(x.items(), key=itemgetter(1),reverse=True)
-#        choice=[]
-#        for i in range(N):
-#            choice.append(rr[i][0])
-#    return choice
-#def PulpSolve(N,genre,historic,user_features):
-#    
-#    url=os.path.join(settings.STATIC_ROOT, 'csv/genre_list.csv')
-#    with open(url, 'rb') as csvfile:
-#        text = csv.reader(csvfile, delimiter=',')
-#        genre_dict = {rows[0]:rows[1] for rows in text}
-#        
-#    correlations_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/correlations_by_type.npy')).item()
-#    list_correlations=np.load(os.path.join(settings.STATIC_ROOT, 'data/list_correlations.npy')).item()
-#    songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
-#    #### only correlations will play a role  
-#    url=os.path.join(settings.STATIC_ROOT, 'model/double_actions/double_actions.json')
-#    json_file = open(url, 'r')
-#    double_actions = json_file.read()
-#    json_file.close()
-#    double_actions_model = model_from_json(double_actions)
-#    
-#    
-#    
-#    
-#    double_action_values=[]
-#    
-#                           # or w[0][0]
-#    s=np.array(correlations_by_type[genre])
-#    hist=np.tile(historic,(len(correlations_by_type[genre]),1)) 
-#    feat=np.tile(user_features,(len(correlations_by_type[genre]),1))
-#    r=np.concatenate((hist,s,feat),axis=1)
-#       
-#    
-#    jj=genre_dict[genre]
-#    
-#    double_actions_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/double_actions/double_actions_weights_'+str(jj)+'.h5'))
-#    
-#    double_action_values=double_actions_model.predict(r).astype('float32') 
-#    
-#    print type(double_action_values)
-#    print np.shape(double_action_values)
-#    print 'loool'
-#    #            print double_action_values(list_correlations[w[0][0]].index(('god_your_mama_and_me', 'every_time_i_hear_that_song')))[0]
-#    #            print double_action_values[list_correlations['Pop'].index(('say_you_wont_let_go', 'pillowtalk'))]
-#    
-#    prob = LpProblem("Songs recommendation",LpMaximize)
-#    L=songs_by_type[genre].keys()
-#    
-#    #            z = list(combination(L,2))
-#    z=list_correlations[genre]
-#    corr=[(i) for i in z]
-#    
-#    #LpContinuous
-#    #LpBinary
-#    Y=LpVariable.dicts("y", corr, 0, 1, LpContinuous)
-#    X=LpVariable.dicts("x", L, 0, 1, LpContinuous)
-#    
-#    ## objective value
-##    double_action_values[1]=1000
-#    
-#    prob += lpSum(Y[(i)]*double_action_values[list_correlations[genre].index(i)] for i in z),'total values'
-#    
-#    
-#    prob += lpSum(X[i]  for i in L) <=N
-#    
-#    for i in z:
-#        prob += Y[(i)]  <= X[i[0]]
-#        prob += Y[(i)]  <= X[i[1]]
-#    
-#    prob.writeLP(os.path.join(settings.STATIC_ROOT, 'lol.lp'))
-#    prob.solve()
-#    
-#
-#    
-##    q=0
-###    for v in prob.variables():
-###        if v.varValue>0:
-###            q=q+1
-###  #             print v.name, "=", v.varValue
-##
-##            
-##    print 'q = ' +str(q)
-#    print pulp.value(prob.objective)
-#    
-#    x={}
-#    y={}
-#    for i in songs_by_type['Latin'].keys():
-#        x[i]=X[i].value()
-#    for i in list_correlations['Latin']:
-#        y[i]=Y[i].value()
-#        
-#    rr=sorted(x.items(), key=itemgetter(1),reverse=True)
-#    choice=[]
-#    for i in range(N):
-#        choice.append(rr[i][0])
-#    value=0
-#    if N==3:       
-#        tu=(rr[0][0],rr[1][0])
-#        if tu in list_correlations[genre]:
-#            indice=list_correlations[genre].index(tu)
-#        else:
-#            tu=(rr[1][0],rr[0][0])
-#            indice=list_correlations[genre].index(tu)
-#        print tu
-#        value+=0.5*historic[int(jj)]*double_action_values[indice]
-#        
-#        tu=(rr[0][0],rr[2][0])
-#        if tu in list_correlations[genre]:
-#            indice=list_correlations[genre].index(tu)
-#        else:
-#            tu=(rr[2][0],rr[0][0])
-#            indice=list_correlations[genre].index(tu)
-#        print tu
-#        value+=0.5*historic[int(jj)]*double_action_values[indice]
-#        
-#        tu=(rr[1][0],rr[2][0])
-#        if tu in list_correlations[genre]:
-#            indice=list_correlations[genre].index(tu)
-#        else:
-#            tu=(rr[2][0],rr[1][0])
-#            indice=list_correlations[genre].index(tu)
-#        print tu
-#        value+=0.5*historic[int(jj)]*double_action_values[indice]
-#                
-#        
-#        
-#        
-#    print [choice,value]
-#    return [choice,value]
-
+def nov_recovery(x):
+        return 1-np.exp(-x/1.3)
+  
+ 
+    
+#import numpy as np
+#import matplotlib.pyplot as plt
+#t = np.arange(0., 5., 1)
+#plt.plot(t, 1-np.exp(-t/1.45), 'bs')
 
 
 

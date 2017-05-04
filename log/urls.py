@@ -15,13 +15,15 @@ urlpatterns = [
       
       
       url(r'^(?P<titre_1>.*)/(?P<titre_2>.*)$', views.solo, name='solo'),
-      
+    
+      url(r'^recommend_songs$', views.recommend_songs, name='recommend_songs'),
+      url(r'^save_rating$', views.save_rating, name='save_rating'),
       
       
       url(r'^auth$', views.auth, name='auth'),
       
       url(r'^logout$', views.loggout, name='logout'),
-      #url(r'^profil$', views.ProfileFormView.as_view(), name='profil'),
+   
       
       url(r'^profil$', views.profil, name='profil'),
       

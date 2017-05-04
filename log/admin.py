@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 # Register your models here.
-from .models import Profile, Restaurant, Coments, Tracks,Track_Coments  , Traj,history
+from .models import Profile, Tracks,Track_Coments  , Traj,history
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user','area', 'age','region','sex')
@@ -13,23 +13,6 @@ class ProfileAdmin(admin.ModelAdmin):
 
 admin.site.register(Profile, ProfileAdmin)
 
-class RestaurantAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Restaurant._meta.fields]
-    list_filter = ('name', )
-    
-    #ordering = ('occupation', )
-    search_fields = ('name','neighborhood' )
-
-admin.site.register(Restaurant, RestaurantAdmin)
-
-class ComentsAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Coments._meta.fields]
-    list_filter = ('user','restaurant_name','restaurant' )
-    
-    #ordering = ('occupation', )
-    search_fields = ('user','restaurant_name' )
-
-admin.site.register(Coments, ComentsAdmin)
 
 class TracksAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Tracks._meta.fields]
