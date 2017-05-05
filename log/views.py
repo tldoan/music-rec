@@ -5,14 +5,10 @@ from django.utils import timezone
         
 from .models import Profile, Tracks, Track_Coments  , Traj , history
 from django.urls import reverse
-from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth import authenticate, login,logout,update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
-
-
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-
 
 import datetime
 from datetime import time
@@ -22,7 +18,7 @@ from django.conf import settings
 import os
 from wordcloud import WordCloud
 import random,string
-#import matplotlib.pyplot as plt
+
 
 from PIL import Image
 import numpy as np
@@ -31,26 +27,16 @@ from django.db.models import Avg
 
 from itertools import *
 import json
-from django.http import HttpResponse,Http404
-from django.http import JsonResponse
+from django.http import HttpResponse
+
 from django.views.decorators.csrf import csrf_exempt
 
-#from django_ajax.decorators import ajax
- 
-
-#import csv
-
-
-#from keras.models import Sequential
-#from keras.layers import Dense, Activation, Input
-#import keras
-#import tensorflow
 
 from neural_network import predict_type, history_update,evaluate_actions
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
-import timeit
+
 
 def loggin(request):  
     logout(request)
@@ -106,10 +92,6 @@ def homepage(request):
             if (prof.area=='' or prof.age=='' or prof.region=='' or prof.sex==''):
                 return redirect('profil')
             else:
-                
-#                track_list = Tracks.objects.order_by('track_name')
-                
-                
                 
                 return render(request,'home.html',locals())
         else:     
@@ -189,8 +171,7 @@ def profil(request):
     else:
         if Profile.objects.filter(user=request.user).exists():   
             pp=Profile.objects.get(user=request.user)  
-#        if Profile.objects.filter(user=request.user).exists():
-#            has_filled_profil=True            
+        
         return render(request,'profil.html',locals())
                
 def register(request):
@@ -242,6 +223,10 @@ def save_rating(request):
                 else:
                     msg={'update_wcloud':False}
                 t.save()
+                
+                if Track_Coments.objects.filter(track=track).count()>=10:                        
+                    track.track_popularity=Track_Coments.objects.filter(track=track).aggregate(Avg('rating'))['rating__avg']
+                    track.save() 
                           
             
             return HttpResponse(json.dumps(msg),content_type="application/json")
@@ -252,16 +237,16 @@ def save_rating(request):
 
 def recommend_songs(request):
     if request.is_ajax():
-        print  'yess'
+      
         if request.method=='GET':
-            print 'yeees again'
+#            print 'yeees again'
 #            track_pseudo = request.POST.get('track_pseudo')
             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]  
            
             length=len(t.path)
-            print t.path
-            print 'pathh'
-            print type(str(t.path[length-2]))
+#            print t.path
+#            print 'pathh'
+#            print type(str(t.path[length-2]))
             if type(t.path[length-1])==unicode:               
                 track_pseudo=t.path[length-1]
           
@@ -274,8 +259,8 @@ def recommend_songs(request):
                     
                     track_pseudo=t.path[length-2]
                 
-            print 'longueur'
-            print track_pseudo
+#            print 'longueur'
+#            print track_pseudo
 #            
             track=get_object_or_404(Tracks, track_pseudo=track_pseudo)
            
@@ -283,10 +268,11 @@ def recommend_songs(request):
             t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
             historic=history_update(t2)  
 #            N=4
+          
             w=predict_type(request.user,historic,track)              
-     
+         
             l=evaluate_actions(request.user,historic,track,w,t2)
-            print l
+#            print l
             liste=[]
             for i in range(len(l)):
                 liste.append(get_object_or_404(Tracks, track_pseudo=l[i])) 
@@ -303,13 +289,9 @@ def recommend_songs(request):
                 index='.next_song_'+str(i)
                 data[index]=song.track_pseudo
 #            print data
-                
-           
-        
-           
-            print 'TT'
-            print t.path[length-1]
-            print type(t.path[length-1])
+#            print 'TT'
+#            print t.path[length-1]
+#            print type(t.path[length-1])
             if type(t.path[length-1])==unicode:  
                     print 'ici'
                 ### S           
@@ -323,77 +305,12 @@ def recommend_songs(request):
             
             t.save()    
 
-
-                
-#            elif type(t.path[length-2])==list:
-#                if len(t.path[length-2])<=2:
-#                    ### S A   R(i-2)  S
-#                    t.path.append(l)
-#                elif len(t.path[length-2])>=3:
-#                    ### S A   S
-#                    ### i la fait retour en arriere
-#                    t.path[length-1]=[0,0,0]
-#                    t.path.append(track_pseudo)
-#                    
-#                    
-#            ########### il est revenu en arriere
-#        
-#        
-#        
-#        
-#                if len(t.path[length-1])>=3:
-#                    if t.path[length-2]!=track_pseudo:
-#                        t.path.append([0.0,0.0])
-#                    ### il a juste appuyer sur F5
-#                
-#            if type(t.path[length-1])==list:     
-#                 if len(t.path[length-1])<=2:
-#                     ######### S A R >>- S
-#                     t.path.append(track_pseudo)
-#                     t.path.append(l)
-#                     t.save()                    
-#                 elif len(t.path[length-1])>=3:
-#                     print 'regarde le type'
-#                     print type(t.path[length-2])
-#                     if t.path[length-2]==str:
-#                         if t.path[length-2]==track_pseudo:
-#                             print 'apuyeer sur F55555555555555'
-##                             t.path[length-1]=l
-#                     else:     
-#
-#                         'nooon'
-#                         t.path.append([0.0,0.0])
-#                         t.path.append(track_pseudo)
-#                         t.save(l)  
-#            elif str(t.path[length-1])=='start':
-#                print 'ahahah'
-#                t.path.append(track_pseudo)
-#                t.path.append(l)
-#            t.save()
-#                
-                
-                     
-                      
-#                      
-#            elif type(t.path[length-1].encode('ascii','ignore'))==str and t.path[length-1]!=track_pseudo: 
-#            ##### il a fait une page precedente donc on va coller  la liste l  puis reward [0,0,0]
-#    #             t.path.append(l)
-#    #             t.path.append([0.0,0.0])
-#                 t.path.append(track_pseudo)
-#                 t.save()  
-                                            
-#            data={'lol':False}
             return HttpResponse(json.dumps(data),content_type="application/json")
     else:
         data={'lol':False}
         return HttpResponse(json.dumps(data),content_type="application/json")
         
 
-
-
-
-    
-    
     
     
 @login_required       
@@ -415,55 +332,31 @@ def fiche_track(request, track_pseudo):
         
 #    load_wordcloud(track_pseudo,'')
     if request.method=='GET':      
-        ## apply weight to the historic      
-        
-#        t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
-#        historic=history_update(t2)  
-#        w=predict_type(request.user,historic,track)              
-#     
-#        l=evaluate_actions(request.user,historic,track,w,t2)
-        
-        
-        
-        
-        
-#        start = timeit.default_timer()
-#        stop = timeit.default_timer()
-#        print "tps de evaluate actions"
-#        print stop - start 
-#        l=['closer','close','alone']
-#        print l
-        
-#        print l
+
         liste=[]
         N=4
         for i in range(N):
             liste.append('None')   
-##       
-#
-#
-#
-#
-        print 'methode GEET DE FICHE TRACK'
+
 ################################################################    
         t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]  
         length=len(t.path)
-        print t.path
+#        print t.path
         if t.path[length-1]=='start':
             t.path.append(track_pseudo)
-            print 'iciciiiiicicii'
+          
             ### on obtient START  S
             ### OK
         if type(t.path[length-1])==list:
-            print 'alalalal'
+       
             ### S A R  ou  S A
             if len(t.path[length-1])<=2:
                 ###  S A R
-                print 'susususu'
+             
                 t.path.append(track_pseudo)
                 ### S A R S
             else:
-                print 'ohohoh'
+             
                 ### S A
                 if t.path[length-2]!=track_pseudo:
                     print 'il a actualiserrrr'
@@ -471,86 +364,20 @@ def fiche_track(request, track_pseudo):
                     t.path.append(track_pseudo)
         t.save()
                 
-                
-                
-#        if t.path[length-1]!=str:
-#            ### car S S  be marchera pas
-#            ### S A R   OU S A
-#            if t.path[length-1]==list:
-#                if len(t.path[length-1])>=2:
-#                    ### S A 
-#                    if t.path[length-2]!=track_pseudo:
-#                        t.path.append([0.0,0.0])
-#                        t.path.append(track_pseudo)
-#                    ### on obtient S A  [0,0] S
-#                else:
-#                    ### S A R
-#                    t.path.append(track_pseudo)
-#                    ### on obtient S A R S
-#        t.save() 
-#        length=len(t.path)
-#        if type(t.path[length-1])==list:                          
-#             t.path.append(track_pseudo)
-#             t.save()                    
-#        elif type(t.path[length-1].encode('ascii','ignore'))==str and t.path[length-1]!=track_pseudo: 
-#        ##### il a fait une page precedente donc on va coller  la liste l  puis reward [0,0,0]
-##             t.path.append(l)
-##             t.path.append([0.0,0.0])
-#             t.path.append(track_pseudo)
-#             t.save()       
+    
                 
         return render(request,'fiche_track.html',locals())
         
              
     elif request.method=='POST':
-        if 'rating' in request.POST:
-            if Track_Coments.objects.filter(user=request.user,track=track).exists():
-                return render(request,'fiche_track.html',locals())
-            else:
-            ## method POST mais du rating form
-                track_coment=TracksForm
-                form=track_coment(request.POST) 
-                rating=request.POST.get('rating','')
-                wordcloud=request.POST.get('wordcloud','')
-                Wrong=True
-                if rating !='':
-                    wrong=False
-                    rev=form.save(commit=False)
-                    rev.rating=float(rating)
-                    rev.user=request.user
-                    rev.track=track
-                    rev.time=datetime.datetime.now()
-                    rev.wordcloud=wordcloud
-                    rev.save() 
-                    
-                    ### s il existe des lignes on fait la moyenne en faisant un loop up dans la db
-                    if Track_Coments.objects.filter(track=track).count()>=10:                        
-                        ## it is a dictionnary convert it now to float  
-                        ## il existera toujours car le mec vient de submit en fait 
-                        
-                        track.track_popularity=Track_Coments.objects.filter(track=track).aggregate(Avg('rating'))['rating__avg']
-
-                    Track_Coments.objects.filter(track=track).count()
-                    track.save()  
-                    has_yet_rated=True
-#                    if wordcloud!='':
-#                        load_wordcloud(track_pseudo,wordcloud)
-                    has_just_commented=True
-                    print '-------------------'
-                    print request.POST.get('time_before_rated','')
-                    time_before=float(request.POST.get('time_before_rated',''))  
-                  
-                
-                return render(request,'fiche_track.html',locals())
-        
-        elif 'queue' in request.POST:
-             print 'queuuuuuuuuuuuuuuuuuue'
+        if 'queue' in request.POST:
+            
    
              #c=request.POST.get('next_song','') 
              titre_1=request.POST.get('titre_1','')
              titre_2=request.POST.get('titre_2','')
-             print titre_1
-             print titre_2
+#             print titre_1
+#             print titre_2
              t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]  
 #             name=str(t.path[len(t.path)-2])
              
@@ -576,8 +403,7 @@ def fiche_track(request, track_pseudo):
              t.save()       
              #### history registering
              t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
-             # on cherche le type de la musique 
-#             genre=str(Tracks.objects.filter(track_pseudo=name).track_genre)
+
              genre=get_object_or_404(Tracks, track_pseudo=track_pseudo).track_genre    
              
     
@@ -645,9 +471,6 @@ def fiche_track(request, track_pseudo):
 #            genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
             # on inscrit le nom du track     
             
-           
-            
-            
             length_t2=len(t2.path)
              
             if str(t2.path[length_t2-2][0])!=track_pseudo:     
@@ -664,8 +487,6 @@ def fiche_track(request, track_pseudo):
             
             
             if float(listening_time)>=novelty_limit:
-#                 print np.array(t2.novelty[track.track_genre])
-#                 print np.shape(np.array(t2.novelty[track.track_genre])
                  
                  if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]==novelty_parameters:                
                      t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0.0          
@@ -732,10 +553,7 @@ def fiche_track(request, track_pseudo):
             t2.save()
             return redirect(reverse('logout'))
         
-################################################################
-     
-   
-        
+###############################################################
 ###############################################################         
 
         
@@ -767,18 +585,6 @@ def solo(request,titre_1,titre_2):
         
         t.save()
         
-#        if type(t.path[length-1])==list:
-#                   
-#            t.path.append(titre_1)
-#            t.save() 
-#            #return render(request,'fiche_track2.html',locals())
-#        elif type(t.path[length-1].encode('ascii','ignore'))==str: 
-#            if t.path[length-1]!=titre_1:    
-#              
-#                
-#                t.path.append(titre_1)
-#                t.path.append(['None','None',titre_2])
-#                t.save() 
                 
         return render(request,'fiche_track2.html',locals())         
     else: ## methode=POST
@@ -816,7 +622,7 @@ def solo(request,titre_1,titre_2):
                     time_before=float(request.POST.get('time_before_rated',''))
                 return render(request,'fiche_track2.html',locals())
         elif 'solo' in request.POST:
-             print 'methode = POST _solo________________'
+#             print 'methode = POST _solo__'
              #c=request.POST.get('titre_2','')  
              t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]   
              
@@ -845,8 +651,7 @@ def solo(request,titre_1,titre_2):
              t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
              # on cherche le type de la musique
              genre=get_object_or_404(Tracks, track_pseudo=track.track_pseudo).track_genre   
-#             genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
-             # on inscrit le nom du track           
+        
              length_t2=len(t2.path)
              
              if str(t2.path[length_t2-2][0])!=track.track_pseudo:     
@@ -860,7 +665,7 @@ def solo(request,titre_1,titre_2):
                         t2.novelty[l][p][0]+=1.0
              if float(listening_time)>=novelty_limit:
                
-#                 print np.shape(np.array(t2.novelty[track.track_genre])
+
                  
                  if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]==novelty_parameters:                
                      t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0.0          
@@ -885,8 +690,6 @@ def solo(request,titre_1,titre_2):
             else:
                 percentage=round(float(percentage),2)
                        
-            
-           
 #            t.path.append(['None','None',titre_2])
             length=len(t.path)
             if t.path[length-5]!=titre_1:
@@ -894,8 +697,6 @@ def solo(request,titre_1,titre_2):
             else:
                 t.path.append([0.0,0.0])
             
-            ## checker si end n est pqs deja mis
-            ## voir si on keep track de la note de la zik aussi
             t.path.append('end')
             t.save()
             
@@ -988,18 +789,7 @@ def solo(request,titre_1,titre_2):
                
             t2.save()
             return redirect(reverse('logout'))
-
-#def update_restaurant_information(request):
-@login_required    
-def change_rating(request,track): 
-    TRACK = get_object_or_404(Tracks, track_name=track)
-    REVIEW=Track_Coments.objects.get(user=request.user,track=TRACK)
-    #REVIEW=get_object_or_404(Track_Coments, track=track,user=request.user)
-    REVIEW.delete()
-    #has_yet_rated=False  
-    #return render(request,'fiche_track.html',locals())
-    return redirect(reverse('fiche_track',kwargs={'track_name': track}))
-                  
+              
 
 def change_password(request):
     if request.method=='POST':
@@ -1035,13 +825,11 @@ def load_wordcloud(track_pseudo,brainstorm):
         
         text = open(os.path.join(settings.STATIC_ROOT+'wordcloud_txt/', track_pseudo+'.txt')).read()
         ## now that we have written in the text, let's generate it
-    #    image = wordcloud.to_image()
-    #    image.save(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', track_pseudo+'.png'),'png')  
+
         mask = np.array(Image.open(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', 'play_icon'+'.jpg')))
         #default_colors = wordcloud.to_array()
         wordcloud = WordCloud(relative_scaling = 0.60,mask=mask).generate(text)
-    #    plt.imshow(wordcloud.recolor(color_func=grey_color_func, random_state=1),
-    #           interpolation="bilinear")
+
         wordcloud.recolor(color_func=grey_color_func, random_state=1)
         wordcloud.to_file(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/',track_pseudo+'.jpg'))
         
