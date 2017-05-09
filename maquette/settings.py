@@ -32,7 +32,8 @@ SECRET_KEY = '5=87fsk=@y5^!cd70yr=!kti!2vw+8prmx)l7z3%n6!1w$h*6y'
 DEBUG = False
 
 #ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','https://music-rec.herokuapp.com']
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','music-rec.herokuapp.com']
+#ALLOWED_HOSTS = ['127.0.0.1', 'localhost','music-rec.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 ADMINS = (
     ('thang', 'doantl89@gmail.com'),)
