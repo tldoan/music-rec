@@ -32,13 +32,14 @@ SECRET_KEY = '5=87fsk=@y5^!cd70yr=!kti!2vw+8prmx)l7z3%n6!1w$h*6y'
 DEBUG = False
 
 #ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','https://music-rec.herokuapp.com']
-#ALLOWED_HOSTS = ['127.0.0.1', 'localhost','music-rec.herokuapp.com']
-ALLOWED_HOSTS = ['*']
 
+#ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','music-rec.herokuapp.com']
+ALLOWED_HOSTS =['127.0.0.1','localhost']
 ADMINS = [('thang', 'doantl89@gmail.com'),]
 
-# Application definition
 
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -152,18 +153,18 @@ TIME_ZONE='America/Montreal'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-
+STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'log/templates'),
 )
 
-STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
-
+#STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
+STATIC_ROOT= os.path.join(BASE_DIR, 'maquette/static/')
 #STATIC_ROOT = os.path.join(PROJECT_ROOT, '../log/')
 
 
-STATIC_URL = '/static/'
+
 
 
 
