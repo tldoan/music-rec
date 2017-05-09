@@ -33,8 +33,8 @@ DEBUG = False
 
 #ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','https://music-rec.herokuapp.com']
 
-#ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','music-rec.herokuapp.com']
-ALLOWED_HOSTS =['127.0.0.1','localhost']
+#ALLOWED_HOSTS = ['127.0.0.1','localhost','music-rec.herokuapp.com']
+ALLOWED_HOSTS =['127.0.0.1','music-rec.herokuapp.com']
 ADMINS = [('thang', 'doantl89@gmail.com'),]
 
 
