@@ -33,6 +33,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','https://music-rec.herokuapp.com']
 
+ADMINS = (
+    ('thang', 'doantl89@gmail.com'),)
 
 # Application definition
 
