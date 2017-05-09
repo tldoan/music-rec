@@ -7,6 +7,12 @@
   <div class="container-fluid">
  
     <ul class="nav navbar-nav navbar-right">
+         <li class="active">
+	      <button class="btn btn-custom btn-md" id='feedback'>
+	      <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 
+        		Feedback 
+            </button>
+     	 </li>
       <li class="active">      
 	      <form id='home' class='form-horizontal' action=""  method='post'>
 				  {% csrf_token %}
@@ -91,8 +97,13 @@
 
 		                            	<div id='element_{{forloop.counter0}}' class="element">
 		                            	<br/>
-
+		                            	<span  id='genre_{{forloop.counter0}}' class="label label-primary"> genre </span>
+		                            	
+		                            	<br/>
+		                            	<br/>
 		                            	<span  id='Eelement_{{forloop.counter0}}' class="label label-custom"> N/A </span>
+		                            	
+		                            	<br/>
 		                            	<br/>
 		                            	
 

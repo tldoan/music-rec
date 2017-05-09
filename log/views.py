@@ -75,14 +75,16 @@ def loggout(request):
 @login_required 
 def homepage(request):
     """'affiche la liste des tracks'""" 
-    Country=Tracks.objects.filter(track_genre='Country')
-    Dance=Tracks.objects.filter(track_genre='Dance/Electronic')
-    Hip_Hop=Tracks.objects.filter(track_genre='Hip-Hop/R&B')
-    Latin=Tracks.objects.filter(track_genre='Latin')
-    Pop=Tracks.objects.filter(track_genre='Pop')
-    Rock=Tracks.objects.filter(track_genre='Rock')
+    Country=Tracks.objects.filter(track_genre='Country').order_by('?')
+    Dance=Tracks.objects.filter(track_genre='Dance/Electronic').order_by('?')
+    Hip_Hop=Tracks.objects.filter(track_genre='Hip-Hop/R&B').order_by('?')
+    Latin=Tracks.objects.filter(track_genre='Latin').order_by('?')
+    Pop=Tracks.objects.filter(track_genre='Pop').order_by('?')
+    Rock=Tracks.objects.filter(track_genre='Rock').order_by('?')
     track_list = Tracks.objects.order_by('track_name')
+   
     L=[Country,Dance,Hip_Hop,Latin,Pop,Rock,track_list]
+
 
     if request.method=='GET':  
         
@@ -92,6 +94,7 @@ def homepage(request):
             if (prof.area=='' or prof.age=='' or prof.region=='' or prof.sex==''):
                 return redirect('profil')
             else:
+              
                 
                 return render(request,'home.html',locals())
         else:     
@@ -109,26 +112,32 @@ def homepage(request):
                 t.save()          
                 
                 try:      
+              
                     t3=Traj.objects.filter(user=request.user).order_by('-start_time')[1]                   
-                    if (timezone.now()-t3.start_time).seconds >=1800:
+                    if (timezone.now()-t3.start_time).seconds >=900:
                     ## was the last conexion of the user more than 30min ago?
                         t2=history(path=['start'])
                         t2.user=request.user
                         t2.save()              
                 except:
+         
                     ## si pas de history
                     t2=history(path=['start']) 
                     t2.user=request.user
+                   
                     t2.save()                    
                 try:
+          
                     t2=history.objects.filter(user=request.user).order_by('-start_time')[0]
                     
                 except:
+              
                     t2=history(path=['start']) 
                     t2.user=request.user               
                 ## delimiteur 
                 t2.append('XXX')
                 t2.append_key(str(t.key))
+          
                 t2.save()
                
                 return redirect(reverse('fiche_track',kwargs={'track_pseudo': c}))
@@ -288,19 +297,21 @@ def recommend_songs(request):
                 data[index]=round(song.track_popularity,2)
                 index='.next_song_'+str(i)
                 data[index]=song.track_pseudo
+                index='#genre_'+str(i)
+                data[index]=song.track_genre
 #            print data
 #            print 'TT'
 #            print t.path[length-1]
 #            print type(t.path[length-1])
             if type(t.path[length-1])==unicode:  
-                    print 'ici'
+#                    print 'ici'
                 ### S           
                     t.path.append(l)
                 #### S A 
                 ##### OK
             elif type(t.path[length-1])==list:
                 if t.path[length-2]==track_pseudo:
-                    print 'laa'
+#                    print 'laa'
                     t.path[length-1]=l
             
             t.save()    
@@ -359,7 +370,7 @@ def fiche_track(request, track_pseudo):
              
                 ### S A
                 if t.path[length-2]!=track_pseudo:
-                    print 'il a actualiserrrr'
+#                    print 'il a actualiserrrr'
                     t.path.append([0.0,0.0])
                     t.path.append(track_pseudo)
         t.save()
@@ -433,10 +444,10 @@ def fiche_track(request, track_pseudo):
              
              
              if str(titre_2)=='empty': 
-                 print 'laaaa'                                   
+#                 print 'laaaa'                                   
                  return redirect(reverse('fiche_track',kwargs={'track_pseudo': titre_1}))
              else:   
-                 print 'iiciii'
+#                 print 'iiciii'
                  return redirect(reverse('solo',kwargs={'titre_1': titre_1,'titre_2':titre_2}))
 
 ## homepage
@@ -571,14 +582,14 @@ def solo(request,titre_1,titre_2):
         review=Track_Coments.objects.filter(track=track)
     else:
         has_yet_rated=False
-    print has_yet_rated
+#    print has_yet_rated
     
     if request.method=='GET':
         
         # check si existe pas deja
         t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
         length=len(t.path)
-        print 'sooloooo'
+#        print 'sooloooo'
         if t.path[length-5]!=titre_1:
             t.path.append(titre_1)
             t.path.append(['None','None',titre_2])
@@ -608,7 +619,7 @@ def solo(request,titre_1,titre_2):
                     rev.wordcloud=wordcloud
                     rev.save()            
                     ### s il existe des lignes on fait la moyenne en faisant un loop up dans la db
-                    print Track_Coments.objects.filter(track=track).count()
+#                    print Track_Coments.objects.filter(track=track).count()
                     if Track_Coments.objects.filter(track=track).count()>=10:                        
                         ## it is a dictionnary convert it now to float  
                         ## il existera toujours car le mec vient de submit en fait 

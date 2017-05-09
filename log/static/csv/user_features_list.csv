@@ -1,18 +1,24 @@
 Agriculture And Env. Sciences,0
 Arts,1
-Dentistry,2
-Education,3
-Engineering,4
+Education,2
+Engineering,3
+Health,4
 Law,5
 Literature,6
 Management,7
-Medicine,8
-Music,9
-Science,10
+Music,8
+Science,9
+Other,10
 M,11
 F,12
-Europe,13
+Africa,13
 Asia,14
-South America,15
-under 20,16
-20-25,17
+Europe,15
+Middle-East,16
+Oceania,17
+North-America,18
+South-America,19
+under 20,20
+20-25,21
+26-30,22
+31-40,23

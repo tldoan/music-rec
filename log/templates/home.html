@@ -9,7 +9,17 @@
   <div class="container-fluid">
  
     <ul class="nav navbar-nav navbar-right">
+    
+
+   
+     <li class="active">
+	      <button class="btn btn-custom btn-md" id='feedback'>
+	      <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 
+        		Feedback 
+            </button>
+     </li>
       <li class="active">
+
        
        <form action="/profil" method="get">
 
@@ -53,9 +63,10 @@
     
   </div>
 </nav>
+<br/>
+<br/>
 
-<br/>
-<br/>
+
 
 {% endblock  %}
 
@@ -94,6 +105,10 @@
 
 {% block track_list %}
 <div class='boutons'>
+<button class="btn btn-warning" id='Instructions' >
+     <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Instructions
+
+</button>
 <button class="btn btn-custom2" id='List' >
      <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> List
 

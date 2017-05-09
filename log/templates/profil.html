@@ -48,26 +48,7 @@
 
 {% block content %}
 
-<!-- <br/>
-<br/>
- <h1>  Profil of  </h1>
-<br/>
-<br/>
-{% if user.is_authenticate %}
 
-<h2><font color="white">Now Let's edit your profile: </font></h2>
-{% endif %}
-
-
-	<div class='row'>
-	<div class='panel panel-info'>
-		<div class="panel-heading">Informations</div>
-		
-		
-			<div class='panel-body'>
-					<form class='form-horizontal' action='' method='post'>
-
-						{% csrf_token %}		 -->	
 
 						<h2 class='uncomplete_form'>   </h2>
 						
@@ -110,7 +91,7 @@
 <button type='submit' id='cancel' class="btn btn-custom2"> Cancel</button>
 						
 
-						<div class="panel panel-custom" id='cc' style="width:22%">
+						<div class="panel panel-custom" id='cc' style="width:35%">
 						
 
 						<div class="panel-heading" id='grad1'> <h1> Profil  </h1>  </div>
@@ -127,35 +108,49 @@
 						</div>
 
 						<div class='row'>  
-						<h5>age:</h5>
+						<h5>your age range:</h5>
 						<select id="id_age" name="age" class="form-group" style="width:40%">
 
 							  
 							  <option value="under 20">under 20</option>
 							  <option value="20-25">20-25</option>
 							  <option value="26-30" >26-30</option>
-							  <option value="30-40" >30-40</option>
-							  <option value="over 40">over 40</option>
+							  <option value="31-40" >31-40</option>
+							 
 
 						</select>
 						</div>
 
 						<div class='row'>
-						<h5>region:</h5>
+						<h5>region where you live:</h5>
 						<select id="id_region" name="region" class="form-group" style="width:40%">
-							  <option value="Europe">Europe</option>
+							  <option value="Africa">Africa</option>
 							  <option value="Asia">Asia</option>
+							  <option value="Europe">Europe</option>
+							  <option value="Middle-East">Middle-East</option>
+							  <option value="Oceania">Oceania</option>
+							  <option value="North-America">North-America</option>
+							  <option value="South-America">South-America</option>
 						</select>
 						</div>
 						
 						
 							
 							<div class='row'>
-							<h5>area:</h5>
+							<h5>professional area:</h5>
 							<select id="id_area" name="area" class="form-group" style="width:40%">
 							  
+							  <option value="Agriculture And Env. Sciences">Agriculture And Env. Sciences</option>
+							  <option value="Arts">Arts</option>
+							  <option value="Education">Education</option>
+							  <option value="Engineering">Engineering</option>
+							  <option value="Health">Health</option>
+							  <option value="Law">Law</option>
+							  <option value="Literature">Literature</option>
 							  <option value="Management">Management</option>
+							  <option value="Music">Music</option>
 							  <option value="Science">Science</option>
+							  <option value="Other">Other</option>
 							  
 							</select>
 							</div>

@@ -33,8 +33,28 @@ $('document').ready(function(){
 		dates.hide();
 		$('.genre_display').text('');
 
+		
 
 		
+	});
+
+	$('#feedback').click(function(){
+		
+		/*window.open('mailto:doantl89@gmail.com');*/
+		var email = 'thang.doan@mail.mcgill.ca';
+        var subject = 'music recommendations';
+        var emailBody = 'your feedback or comments';
+        var attach = 'path';
+        document.location = "mailto:"+email+"?subject="+subject+"&body="+emailBody+
+            "?attach="+attach;
+
+
+	});
+
+	$('#Instructions').click(function(){
+		alert(' \n 1) Choose a songs \n 2) Listen as long as you like \n 3) Please give a rate and a word \n 4) - Accept recommendations you like \n \xa0   - Come back to homepage otherwise');
+			
+			
 	});
 
 	 $.each(dates, function( index, value ) {

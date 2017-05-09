@@ -3,7 +3,18 @@ $('document').ready(function(){
 	  var pictures=document.getElementById('wcloud_picture1').src;
 
        
-     
+     $('#feedback').click(function(){
+    
+    /*window.open('mailto:doantl89@gmail.com');*/
+    var email = 'thang.doan@mail.mcgill.ca';
+        var subject = 'music recommendations';
+        var emailBody = 'your feedback or comments';
+        var attach = 'path';
+        document.location = "mailto:"+email+"?subject="+subject+"&body="+emailBody+
+            "?attach="+attach;
+
+
+  });
      
       $('#submit').click(function(){
       	
@@ -83,7 +94,11 @@ $.ajax({
          
           document.getElementById(key).src=value;
 
-        }else if (key.startsWith('.next_song_') == true){
+        }else if (key.startsWith('#genre_') == true){
+
+        	$(key).text(value);
+
+    	}else if (key.startsWith('.next_song_') == true){
            
            $(key).val(value);
 

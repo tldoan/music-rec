@@ -112,10 +112,11 @@ class Traj(models.Model):
 
    
 def default_songs():
-    songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
-    novelty={}
-    for i in songs_list:
-        novelty[i]=np.ones(shape=(len(songs_list[i]),1))*5
+#    songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
+#    novelty={}
+#    for i in songs_list:
+#        novelty[i]=np.ones(shape=(len(songs_list[i]),1))*5
+    novelty=np.load(os.path.join(settings.STATIC_ROOT, 'data/novelty.npy')).item()
     return novelty
     
     
@@ -138,8 +139,6 @@ class history(models.Model):
        return 'history'
     
 
+
     
-    
-    
-    
-    
+

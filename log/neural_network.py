@@ -75,7 +75,7 @@ def predict_type(user,historic,track):
 #        print 'songs[tracks]'
 
              
-        ##len(state)=205
+        ##len(state)=211
       
         ##############################################################
         ### load neural network
@@ -85,16 +85,24 @@ def predict_type(user,historic,track):
             
                 type_model=load_model(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.h5'))
                 type_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
-#                print ' ou alors ici  ????????????????????????????????????????????'
-        
+
+#                rr=np.ones(shape=(1,100))
+
                 actor_policy=type_model.predict(ss).astype('float32')
-#                print ' ahahah  ????????????????????????????????????????????'
-        sess.close()
+                
+
+#                print actor_policy
+#                print np.max(actor_policy)
+                sess.close()
 
        
 #        print actor_policy
         ## choice
-        CHOICE=np.random.choice(len(actor_policy[0]),1,p=(actor_policy/np.sum(actor_policy))[0] )
+        MAX=np.max(actor_policy)
+        
+        p=np.exp(actor_policy/(MAX*0.25))/np.sum(np.exp(actor_policy/(MAX*0.25)))
+#        print p
+        CHOICE=np.random.choice(len(actor_policy[0]),1,p=p[0] )
  
         url=os.path.join(settings.STATIC_ROOT, 'data/actor_policy_list.npy')
         r=list(np.load(url))
@@ -110,7 +118,7 @@ def evaluate_actions(user,historic,track,w,t2):
 #        if len(r[CHOICE[0])<=2:
     with tf.Session() as sess:   
 
-
+#        w[0]=['Pop','Latin','Country','Rock']
         if len(w[0])==4:
             ######### single actions no correlations
             songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
@@ -134,13 +142,27 @@ def evaluate_actions(user,historic,track,w,t2):
                 s=np.array(songs_by_type[i].values())
                 hist=np.tile(historic,(len(s),1))
                 feat=np.tile(user_features,(len(s),1))
+                
+#                coeff=np.ones(shape=(len(s),1))
+                
+#                tt=np.array(s)
+#                coeff2=(tt[:,0].reshape(len(s),1))/2
+     
+                
+                #rr=np.ones(shape=(len(s),1))
+                
                 state_songs=np.tile(songs[track.track_pseudo],(len(s),1))
   
                 r=np.concatenate((hist,state_songs,s,feat),axis=1)        
+                
                
+                
+                
                 ddd=np.multiply(single_action_model.predict(r).astype('float32'),nov_recovery((np.array(t2.novelty[i]).astype('float32'))))
 #                single_action_values[i]=single_action_model.predict(r).astype('float32')
-                
+                #print 'ddd__________________'
+                #print ddd
+#                print ddd
                 single_action_values[i]=ddd
                 cc=np.argmax(single_action_values[i])
 
@@ -155,7 +177,7 @@ def evaluate_actions(user,historic,track,w,t2):
 #            return choice
             
                       
-    sess.close()     
+        sess.close()     
     return choice         
        
        
@@ -164,7 +186,7 @@ def evaluate_actions(user,historic,track,w,t2):
 
 def PulpSolve(N,w,historic,user_features,t2,track):
     
-    start = timeit.default_timer()
+#    start = timeit.default_timer()
      
     
 ############### loading data ##############
@@ -191,13 +213,13 @@ def PulpSolve(N,w,historic,user_features,t2,track):
     
     double_action_values={}
     single_action_values={}
-    start = timeit.default_timer()  
+#    start = timeit.default_timer()  
     prob = LpProblem("Songs recommendation",LpMaximize)
     var={}
     c=0    
     nb={}
     d=0 
-
+    w[0]=['Pop']
     for i in w[0]:
         cc=0
         nb[i]=1
@@ -208,28 +230,41 @@ def PulpSolve(N,w,historic,user_features,t2,track):
         double_action_values[i]=[]
         single_action_values[i]=[]
         
-                               
+#        coeff2=np.ones(shape=(len(correlations_by_type[i]),1))    
+                   
         s=np.array(correlations_by_type[i])
         hist=np.tile(historic,(len(correlations_by_type[i]),1)) 
         feat=np.tile(user_features,(len(correlations_by_type[i]),1))
         state_songs=np.tile(songs[track.track_pseudo],(len(correlations_by_type[i]),1))    
         rr=np.concatenate((hist,state_songs,s,feat),axis=1)
  
+#        coeff3=  (( (s[:,0]+s[:,181])*0.5) ).reshape(len(correlations_by_type[i]),1)
+     
+    
         jj=genre_dict[i]
         # load weights into new model
 
         double_action_values[i]=double_actions_model.predict(rr).astype('float32') 
-        
+       
         ###########
         ########## single actions
         s=np.array(songs_by_type[i].values())
         hist=np.tile(historic,(len(s),1))
         feat=np.tile(user_features,(len(s),1))
-        state_songs=np.tile(songs[track.track_pseudo],(len(s),1))         
+        state_songs=np.tile(songs[track.track_pseudo],(len(s),1))   
+        
         rr=np.concatenate((hist,state_songs,s,feat),axis=1)
-            
+        
+#        coeff=np.ones(shape=(len(s),1))
+        
+        
+#        tt=np.array(s)
+#        coeff2=(tt[:,0].reshape(len(s),1))/2
+        
+                
         ddd=np.multiply(single_action_model.predict(rr).astype('float32'),nov_recovery(np.array(t2.novelty[i]).astype('float32')))
 #        single_action_values[i]=single_action_model.predict(rr).astype('float32')
+#        print ddd
         single_action_values[i]=ddd
   
         
@@ -273,11 +308,11 @@ def PulpSolve(N,w,historic,user_features,t2,track):
     prob+=c     
 
 #    
-    stop = timeit.default_timer()
-    print 'tps pr add constraints'
-    print stop - start 
-#    
-    start = timeit.default_timer()
+#    stop = timeit.default_timer()
+#    print 'tps pr add constraints'
+#    print stop - start 
+##    
+#    start = timeit.default_timer()
 #    prob.solve(pulp.COIN_CMD(dual=True,mip=1,msg=1))
 #    prob.solve(pulp.PULP_CBC_CMD(dual=True))
 
@@ -286,29 +321,22 @@ def PulpSolve(N,w,historic,user_features,t2,track):
 #    prob.solve(pulp.GUROBI(mip=1))
 
     pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
-    solver = pulp.COIN_CMD(path=pa,mip=1)
+    solver = pulp.COIN_CMD(path=pa)
 
     prob.solve(solver)
 
     
-    stop = timeit.default_timer()
-    print "tps de solve"
-    print stop - start 
+#    stop = timeit.default_timer()
+#    print "tps de solve"
+#    print stop - start 
 
 
-    print 'constraints'
-    print len(prob.constraints)
-    print 'variables'
-    print len(prob.variables())
-#    q=0
-#    for v in prob.variables():
-#        if v.varValue>0:
-#            q=q+1
-#            print v.name, "=", v.varValue
-#                
-#    print 'q = ' +str(q)
-#    print pulp.value(prob.objective)
-    start = timeit.default_timer()
+#    print 'constraints'
+#    print len(prob.constraints)
+#    print 'variables'
+#    print len(prob.variables())
+
+#    start = timeit.default_timer()
     c=np.zeros(len(w[0]))
     for i in range(len(w[0])):
         c[i]=historic[int(genre_dict[w[0][i]])]
@@ -316,6 +344,7 @@ def PulpSolve(N,w,historic,user_features,t2,track):
     y={}
 #        n={}
     restant=N-len(w[0])
+#    print restant
 #    print 'historic'
 #    print historic
 #    print c
@@ -328,8 +357,8 @@ def PulpSolve(N,w,historic,user_features,t2,track):
     
     for i in pion:
         nb[w[0][i]]+=1
-    print 'nb'
-    print nb
+#    print 'nb'
+#    print nb
     choice=[]
     for i in w[0]:
         
@@ -345,20 +374,26 @@ def PulpSolve(N,w,historic,user_features,t2,track):
 #            z=np.random.choice(len(x[i]),nb[i],replace=False,p=(x[i].values()/np.sum(x[i].values())) )[0]    
 #            choice.append(x[i].keys()[z])
 #            print z
-        if nb[i]==2:
-            
-            z=np.random.choice(len(y[i]),1,replace=False,p=(y[i].values()/np.sum(y[i].values())) )[0] 
+#        if nb[i]==2:
+        if nb[i]%2==0:
+        
+#            z=np.random.choice(len(y[i]),1,replace=False,p=(y[i].values()/np.sum(y[i].values())) )[0] 
 
-            choice.extend(y[i].keys()[z])
+            z=np.random.choice(len(y[i]),2,replace=False,p=(y[i].values()/np.sum(y[i].values())))
+        
+            for ee in z:
+                choice.extend(y[i].keys()[ee])
+#                choice.extend(y[i].keys()[z])
+#            print choice
         else:
             z=np.random.choice(len(x[i]),nb[i],replace=False,p=(x[i].values()/np.sum(x[i].values())) )
 #            print z
            
             for ii in z:         
                 choice.append(x[i].keys()[ii])
-    stop = timeit.default_timer()
-    print "fin du prg"
-    print stop - start 
+#    stop = timeit.default_timer()
+#    print "fin du prg"
+#    print stop - start 
 
     
     return choice
