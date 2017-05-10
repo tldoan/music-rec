@@ -13,11 +13,11 @@
     
     
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css"> 
-  
+ 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
   
-   
+
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-rating/1.4.0/bootstrap-rating.min.css"></script> 
     <!-- bootstrap -->
@@ -27,18 +27,18 @@
 
    
    
-  
+ 
       
      
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/bootstrap-tokenfield.min.css" integrity="sha256-4qBzeX420hElp9/FzsuqUNqVobcClz1BjnXoxUDSYQ0=" crossorigin="anonymous" /> 
 
     
-
+   
      
       
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/tokenfield-typeahead.min.css" integrity="sha256-wjzCZMOsihqVFmuuKOTcseOy9q46Q7VqMTktUoWDilw=" crossorigin="anonymous" />
       
-     <!-- tokenfield-->
+
   
   <link rel="stylesheet" href="{% static 'css/main.css' %}" media="screen">
   <style>
@@ -139,7 +139,7 @@ audio::-webkit-media-controls-panel {
 
 	 	<div class="col-sm-9 col-md-9 col-lg-9">
 	 	
-		{% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
+	 	{% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
 		<img src="{% static image_static %}"  id='wcloud_picture1' alt="Be the first to brainstorm" style="width:100%" />
 		{% endwith %}
 		<h4> <span class="label label-default">most frequent tag words used </span></h4>	
@@ -201,7 +201,8 @@ audio::-webkit-media-controls-panel {
 			
 
 					
-
+	 	
+	 	
 	 		 
 		</div>
 
@@ -213,7 +214,7 @@ audio::-webkit-media-controls-panel {
 
 
 	 			 
-
+	
 
 						{% if  has_yet_rated  %}
 
@@ -230,8 +231,7 @@ audio::-webkit-media-controls-panel {
 							
 							<div class="panel-heading" id ='rating4'><h2>Give us your opinion</h2></div>
 								 
-								<!-- <form id='form_rate' class='form-horizontal' action='' method='post'>
-										{% csrf_token %} -->
+	
 										{%  if Wrong %}
 						             	<h4><strong> Please give a rating</strong></h4>
 						             	{%  endif %}
@@ -251,7 +251,7 @@ audio::-webkit-media-controls-panel {
 											</div>
 											 <br/>
 											 
-								<!-- </form> -->
+					
 								<button type="button" class="btn btn-custom2"  data-toggle="tooltip" data-placement="bottom" title="Write any words
 that come 
 to your mind
@@ -380,7 +380,7 @@ $(document).ready(function(){
 
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-rating/1.4.0/bootstrap-rating.min.js" integrity="sha256-2f3IfcCoAqV8FwRQhw1v/r4MLDQ1A3TQiYGtRUfW/l8=" crossorigin="anonymous"></script>
-<!-- rating -->
+
  
 {% if base_2  %}
 <script type='text/javascript' src="{% static 'js/fiche_track2.js' %}"></script>   
