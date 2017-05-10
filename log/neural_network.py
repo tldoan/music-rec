@@ -314,7 +314,7 @@ def PulpSolve(N,w,historic,user_features,t2,track):
 ##    
 #    start = timeit.default_timer()
     print 'regarde iciiiiiiiiiiii'
-    prob.solve(pulp.COIN_CMD(dual=True,mip=1,msg=1))
+    prob.solve(pulp.COIN_CMD(dual=True,msg=1))
 #    prob.solve(pulp.PULP_CBC_CMD(dual=True))
 
 #    prob.solve(pulp.GLPK(mip=1))
