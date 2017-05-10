@@ -313,19 +313,22 @@ def PulpSolve(N,w,historic,user_features,t2,track):
 #    print stop - start 
 ##    
 #    start = timeit.default_timer()
-#    prob.solve(pulp.COIN_CMD(dual=True,mip=1,msg=1))
+    prob.solve(pulp.COIN_CMD(dual=True,mip=1,msg=1))
 #    prob.solve(pulp.PULP_CBC_CMD(dual=True))
 
 #    prob.solve(pulp.GLPK(mip=1))
     
 #    prob.solve(pulp.GUROBI(mip=1))
+   
+    
 
 
-
-    pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
-    solver = pulp.COIN_CMD(path=pa)
+    
+    
+#    pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
+#    solver = pulp.COIN_CMD(path=pa)
 #
-    prob.solve(solver)
+#    prob.solve(solver)
 
     
     
