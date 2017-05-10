@@ -36,6 +36,9 @@ from neural_network import predict_type, history_update,evaluate_actions
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
+def custom_500(request):
+    return render(request, '500.html', {}, status=500)
+
 
 
 def loggin(request):  

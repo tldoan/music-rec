@@ -27,12 +27,9 @@ urlpatterns = [
    
       
       url(r'^home', views.homepage, name='homepage'),
+       url(r'^500', views.custom_500, name='500'),
   
-      
-       
-  
-          
-           
-       
   
 ]
+
+handler500 = 'app.views.custom_500'

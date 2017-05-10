@@ -21,28 +21,27 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5=87fsk=@y5^!cd70yr=!kti!2vw+8prmx)l7z3%n6!1w$h*6y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+
 #ALLOWED_HOSTS = ['127.0.0.1','localhost','music-rec.herokuapp.com']
-ALLOWED_HOSTS =['127.0.0.1','localhost','music-rec.herokuapp.com']
+ALLOWED_HOSTS =['127.0.0.1','music-rec.herokuapp.com']
+
 ADMINS = (
         ('thang', 'doantl89@gmail.com'),
-        )
-
+        ('thang','thang.doan@mail.mcgill.ca'),
+          )
 MANAGERS=ADMINS
 
 SERVER_EMAIL='no-reply@music-rec.com'
-EMAIL_HOST = 'smtp.yandex.ca'
-EMAIL_HOST_USER = 'noreply@music-rec.com'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'noreply@<project-name>.ru'
 EMAIL_HOST_PASSWORD = 'lollol94'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -66,7 +65,7 @@ LOGGING = {
     }
 }
         
-        
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -75,6 +74,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
+    
     'django.contrib.staticfiles','log',
 
     
@@ -188,12 +188,21 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'log/templates'),
 )
 
+
 #STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
-
-
 STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
 
+
+
+
+
+
+
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
 
 
 # Extra places for collectstatic to find static files.
@@ -203,6 +212,7 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 STATICFILES_DIRS=[
         os.path.join(BASE_DIR,'static'),]
+
 
 
 
