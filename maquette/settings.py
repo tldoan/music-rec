@@ -21,10 +21,6 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5=87fsk=@y5^!cd70yr=!kti!2vw+8prmx)l7z3%n6!1w$h*6y'
 
@@ -32,13 +28,37 @@ SECRET_KEY = '5=87fsk=@y5^!cd70yr=!kti!2vw+8prmx)l7z3%n6!1w$h*6y'
 DEBUG = False
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-#ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','https://music-rec.herokuapp.com']
+
 
 #ALLOWED_HOSTS = ['127.0.0.1','localhost','music-rec.herokuapp.com']
 ALLOWED_HOSTS =['127.0.0.1','music-rec.herokuapp.com']
-#ADMINS = [('thang', 'doantl89@gmail.com'),]
 
+ADMINS = (
+        ('thang', 'doantl89@gmail.com'),
+        ('thang','thang.doan@mail.mcgill.ca'),
+          )
+MANAGERS=ADMINS
 
+SERVER_EMAIL='no-reply@music-rec.com'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
+        
 
 # Application definition
 INSTALLED_APPS = [
@@ -48,6 +68,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
+    
     'django.contrib.staticfiles','log',
 
     
@@ -63,6 +84,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'maquette.urls'
@@ -160,9 +182,10 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'log/templates'),
 )
 
+
 #STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
 STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
-#STATIC_ROOT = os.path.join(PROJECT_ROOT, '../log/')
+
 
 
 
@@ -176,7 +199,6 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 
-
 # Extra places for collectstatic to find static files.
 #STATICFILES_DIRS = (
 #    os.path.join(PROJECT_ROOT, '../log/static'),
@@ -184,12 +206,6 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 STATICFILES_DIRS=[
         os.path.join(BASE_DIR,'static'),]
-
-
-
-
-
-
 
 
 
