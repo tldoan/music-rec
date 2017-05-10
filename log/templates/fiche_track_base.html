@@ -139,7 +139,9 @@ audio::-webkit-media-controls-panel {
 
 	 	<div class="col-sm-9 col-md-9 col-lg-9">
 	 	
-
+		{% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
+		<img src="{% static image_static %}"  id='wcloud_picture1' alt="Be the first to brainstorm" style="width:100%" />
+		{% endwith %}
 		<h4> <span class="label label-default">most frequent tag words used </span></h4>	
 		
 		  <table class="table table-inverse">
