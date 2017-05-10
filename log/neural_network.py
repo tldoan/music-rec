@@ -320,11 +320,17 @@ def PulpSolve(N,w,historic,user_features,t2,track):
     
 #    prob.solve(pulp.GUROBI(mip=1))
 
+
+
     pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
     solver = pulp.COIN_CMD(path=pa)
-
+#
     prob.solve(solver)
 
+    
+    
+    
+    
     
 #    stop = timeit.default_timer()
 #    print "tps de solve"

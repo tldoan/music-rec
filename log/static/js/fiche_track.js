@@ -80,6 +80,7 @@ $.ajax({
     type: "GET",
     url:"/recommend_songs",  
     async : false,
+    timeout: 10000,
    // data: { track_pseudo: tracksss },  
     dataType: 'json',
    success:function(jsons){
@@ -121,6 +122,7 @@ $.ajax({
         $('#pub').text('You may also like:');
         QQ.show();
      },
+
    error: function(){
     alert('error , redirecting you to homepage');
 
@@ -131,7 +133,7 @@ $.ajax({
    
    success:function(jsons){
    	
-   	window.location.replace("http://127.0.0.1:8000/home");
+   	window.location.replace("https://music-rec.herokuapp.com/home");
    },
     error: function(){
     alert('error again...');
