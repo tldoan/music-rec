@@ -36,7 +36,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 #ALLOWED_HOSTS = ['127.0.0.1','localhost','music-rec.herokuapp.com']
 ALLOWED_HOSTS =['127.0.0.1','music-rec.herokuapp.com']
-ADMINS = [('thang', 'doantl89@gmail.com'),]
+#ADMINS = [('thang', 'doantl89@gmail.com'),]
 
 
 
