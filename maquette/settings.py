@@ -40,6 +40,12 @@ ADMINS = (
 MANAGERS=ADMINS
 
 SERVER_EMAIL='no-reply@music-rec.com'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'noreply@<project-name>.ru'
+EMAIL_HOST_PASSWORD = 'lollol94'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'no-reply@music-rec.com'
 
 LOGGING = {
     'version': 1,
@@ -194,7 +200,7 @@ STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 

@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/bootstrap-tokenfield.min.css" integrity="sha256-4qBzeX420hElp9/FzsuqUNqVobcClz1BjnXoxUDSYQ0=" crossorigin="anonymous" /> 
 
     
-    <!-- <link rel="stylesheet" href="{% static 'css/tokenfield-typeahead.min.css' %}"> -->
+
      
       
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/tokenfield-typeahead.min.css" integrity="sha256-wjzCZMOsihqVFmuuKOTcseOy9q46Q7VqMTktUoWDilw=" crossorigin="anonymous" />
@@ -100,12 +100,7 @@ audio::-webkit-media-controls-panel {
 
 							<br/>
 								
-									<!-- <audio id="myAudio" ontimeupdate="update(this)" controls="controls">
-									{% with 'music/'|add:track.track_link|add:'.mp3' as sound_static %}
-									<source src="{% static sound_static %}" type="audio/mpeg">
-									{% endwith %}
-									</audio>
-									<br/> -->
+							
 
 									<audio id="myAudio" ontimeupdate="update(this)" controls="controls">
 									{% with 'https://s3.ca-central-1.amazonaws.com/music-rec/'|add:track.track_link|add:'.m4a' as sound_static %}
@@ -144,11 +139,11 @@ audio::-webkit-media-controls-panel {
 
 	 	<div class="col-sm-9 col-md-9 col-lg-9">
 	 	
-	 	{% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
+	 <!-- 	{% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
 		<img src="{% static image_static %}"  id='wcloud_picture1' alt="Be the first to brainstorm" style="width:100%" />
-		{% endwith %}
+		{% endwith %}-->
 		<h4> <span class="label label-default">most frequent tag words used </span></h4>	
-		 <!-- <table class="table  table-inverse table-responsive"> -->
+		
 		  <table class="table table-inverse">
 					  <thead>
 					  <tr> <th colspan="3" class='title'><h3><strong>About the track</strong></h3></th>  
@@ -206,15 +201,7 @@ audio::-webkit-media-controls-panel {
 			
 
 					
-	 	
-	 			<!-- 	<div class="col-sm-4 col-md-4 col-lg-4"> -->
-			
-		
-					   
-						  
-			<!-- </div> -->	
-<!-- <button  onclick="getCurTime()">Get current time position</button>
-<button onclick="myFunction()" type="button">Get video length</button><br> -->
+
 	 		 
 		</div>
 
@@ -226,23 +213,7 @@ audio::-webkit-media-controls-panel {
 
 
 	 			 
-		  		<!-- <div class="panel panel-custom" >
-							        <div class="panel-heading" id='grad1'><h4>Lyrics  <button id='hide2' class='btn btn-custom2'>hide</button> <button id='show' class='btn btn-custom2'>show</button></h4></div>		
 
-									     <div class="panel-body" id='lyrics'>
-
-											                		<div class="col-sm-4 col-md-4 col-lg-4" >
-											                
-											                        <div class='lyrics' >
-											                        lyrics
-											                        </div> 
-											                        </div>  
-											                  
-											<input type="hidden" id="lyrics_var" name="lyrics_var" value="{{track.track_link}}">
-			    						</div>
-			               
-			    </div> 
- -->
 
 						{% if  has_yet_rated  %}
 
@@ -391,9 +362,7 @@ $(document).ready(function(){
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<!-- <script src="//code.jquery.com/ui/1.7.3/jquery-ui.min.js"
-			  integrity="sha256-pYKd3m/N09PCc1/MM/f1Nk4PnaHrShF5ehtyZ0kdDds="
-			  crossorigin="anonymous"></script> -->
+
 
 
 
