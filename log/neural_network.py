@@ -219,7 +219,7 @@ def PulpSolve(N,w,historic,user_features,t2,track):
     c=0    
     nb={}
     d=0 
-    w[0]=['Pop']
+#    w[0]=['Pop']
     for i in w[0]:
         cc=0
         nb[i]=1
@@ -313,6 +313,7 @@ def PulpSolve(N,w,historic,user_features,t2,track):
 #    print stop - start 
 ##    
 #    start = timeit.default_timer()
+    print 'regarde iciiiiiiiiiiii'
     prob.solve(pulp.COIN_CMD(dual=True,mip=1,msg=1))
 #    prob.solve(pulp.PULP_CBC_CMD(dual=True))
 
