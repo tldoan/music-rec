@@ -31,14 +31,42 @@ SECRET_KEY = '5=87fsk=@y5^!cd70yr=!kti!2vw+8prmx)l7z3%n6!1w$h*6y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-#ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','https://music-rec.herokuapp.com']
-
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #ALLOWED_HOSTS = ['127.0.0.1','localhost','music-rec.herokuapp.com']
-ALLOWED_HOSTS =['127.0.0.1','music-rec.herokuapp.com']
-ADMINS = [('thang', 'doantl89@gmail.com'),]
+ALLOWED_HOSTS =['127.0.0.1','localhost','music-rec.herokuapp.com']
+ADMINS = (
+        ('thang', 'doantl89@gmail.com'),
+        )
 
+MANAGERS=ADMINS
 
+SERVER_EMAIL='no-reply@music-rec.com'
+EMAIL_HOST = 'smtp.yandex.ca'
+EMAIL_HOST_USER = 'noreply@music-rec.com'
+EMAIL_HOST_PASSWORD = 'lollol94'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'no-reply@music-rec.com'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
+        
+        
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -62,6 +90,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'maquette.urls'
@@ -160,20 +189,11 @@ TEMPLATE_DIRS = (
 )
 
 #STATIC_ROOT= os.path.join(BASE_DIR, 'log/static/')
+
+
 STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
-#STATIC_ROOT = os.path.join(PROJECT_ROOT, '../log/')
-
-
-
-
-
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
-
-
-
-
 
 
 # Extra places for collectstatic to find static files.
@@ -183,13 +203,6 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 STATICFILES_DIRS=[
         os.path.join(BASE_DIR,'static'),]
-
-
-
-
-
-
-
 
 
 
