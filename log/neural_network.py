@@ -313,9 +313,9 @@ def PulpSolve(N,w,historic,user_features,t2,track):
 #    print stop - start 
 ##    
 #    start = timeit.default_timer()
-    print 'regarde iciiiiiiiiiiii'
-    prob.solve(pulp.COIN_CMD(dual=True,msg=1))
-#    prob.solve(pulp.PULP_CBC_CMD(dual=True))
+
+#    prob.solve(pulp.COIN_CMD(dual=True,msg=1))
+    prob.solve(pulp.PULP_CBC_CMD(dual=True))
 
 #    prob.solve(pulp.GLPK(mip=1))
     
@@ -389,7 +389,7 @@ def PulpSolve(N,w,historic,user_features,t2,track):
         
 #            z=np.random.choice(len(y[i]),1,replace=False,p=(y[i].values()/np.sum(y[i].values())) )[0] 
 
-            z=np.random.choice(len(y[i]),2,replace=False,p=(y[i].values()/np.sum(y[i].values())))
+            z=np.random.choice(len(y[i]),nb[i]/2,replace=False,p=(y[i].values()/np.sum(y[i].values())))
         
             for ee in z:
                 choice.extend(y[i].keys()[ee])
