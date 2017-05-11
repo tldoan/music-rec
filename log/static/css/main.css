@@ -57,7 +57,7 @@ width:300px;
 .glyphicon-star-empty {
 
 color:#b0c619;
-font-size: 80px;
+font-size: 70px;
 text-align:center;
 }
 #star
@@ -279,16 +279,63 @@ white-space:pre-wrap;
     to { transform: scale(1) rotate(360deg);}
 }
 
-.label-danger
-{
-font-size: 20px;
+
+
+#pub2{
+    font-size: 18px;
 }
 
-.label-warning
-{
-font-size: 20px;
+.fa-hand-o-down {
+    -animation: leaves .3s ease-in-out infinite alternate;
+    -webkit-animation: leaves .3s ease-in-out infinite alternate;
+    display:block;
+    text-align:center;
 }
-.label-sucess
-{
-font-size: 25px;
+
+#play_songs {
+    -animation: leaves .3s ease-in-out infinite alternate;
+    -webkit-animation: leaves .3s ease-in-out infinite alternate;
+    display:block;
+    text-align:center;
 }
+
+
+@-webkit-keyframes leaves {
+    0% {
+        -webkit-transform: scale(1.0);
+    }
+    100% {
+        -webkit-transform: scale(1.4);
+    }
+}
+
+@keyframes leaves {
+    0% {
+        transform: scale(1.0);
+    }
+    100% {
+        transform: scale(1.4);
+    }
+}
+i{
+        text-align:center;
+    }
+
+
+#pub
+{
+    text-align:center;
+}
+
+#titre_1{
+     margin-right: 10px;
+}
+#titre_2{
+     margin-right: 25px;
+}
+
+#swtich_page2{ 
+    display: inline;
+    margin-right: 30px;
+}
+

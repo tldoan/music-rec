@@ -81,11 +81,75 @@
 
 <div class="panel panel-custom panel-horizontal" >
               <div class="panel-heading" id='grad1'>
-                 <h4 id='pub'> 
-                 	<span class="label label-danger" id='pub2'>
-                 <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading recommendations ...
-                 	</span>
-                 </h4>
+
+             
+                 
+                 	
+                 
+
+ <form id='swtich_page2' class='swtich_page2' action="" method='post'>
+		                        {% csrf_token %}  
+		                         
+		                         
+		                        <input type="hidden" id='percentage' class='percentage' name='percentage' value="">
+		                        
+		                        
+		                        <input type="hidden" id='listening_time' class='listening_time' name='listening_time' value="">
+		                        
+		                        <input type='hidden' class='liste2' name='liste2' value="{{l}}">
+		                        <br/> 
+		                        <input type='hidden' class='queue' name='queue' value="None"> 
+		                        
+		                        <span  class="label label-custom2" >1.</span>
+		                        <span id='titre_1' class="label label-custom2" name='titre_1'>empty</span>
+		                        
+		                        <span  class="label label-custom2" >2.</span>
+		                        <span id='titre_2' class="label label-custom2" name='titre_2'>empty</span>
+		                        <!-- <br/> -->
+		                        <input type='hidden' id='titre_1' class='titre_1' name='titre_1' value="empty">
+		                        <!-- <br/>  -->
+		                        <input type='hidden' id='titre_2' class='titre_2' name='titre_2' value="empty"> 
+		                        
+		                        <!--<input type="hidden" id="next_song" name="next_song" value="time"> -->
+		                      
+		                      <button id='load2' class="btn btn-custom2 btn-sm" >
+
+	
+		                       <i class="fa fa-play" id='play_songs' style="font-size:40px;color:red"></i>
+		                      
+		                                 
+		                      </button>
+
+
+		                      
+		   </form>  
+
+		    <button id='unload' class="btn btn-custom2 btn-sm" >
+			<span class="glyphicon glyphicon glyphicon-trash" id='play_songs' aria-hidden="true" style="font-size:40px"></span>
+			
+			 	
+			  </button> 
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     </div>
 
                       <div class="panel-main-body" >
@@ -119,41 +183,35 @@
 		                                  
 
 				   						    <input type="hidden" class="rating2" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" data-readonly data-fractions="3"  value=4/>	
-				   						    <br/>	                                  	   
+				   						    <br/>	     
+				   						    <br/>                             	   
 				   							<span id='NOTE_{{forloop.counter0}}' class="label label-danger">0</span>
 
 				   							
+				   							<br/>	
 				   							<br/>		
-				   							<br/>		   			
+				   								   			
 
 				   					 	 <form id='swtich_page_{{forloop.counter0}}' class='swtich_page' action='' method='post'>
 				   							{% csrf_token %}	
 				   						    
 				   						
 				   						
-				   							<input type="hidden" class='next_song_{{forloop.counter0}}' value="N/A"> 
-				   							
-
-				   						
+				   							<input type="hidden" class='next_song_{{forloop.counter0}}' value="N/A"> 		
 				   		
 		                                    
 										</form>  
-
-										<!-- <button id='queue_{{forloop.counter0}}' class="btn btn-custom btn-sm" >
-				   						<span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-				   						<br/>
-				   						 Select		
+										
+										
 
 
-
-                      					</button> -->
-
+					
 
                       					
 		                                  
 		                                 
 		                                  
-		                                  <br/>
+		                                 
 		                                 
 		                            	</div>
 		                            		
@@ -183,9 +241,9 @@
  <div class="col-sm-12  col-md-12  col-lg-12 " id='queue__'>
 		<h3> Load songs here</h3>
 		
-		  <form id='swtich_page2' class='swtich_page2' action="" method='post'>
+<!-- 		  <form id='swtich_page2' class='swtich_page2' action="" method='post'>
 		                        {% csrf_token %}  
-		                          <!--  sending variables to django -->
+		                         
 		                         
 		                        <input type="hidden" id='percentage' class='percentage' name='percentage' value="">
 		                        
@@ -206,21 +264,25 @@
 		                        <br/> 
 		                        <input type='hidden' id='titre_2' class='titre_2' name='titre_2' value="empty"> 
 		                        <br/> 
-		                        <!--<input type="hidden" id="next_song" name="next_song" value="time"> -->
+		                      
 		                      
 		                      <button id='load2' class="btn btn-custom2 btn-sm" >
-		                       <span class="glyphicon glyphicon-expand" aria-hidden="true"></span>
-		                      <!-- <br/>  -->
+		        
+		                       <i class="fa fa-play" id='play_songs' style="font-size:48px;color:red"></i>
+		                    
 		                       Play                
 		                      </button>
 		                      
-		   </form>           
+		   </form>         -->   
 
-		   <button id='unload' class="btn btn-custom2 btn-sm" >
+
+
+
+	<!-- 	   <button id='unload' class="btn btn-custom2 btn-sm" >
 								<span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"></span>
-								<!-- <br/> -->
+								
 								 clear 		
-		  					  </button> 
+		  					  </button>  -->
 			  <button type="button" class="btn btn-custom2 btn-sm" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Load one or     
 two songs 
 from bottom 

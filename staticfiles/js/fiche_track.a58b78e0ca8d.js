@@ -137,7 +137,7 @@ $.ajax({
    
    success:function(jsons){
    	
-   	window.location.replace("https://music-rec.herokuapp.com/home");
+   	window.location.replace("http://127.0.0.1:8000/home");
    },
     error: function(){
     alert('error again...');

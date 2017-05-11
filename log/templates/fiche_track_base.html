@@ -25,7 +25,7 @@
     <!-- jquery UI-->
      
 
-   
+
    
  
       
@@ -39,7 +39,12 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/tokenfield-typeahead.min.css" integrity="sha256-wjzCZMOsihqVFmuuKOTcseOy9q46Q7VqMTktUoWDilw=" crossorigin="anonymous" />
       
 
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   
+
+
+
   <link rel="stylesheet" href="{% static 'css/main.css' %}" media="screen">
   <style>
   audio::-internal-media-controls-download-button {
@@ -114,7 +119,13 @@ audio::-webkit-media-controls-panel {
 						</div>
 						<br/>
 						<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> 	 
-	 	<span class="label label-danger" id='star'>Song Rating: {{track.track_popularity| floatformat:2}}/5.00</span>
+	 	<span class="label label-default" id='star'>Song Rating: {{track.track_popularity| floatformat:2}}/5.00</span>
+<br/>
+<br/>
+<br/>
+
+
+	   	  
 
 
 			</div>		
@@ -171,15 +182,27 @@ audio::-webkit-media-controls-panel {
 					      <th scope="row">Artist rating</th>
 					      <td class='cell_hvr'> {{track.Artist_popularity| floatformat:0}}   </td>     
 					    </tr>
-					    <!-- <tr>
+	<!-- 				    <tr>
 					      <th scope="row">Featuring</th>
 					      <td class='cell_hvr'> {{track.featuring}}  </td>
 					    </tr> -->
 					  </tbody>
+
 					</table>
 					<br/>
+
+		<i class="fa fa-hand-o-down" style="font-size:48px;color:red"></i>
+		                 <h3 id='pub'> 
+                 	<span class="label label-danger" id='pub2'>
+                 <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading recommendations ...
+                 	</span>
+
+                 </h3>
+	
+ 
 		
-		</div>					
+		</div>		
+				
 					
 
 					
@@ -189,8 +212,8 @@ audio::-webkit-media-controls-panel {
 	 	<br/>
 	 	<br/>
 	 	<br/>
-	 	<br/>
-	 	<br/>
+	 	
+			
 	 	
 	 	
 	 	

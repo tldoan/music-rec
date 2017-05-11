@@ -1,8 +1,13 @@
 $('document').ready(function(){ 
 	  var tracksss= document.getElementById('TRACK').innerText;
 	 /* var pictures=document.getElementById('wcloud_picture1').src;*/
-	
+	$('.fa-hand-o-down').hide();
 	  
+
+    $('.fa-play').attr("id","ahha");
+    $('.glyphicon-trash').attr("id","ahha");
+
+    
 
        /*var QQ = $('*[id^="queue_"]');
        QQ.hide();*/
@@ -75,8 +80,9 @@ $.ajax({
        
 
         var data2=JSON.parse(data);
-        console.log(data2);
+        /*console.log(data2);*/
       	/*QQ.show();*/
+        $('.fa-hand-o-down').show();
       
         $.each(data2, function(key, value){
      
@@ -116,8 +122,7 @@ $.ajax({
        });  
 
 
-        $('#pub2').text('');
-      
+        $('#pub2').text('');  
         $('#pub2').removeClass('label label-danger').addClass('label label-warning');
         $('#pub2').text('our recommendations : add one or two songs');
         // QQ.show();
@@ -132,7 +137,7 @@ $.ajax({
    
    success:function(jsons){
    	
-   	window.location.replace("http://127.0.0.1:8000/home");
+   	window.location.replace("https://music-rec.herokuapp.com/home");
    },
     error: function(){
     alert('error again...');
@@ -229,8 +234,11 @@ $(function() {
 
     $('#pub2').text('');
   
-    $('#pub2').removeClass('label label-danger').addClass('label label-warning');
-    $('#pub2').text('ready : add one or two songs to the playlist');
+    $('#pub2').removeClass('label label-success').addClass('label label-warning');
+    $('#pub2').text('our recommendations : add one or two songs to the playlist');
+
+    $('.fa-play').attr("id","ahah");
+    $('.glyphicon-trash').attr("id","ahha");
 
 
 
@@ -250,6 +258,10 @@ $(function() {
                   $('#pub2').removeClass('label label-warning').addClass('label label-success');
                   $('#pub2').text('You can now play the song or add one more');
                  
+                  $('.fa-play').attr("id","play_songs");
+                  $('.glyphicon-trash').attr("id","play_songs");
+
+
                   $('#titre_1').text($('.next_song_'+index).val());
                   $('.titre_1').val($('.next_song_'+index).val());
                   $('#element_'+index).hide();
@@ -265,7 +277,7 @@ $(function() {
 
 
             } else if ($('#titre_1').text()!=='empty' && $('#titre_2').text()!=='empty'){
-                alert('queue full ! delete songs');
+                alert('queue full ! Clear songs');
                
       
               
