@@ -228,7 +228,7 @@ def save_rating(request):
                 t.time=datetime.datetime.now()
                 if wcloud!='':      
                     t.wordcloud=wordcloud
-                    load_wordcloud(track_pseudo,wordcloud)
+
  
                     msg={'update_wcloud':True}
                   
