@@ -13,11 +13,11 @@
      
           <li class="active">        
             
-                 <form action="/register" method="get">
-               				<!-- {% csrf_token %} -->
+             <!--     <form action="/register" method="get">
+               				
                       
                 	<button  class="btn btn-custom">Register</button>
-           		</form> 
+           		</form>  -->
                    
                
             
@@ -73,7 +73,7 @@
 <!-- <div class='container'> -->
 <!-- <div class="col-sm-8 col-md-8  col-lg-8 "> -->
 	
-	<div class="panel panel-custom" id='login_panel' style="width:26%">
+	<div class="panel panel-custom" id='login_panel' style="width:35%">
 		<div class="panel-heading" id='grad1'>
 		<h1> Account  </h1>
 		</div>
@@ -85,7 +85,7 @@
     
 	
 							
-				
+								<br/>
 						
 								<form action="auth" method="post"> 
 				    				{% csrf_token %}
@@ -116,10 +116,27 @@
 					    		
 					    		</div>
 		    					
-						</form>
-						
+								</form>
+
+						<br/>
+
+
 						
 						</div>
+							<div class="panel-footer">
+										 <div class='row'>
+										 First time coming?
+										 <br/>
+										 
+
+										 <form action="/register" method="get">
+				               				<!-- {% csrf_token %} -->
+				                      
+				                		<button  class="btn btn-custom" style="width:40%">Register</button>
+				           				</form> 
+				           				</div>
+			           				</div>
+						
 						</div>
 			
 			
