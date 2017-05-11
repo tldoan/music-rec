@@ -52,7 +52,7 @@ $('document').ready(function(){
 	});
 
 	$('#Instructions').click(function(){
-		alert(' \n 1) Choose a songs \n 2) Listen as long as you like \n 3) Please give a rate and a word \n 4) - Accept recommendations you like \n \xa0   - Come back to homepage otherwise');
+		alert(' \n 1) Choose a song \n 2) Listen as long as you like \n 3) Please give a rating and a word \n 4) - Accept recommendations you like \n \xa0   - Come back to homepage otherwise');
 			
 			
 	});

@@ -1,13 +1,13 @@
 $('document').ready(function(){ 
 	  var tracksss= document.getElementById('TRACK').innerText;
 	 /* var pictures=document.getElementById('wcloud_picture1').src;*/
-	 
+	
 	  
 
-       var QQ = $('*[id^="queue_"]');
-       QQ.hide();
+       /*var QQ = $('*[id^="queue_"]');
+       QQ.hide();*/
 
-
+       $('#conteneur').hide();
 
 
      $('#feedback').click(function(){
@@ -69,13 +69,14 @@ $.ajax({
    // data: { track_pseudo: tracksss },  
     dataType: 'json',
    success:function(jsons){
-      
+        
+        $('#conteneur').show();
         var data = JSON.stringify(jsons);
        
 
         var data2=JSON.parse(data);
         console.log(data2);
-      	QQ.show();
+      	/*QQ.show();*/
       
         $.each(data2, function(key, value){
      
@@ -115,8 +116,11 @@ $.ajax({
        });  
 
 
-        $('#pub').text('You may also like:');
-        QQ.show();
+        $('#pub2').text('');
+      
+        $('#pub2').removeClass('label label-danger').addClass('label label-warning');
+        $('#pub2').text('our recommendations : add one or two songs');
+        // QQ.show();
      },
    error: function(){
     alert('error ');
@@ -128,7 +132,7 @@ $.ajax({
    
    success:function(jsons){
    	
-   	window.location.replace("https://music-rec.herokuapp.com/home");
+   	window.location.replace("http://127.0.0.1:8000/home");
    },
     error: function(){
     alert('error again...');
@@ -223,6 +227,12 @@ $(function() {
     $('.titre_2').val($('#titre_2').text());
 
 
+    $('#pub2').text('');
+  
+    $('#pub2').removeClass('label label-danger').addClass('label label-warning');
+    $('#pub2').text('ready : add one or two songs to the playlist');
+
+
 
     document.getElementById('unload').disabled=true;
     document.getElementById('load2').disabled=true;
@@ -235,7 +245,10 @@ $(function() {
      $('#'+'queue_'+index).click(function(){         
          if ($('#titre_1').text()=='empty') {
 
-                  //console.log('titre_1');  
+
+                  $('#pub2').text('');
+                  $('#pub2').removeClass('label label-warning').addClass('label label-success');
+                  $('#pub2').text('You can now play the song or add one more');
                  
                   $('#titre_1').text($('.next_song_'+index).val());
                   $('.titre_1').val($('.next_song_'+index).val());
@@ -247,6 +260,8 @@ $(function() {
               $('#titre_2').text($('.next_song_'+index).val());
               $('.titre_2').val($('.next_song_'+index).val());
               $('#element_'+index).hide();
+
+              $('#pub2').text('ready to play !');
 
 
             } else if ($('#titre_1').text()!=='empty' && $('#titre_2').text()!=='empty'){

@@ -64,7 +64,7 @@ audio::-webkit-media-controls-panel {
 
 
 
-<h1>  {{track.Artist}} - {{track.track_name}} </h1>
+<h2>  {{track.Artist}} - {{track.track_name}} </h2>
 <div id='TRACK' style="display:none">{{track.track_pseudo}}</div>
 
 
@@ -82,7 +82,7 @@ audio::-webkit-media-controls-panel {
 
  	<div class="col-sm-10 col-md-10 col-lg-10">
 
-		 <img src={{track.Album_cover}}  class="img-thumbnail" alt="artist image"> 
+		 <img src={{track.Album_cover}}  class="img-thumbnail" alt="artist image" style="width:80%"> 
 		 <br/>
 		 <br/>
 
@@ -140,9 +140,9 @@ audio::-webkit-media-controls-panel {
 	 	<div class="col-sm-9 col-md-9 col-lg-9">
 	 	
 	 	{% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
-		<img src="{% static image_static %}"  id='wcloud_picture1' alt="Be the first to brainstorm" style="width:100%" />
+		<img src="{% static image_static %}"  id='wcloud_picture1' alt="Be the first to brainstorm" style="width:85%" />
 		{% endwith %}
-		<h4> <span class="label label-default">most frequent tag words used </span></h4>	
+		<h4> <span class="label label-default">frequent tag words associated </span></h4>	
 		
 		  <table class="table table-inverse">
 					  <thead>
@@ -163,18 +163,18 @@ audio::-webkit-media-controls-panel {
 					    <th scope="row">Genre</th>
 					      <td class='cell_hvr'>  {{track.track_genre}}  </td>  
 					    </tr>
-					    <tr>
+					<!--     <tr>
 					      <th scope="row">Artist</th>
 					      <td class='cell_hvr'> {{track.Artist}}  </td>  
-					    </tr>
+					    </tr> -->
 					    <tr >
 					      <th scope="row">Artist rating</th>
 					      <td class='cell_hvr'> {{track.Artist_popularity| floatformat:0}}   </td>     
 					    </tr>
-					    <tr>
+					    <!-- <tr>
 					      <th scope="row">Featuring</th>
 					      <td class='cell_hvr'> {{track.featuring}}  </td>
-					    </tr>
+					    </tr> -->
 					  </tbody>
 					</table>
 					<br/>
@@ -192,7 +192,7 @@ audio::-webkit-media-controls-panel {
 	 	<br/>
 	 	<br/>
 	 	
-	 	<br/>
+	 	
 	 	
 
 	 		
@@ -242,7 +242,7 @@ audio::-webkit-media-controls-panel {
 
 										  <br/>
 										  
-										 <h5> This song makes me think of: </h5>
+										 <h5> Emotions associated with the song: </h5>
 
 											<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
 											<br/>
@@ -292,6 +292,7 @@ this songs">
 		</div>
 </div>
 <br/>
+<br/>
 
 
 
@@ -301,36 +302,6 @@ this songs">
 
 
 
-<div class='row'>
-
-
-
-			  <div class="col-sm-4 col-md-4 col-lg-4 ">
-			  	
-			  	
-	
-					
-			  	
-			  	
-			  	<br/>
-			  	<br/>
-
-			
-
-				<br/>
-					</div>
-
-
-
-
-			
-						
-
-
-
-
-
-			  </div>
 
  
 
