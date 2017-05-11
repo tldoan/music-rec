@@ -43,22 +43,7 @@ $('document').ready(function(){
         var data2=JSON.parse(data);  
         alert('Thanks for your comment !');  
 
-/*	      if (data2['update_wcloud']){
-	      	
-	       	document.getElementById('wcloud_picture1').src="https://s3.ca-central-1.amazonaws.com/music-rec/wait.gif"
-	       
-	       	setTimeout(function() {
-	       			
-  				 document.getElementById('wcloud_picture1').src=pictures;
-		}, 1000);
-	       
-	       
-	      	
-	            
 
-	    }else{
-	    	alert('pas d update');
-	    }*/
 	   },
 	   error: function(){
 	    alert('error');
@@ -89,7 +74,7 @@ $.ajax({
        
 
         var data2=JSON.parse(data);
-        /*console.log(data2);*/
+        console.log(data2);
       	QQ.show();
       
         $.each(data2, function(key, value){
@@ -97,12 +82,14 @@ $.ajax({
         if (key.startsWith('#NOTE_') == true){
             
            $(key).text(value);
+          
         }else if (key.startsWith('image') == true){
          
           document.getElementById(key).src=value;
 
         }else if (key.startsWith('#genre_') == true){
 
+         
         	$(key).text(value);
 
     	}else if (key.startsWith('.next_song_') == true){
@@ -117,14 +104,22 @@ $.ajax({
 
         }       
         
+
      
-      });    
+      }); 
+
+
+      $('.rating2').each(function(index,value){
+        
+      $(this).rating('rate',$('#NOTE_'+index).text())
+       });  
+
+
         $('#pub').text('You may also like:');
         QQ.show();
      },
-
    error: function(){
-    alert('error , redirecting you to homepage');
+    alert('error ');
 
 //////////////////////////////////////
     $.ajax({
@@ -133,15 +128,13 @@ $.ajax({
    
    success:function(jsons){
    	
-   	window.location.replace("https://music-rec.herokuapp.com/home");
+   	window.location.replace("http://127.0.0.1:8000/home");
    },
     error: function(){
     alert('error again...');
 	},
 	});
 //////////////////////////////////////
-
-
    },
 
    });
@@ -199,13 +192,13 @@ function update(player) {
   });
 
 
-/* var song_rate = document.getElementById("song_rate").value;*/
+
 
 $(function () { 
          
   $('.rating2').each(function(index,value){
      
-  //  console.log($('#'+index).text());
+
       
       
       $(this).rating('rate',$('#NOTE_'+index).text())
