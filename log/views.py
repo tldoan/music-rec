@@ -285,10 +285,12 @@ def recommend_songs(request):
          
             l=evaluate_actions(request.user,historic,track,w,t2)
 #            print l
+#            l=['closer','closer','closer','closer']  
             liste=[]
             for i in range(len(l)):
                 liste.append(get_object_or_404(Tracks, track_pseudo=l[i])) 
-#              
+            
+             
             data={}
             for i in range(len(l)):
                 song=get_object_or_404(Tracks, track_pseudo=l[i])

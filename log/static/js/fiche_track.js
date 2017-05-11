@@ -79,7 +79,7 @@ $('document').ready(function(){
 $.ajax({
     type: "GET",
     url:"/recommend_songs",  
-    async : false,
+    async : true,
     timeout: 10000,
    // data: { track_pseudo: tracksss },  
     dataType: 'json',
