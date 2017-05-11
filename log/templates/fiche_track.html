@@ -49,8 +49,7 @@
   </div>
 </nav>
 
-<br/>
-<br/>
+
 
 {% endblock  %}
 
@@ -129,7 +128,7 @@
 				   							<input type="hidden" class='next_song_{{forloop.counter0}}' value="N/A"> 
 				   							
 
-				   						<br/>
+				   						
 				   		
 		                                    
 										</form>  
@@ -173,7 +172,7 @@
 
  
  <div class="col-sm-12  col-md-12  col-lg-12 " id='queue__'>
-		<h3><span class="glyphicon glyphicon-expand"></span> Next songs</h3>
+		<h3> Next songs</h3>
 		
 		  <form id='swtich_page2' class='swtich_page2' action="" method='post'>
 		                        {% csrf_token %}  
@@ -201,7 +200,7 @@
 		                        <!--<input type="hidden" id="next_song" name="next_song" value="time"> -->
 		                      
 		                      <button id='load2' class="btn btn-custom2 btn-sm" >
-		                       <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+		                       <span class="glyphicon glyphicon-expand" aria-hidden="true"></span>
 		                      <!-- <br/>  -->
 		                       Play                
 		                      </button>
