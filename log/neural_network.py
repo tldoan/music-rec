@@ -120,6 +120,7 @@ def evaluate_actions(user,historic,track,w,t2):
 
         w[0]=['Pop','Latin','Country','Rock']
         if len(w[0])==4:
+            print 'ici'
             ######### single actions no correlations
             songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
             songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
