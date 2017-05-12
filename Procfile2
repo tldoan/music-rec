@@ -1,1 +1,3 @@
 web: gunicorn --pythonpath="$PWD" maquette.wsgi --log-file -
+
+web: gunicorn hello:app
