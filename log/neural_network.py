@@ -118,7 +118,7 @@ def evaluate_actions(user,historic,track,w,t2):
 #        if len(r[CHOICE[0])<=2:
     with tf.Session() as sess:   
 
-#        w[0]=['Pop','Latin','Country','Rock']
+        w[0]=['Pop','Latin','Country','Rock']
         if len(w[0])==4:
             ######### single actions no correlations
             songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
