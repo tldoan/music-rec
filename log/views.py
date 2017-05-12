@@ -36,9 +36,9 @@ from neural_network import predict_type, history_update,evaluate_actions
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
+
 def custom_500(request):
     return render(request, '500.html', {}, status=500)
-
 
 
 def loggin(request):  
@@ -75,18 +75,30 @@ def loggout(request):
     return redirect(reverse('login'))
 
 
+
 @login_required 
 def homepage(request):
     """'affiche la liste des tracks'""" 
-    Country=Tracks.objects.filter(track_genre='Country').order_by('?')
-    Dance=Tracks.objects.filter(track_genre='Dance/Electronic').order_by('?')
-    Hip_Hop=Tracks.objects.filter(track_genre='Hip-Hop/R&B').order_by('?')
-    Latin=Tracks.objects.filter(track_genre='Latin').order_by('?')
-    Pop=Tracks.objects.filter(track_genre='Pop').order_by('?')
-    Rock=Tracks.objects.filter(track_genre='Rock').order_by('?')
-    track_list = Tracks.objects.order_by('track_name')
+#    Country=Tracks.objects.filter(track_genre='Country').order_by('?')
+#    Dance=Tracks.objects.filter(track_genre='Dance/Electronic').order_by('?')
+#    Hip_Hop=Tracks.objects.filter(track_genre='Hip-Hop/R&B').order_by('?')
+#    Latin=Tracks.objects.filter(track_genre='Latin').order_by('?')
+#    Pop=Tracks.objects.filter(track_genre='Pop').order_by('?')
+#    Rock=Tracks.objects.filter(track_genre='Rock').order_by('?')
+#    track_list = Tracks.objects.order_by('track_name')
+    
+    tracks_list=list(np.load(os.path.join(settings.STATIC_ROOT, 'data/tracks_list.npy'))) 
+    random.shuffle(tracks_list)
+
+#    print tracks_list
    
-    L=[Country,Dance,Hip_Hop,Latin,Pop,Rock,track_list]
+    L=list(np.load(os.path.join(settings.STATIC_ROOT, 'data/L.npy')))
+    for r in L:
+        random.shuffle(r)
+    
+#    L=[Country,Dance,Hip_Hop,Latin,Pop,Rock,track_list]
+#    print len(L)
+    
 
 
     if request.method=='GET':  
@@ -228,7 +240,7 @@ def save_rating(request):
                 t.time=datetime.datetime.now()
                 if wcloud!='':      
                     t.wordcloud=wordcloud
-
+#                    load_wordcloud(track_pseudo,wordcloud)
  
                     msg={'update_wcloud':True}
                   
@@ -284,26 +296,25 @@ def recommend_songs(request):
             w=predict_type(request.user,historic,track)              
          
             l=evaluate_actions(request.user,historic,track,w,t2)
-#            print l
-#            l=['closer','closer','closer','closer']  
-            liste=[]
-            for i in range(len(l)):
-                liste.append(get_object_or_404(Tracks, track_pseudo=l[i])) 
+            print l
+#            liste=[]
+#            for i in range(len(l)):
+#                liste.append(get_object_or_404(Tracks, track_pseudo=l[i])) 
             
-             
+            songs_db=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_db.npy')).item() 
             data={}
             for i in range(len(l)):
-                song=get_object_or_404(Tracks, track_pseudo=l[i])
+                song=songs_db[l[i]]
                 index='#Eelement_'+str(i)             
-                data[index]=song.Artist+' - '+song.track_name
+                data[index]=song['Artist']+' - '+song['track_name']
                 index='image_'+str(i)
-                data[index]=song.Artist_image
+                data[index]=song['Artist_image']
                 index='#NOTE_'+str(i)
-                data[index]=round(song.track_popularity,2)
+                data[index]=round(song['track_popularity'],2)
                 index='.next_song_'+str(i)
-                data[index]=song.track_pseudo
+                data[index]=song['track_pseudo']
                 index='#genre_'+str(i)
-                data[index]=song.track_genre
+                data[index]=song['track_genre']
 #            print data
 #            print 'TT'
 #            print t.path[length-1]
@@ -335,7 +346,10 @@ def fiche_track(request, track_pseudo):
     novelty_limit=60
     
     songs_keys=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_keys.npy')).item()   
-    track = get_object_or_404(Tracks, track_pseudo=track_pseudo)
+    
+    songs_db=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_db.npy')).item() 
+    track=songs_db[track_pseudo]
+#    track = get_object_or_404(Tracks, track_pseudo=track_pseudo)
 
     base_2=False
     has_yet_rated=True  
@@ -420,8 +434,9 @@ def fiche_track(request, track_pseudo):
              #### history registering
              t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
 
-             genre=get_object_or_404(Tracks, track_pseudo=track_pseudo).track_genre    
-             
+
+#             genre=get_object_or_404(Tracks, track_pseudo=track_pseudo).track_genre    
+             genre=track['track_genre']
     
              # on inscrit le nom du track           
              
@@ -441,8 +456,8 @@ def fiche_track(request, track_pseudo):
              if float(listening_time)>=novelty_limit:
 #                 print np.array(t2.novelty[track.track_genre])
 #                 print np.shape(np.array(t2.novelty[track.track_genre])                 
-                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]==novelty_parameters:                
-                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0.0                       
+                 if t2.novelty[track['track_genre']  ][   songs_keys[track['track_genre']     ][track['track_pseudo'] ]][0]==novelty_parameters:                
+                     t2.novelty[track['track_genre']  ][songs_keys[track['track_genre']  ][track['track_pseudo']  ]][0]=0.0                       
                          
                      
              t2.save()
@@ -483,8 +498,11 @@ def fiche_track(request, track_pseudo):
             t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
             # on cherche le type de la musique
             
-            genre=get_object_or_404(Tracks, track_pseudo=track_pseudo).track_genre   
+#            genre=get_object_or_404(Tracks, track_pseudo=track_pseudo).track_genre   
+            
 #            genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
+
+            genre=track['track_genre']
             # on inscrit le nom du track     
             
             length_t2=len(t2.path)
@@ -504,8 +522,8 @@ def fiche_track(request, track_pseudo):
             
             if float(listening_time)>=novelty_limit:
                  
-                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]==novelty_parameters:                
-                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0.0          
+                 if t2.novelty[track['track_genre']   ][ songs_keys[track['track_genre']   ][track['track_pseudo']   ]][0]==novelty_parameters:                
+                     t2.novelty[track['track_genre'] ][ songs_keys[track['track_genre']  ][track['track_pseudo']     ]][0]=0.0          
                
                      
             t2.save()
@@ -541,7 +559,8 @@ def fiche_track(request, track_pseudo):
             t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
             # on cherche le type de la musique   
 #            genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
-            genre=get_object_or_404(Tracks, track_pseudo=track_pseudo).track_genre   
+#            genre=get_object_or_404(Tracks, track_pseudo=track_pseudo).track_genre   
+            genre=track['track_genre']
             # on inscrit le nom du track           
             
             
@@ -563,8 +582,8 @@ def fiche_track(request, track_pseudo):
 #                 print np.array(t2.novelty[track.track_genre])
 #                 print np.shape(np.array(t2.novelty[track.track_genre])
                  
-                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]==novelty_parameters:                
-                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0.0          
+                 if t2.novelty[track['track_genre']      ][songs_keys[track['track_genre']       ][track['track_pseudo']  ]][0]==novelty_parameters:                
+                     t2.novelty[track['track_genre']  ][songs_keys[track['track_genre'] ][track['track_pseudo'] ]][0]=0.0          
               
             t2.save()
             return redirect(reverse('logout'))
@@ -595,7 +614,7 @@ def solo(request,titre_1,titre_2):
         t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]
         length=len(t.path)
 #        print 'sooloooo'
-        if t.path[length-5]!=titre_1:
+        if t.path[length-5]!=titre_1 and t.path[length-2]!=titre_1:
             t.path.append(titre_1)
             t.path.append(['None','None',titre_2])
         

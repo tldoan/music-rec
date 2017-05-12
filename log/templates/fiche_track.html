@@ -5,8 +5,14 @@
 
 <nav class="navbar navbar-custom" id='grad1'>
   <div class="container-fluid">
+
  
     <ul class="nav navbar-nav navbar-right">
+ <li class="active">
+ 
+ <span  id='sortir' class="label label-danger" style="height:35px">Logout when leaving</span>
+
+ 	</li>
          <li class="active">
 	      <button class="btn btn-custom btn-md" id='feedback'>
 	      <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 
@@ -85,8 +91,7 @@
              
                  
                  	
-                 
-
+        
  <form id='swtich_page2' class='swtich_page2' action="" method='post'>
 		                        {% csrf_token %}  
 		                         
@@ -113,40 +118,24 @@
 		                        <!--<input type="hidden" id="next_song" name="next_song" value="time"> -->
 		                      
 		                      <button id='load2' class="btn btn-custom2 btn-sm" >
-
 	
-		                       <i class="fa fa-play" id='play_songs' style="font-size:40px;color:red"></i>
-		                      
-		                                 
+		                     <!--   <i class="fa fa-play" id='play_songs' style="font-size:40px;color:red"></i> -->
+		                      <span class="glyphicon glyphicon-play-circle" id='plqy_songs' aria-hidden="true" style="font-size:40px"></span>
+
 		                      </button>
 
 
 		                      
-		   </form>  
+		   </form> 
+
+ 
 
 		    <button id='unload' class="btn btn-custom2 btn-sm" >
-			<span class="glyphicon glyphicon glyphicon-trash" id='play_songs' aria-hidden="true" style="font-size:40px"></span>
+			<span class="glyphicon glyphicon-trash" id='play_songs' aria-hidden="true" style="font-size:30px"></span> 
+			
 			
 			 	
 			  </button> 
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -184,11 +173,10 @@
 
 				   						    <input type="hidden" class="rating2" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" data-readonly data-fractions="3"  value=4/>	
 				   						    <br/>	     
-				   						    <br/>                             	   
+				   						                          	   
 				   							<span id='NOTE_{{forloop.counter0}}' class="label label-danger">0</span>
 
-				   							
-				   							<br/>	
+				   								<br/>
 				   							<br/>		
 				   								   			
 
@@ -200,18 +188,8 @@
 				   							<input type="hidden" class='next_song_{{forloop.counter0}}' value="N/A"> 		
 				   		
 		                                    
-										</form>  
-										
-										
-
-
-					
-
-                      					
+										</form>   					
 		                                  
-		                                 
-		                                  
-		                                 
 		                                 
 		                            	</div>
 		                            		
@@ -238,10 +216,10 @@
 
 
  
- <div class="col-sm-12  col-md-12  col-lg-12 " id='queue__'>
+<!--  <div class="col-sm-12  col-md-12  col-lg-12 " id='queue__'>
 		<h3> Load songs here</h3>
 		
-<!-- 		  <form id='swtich_page2' class='swtich_page2' action="" method='post'>
+		  <form id='swtich_page2' class='swtich_page2' action="" method='post'>
 		                        {% csrf_token %}  
 		                         
 		                         
@@ -273,16 +251,16 @@
 		                       Play                
 		                      </button>
 		                      
-		   </form>         -->   
+		   </form>           
 
 
 
 
-	<!-- 	   <button id='unload' class="btn btn-custom2 btn-sm" >
+		   <button id='unload' class="btn btn-custom2 btn-sm" >
 								<span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"></span>
 								
 								 clear 		
-		  					  </button>  -->
+		  					  </button> 
 			  <button type="button" class="btn btn-custom2 btn-sm" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Load one or     
 two songs 
 from bottom 
@@ -293,7 +271,7 @@ recomendations">
 		  					
 		  					 
   
-</div>                               
+</div>    -->                            
 
 		   					
 
@@ -308,37 +286,4 @@ recomendations">
 
 
 
-		<!-- <div class="col-sm-3 col-md-3 col-lg-3 col-sm-push-2 col-md-push-2 col-lg-push-3">
-		<button type="button" class="btn btn-lg btn-custom3" data-toggle="modal" data-target="#myModal">Instructions</button>
-		</div>
-
-		<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      
-      <div class="modal-content">
-        <div class="modal-header" id='grad1'>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h3 class="modal-title">Instructions</h3>
-        </div>
-        <div class="modal-body">
-          <h2>Welcome to the song page !</h2>
-          <br/>
-          <ul>
-          <li>You can listen to the songs with the Audio Player panel (red)</li>
-          <li>Lyrics are included, give it a try !</li>
-          <li>Please rate the songs and also brainstorm :)</li>
-          <li>For choosing next songs, refer to the info sign below</li>
-          </ul>
-          <br/>
-
-                                          <p>Enjoy!</p>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      
-    </div>
-  </div> -->
+	

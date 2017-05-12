@@ -6,8 +6,15 @@
 
 <nav class="navbar navbar-custom" id='grad1'>
   <div class="container-fluid">
+
+  
  
     <ul class="nav navbar-nav navbar-right">
+    <li class="active">
+ 
+ <span  id='sortir' class="label label-danger" style="height:35px">Logout when leaving</span>
+
+  </li>
          <li class="active">
         <button class="btn btn-custom btn-md" id='feedback'>
         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 
@@ -75,7 +82,7 @@
 
  
  <div class="col-sm-12  col-md-12  col-lg-12 " id='queue__'>
-    <h1><span class="glyphicon glyphicon-expand"></span> Next song</h1>
+    <h1> Play next song</h1>
 
         <form id='solo' class='solo' action="" method='post'>
                               {% csrf_token %}  
@@ -88,25 +95,26 @@
                                        
                               <br/> 
                               
-                              <span id='artist' class="label label-custom2" name='artist'>{{track2.Artist}}</span>
-                              <span id='next_song' class="label label-custom2" name='next_song'>{{titre_2}}</span>
-                              <br/>
-                              <img src= {{track2.Artist_image}} class="img-circle" alt="artist image"> 
-                              <br/>
+                              <!--  <button id='load3' class="btn btn-custom6" > -->
+                              <span id='artist' class="label label-custom2" name='artist'>{{track2.Artist}}  </span>
+                              
+                               
+                              <span  id='next_song' class="label label-custom2" name='next_song'>{{titre_2}}</span>
+                             
+                              <!--  <button id='load3' class="btn btn-custom6" > -->
+                               <input  id='load3' type='image' src= {{track2.Artist_image}} class="img-circle" alt="artist image"> 
+                             
+                              <!--  </button> -->
+
                               <!-- <span id='titre_2' class="label label-info" name='titre_2'>empty</span> -->
                               <input type='hidden' id='next_song' class='next_song' name='solo' value={{titre_2}}>
-                              <br/> 
+                              
+                        
 
-                            <br/>
-                            <button id='load3' class="btn btn-custom2 btn-sm" >
-                             <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-                            
-                             Play                
-                            </button>
-                            <br/> 
+                          
 
          </form>
-          </button> 
+          
            
 
 </div>

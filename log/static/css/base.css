@@ -46,7 +46,7 @@ h4
 
 body
 {
-	background-image:url("https://s3.ca-central-1.amazonaws.com/music-rec/background/metal_wallpaper6.jpg");
+	background-image:url("metal_wallpaper6.jpg");
 }
 #version
 {	
@@ -108,7 +108,7 @@ figcaption {
   flex-direction:row;
   padding:0px;
  margin-top:5%;
- margin-left:8%;  
+ margin-left:7%;  
 }
 
 
@@ -116,7 +116,7 @@ figcaption {
  display: inline-block;
 
  margin: 2%;
-
+/* ici qu il faut changer*/
   width: calc(15% - 1px);
 flex: 0 1 auto
 
@@ -130,7 +130,7 @@ flex: 0 1 auto
 
 .img-circle{
   display: inline-block;
-  width: 70%;
+  width: 80%;
   border: ridge 2px;
 
 }
@@ -177,4 +177,35 @@ flex: 0 1 auto
     text-align:center;
     
     
+}
+
+
+
+#change_settings {
+    -animation: leaves .5s ease-in-out infinite alternate;
+    -webkit-animation: leaves .5s ease-in-out infinite alternate;
+    display:block;
+    /*text-align:center;*/
+    margin-left: 20px;
+
+
+}
+
+
+@-webkit-keyframes leaves {
+    0% {
+        -webkit-transform: scale(1.0);
+    }
+    100% {
+        -webkit-transform: scale(1.3);
+    }
+}
+
+@keyframes leaves {
+    0% {
+        transform: scale(1.0);
+    }
+    100% {
+        transform: scale(1.3);
+    }
 }

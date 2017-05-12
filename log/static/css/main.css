@@ -70,22 +70,6 @@ text-align:center;
         background-color: grey ;
 }
 
-/*.progress-bar-vertical {
-
--webkit-transform: rotate(90deg);
-transform: rotate(90deg);
-width: 4000%;
-position:relative;
-bottom:1280px;
-right:1285px;
-
-
-  
-}
-#myProgress
-{
-    border:solid black;
-}*/
 
 #grad1 
  {
@@ -98,7 +82,7 @@ right:1285px;
 }
 body
 {
- background-image:url("https://s3.ca-central-1.amazonaws.com/music-rec/background/metal_wallpaper6.jpg");
+ background-image:url("metal_wallpaper6.jpg");
 }
 
 .btn
@@ -157,9 +141,6 @@ p{
 {
     background-color:transparent;
 
-
-
-
 }
 
 .container
@@ -177,10 +158,7 @@ background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must b
 border:4px inset white;
 
 }
-.label-default
-{
-  
-}
+
 #rating3
 {   
     
@@ -195,9 +173,6 @@ background: -moz-linear-gradient(-90deg,#0588E6, #2f353f); /* For Firefox 3.6 to
 background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
 
 }
-
-
-
 
 .element{
     flex:1 1 0;
@@ -214,12 +189,6 @@ background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must b
  {
     background-color:green;
  }
-#lyrics
-{   
-    text-align:center;
-    background-color:white;
-    border: 2px black double;
-}
 
 .glyphicon-chevron-right{
     color:red;
@@ -263,7 +232,6 @@ white-space:pre-wrap;
 }
 
 
-
 .glyphicon-refresh-animate {
     -animation: spin .7s infinite linear;
     -webkit-animation: spin2 .7s infinite linear;
@@ -285,9 +253,9 @@ white-space:pre-wrap;
     font-size: 18px;
 }
 
-.fa-hand-o-down {
-    -animation: leaves .3s ease-in-out infinite alternate;
-    -webkit-animation: leaves .3s ease-in-out infinite alternate;
+.fa-hand-o-down{
+    -animation: leaves .7s ease-in-out infinite alternate;
+    -webkit-animation: leaves .7s ease-in-out infinite alternate;
     display:block;
     text-align:center;
 }
@@ -305,7 +273,7 @@ white-space:pre-wrap;
         -webkit-transform: scale(1.0);
     }
     100% {
-        -webkit-transform: scale(1.4);
+        -webkit-transform: scale(1.5);
     }
 }
 
@@ -314,7 +282,7 @@ white-space:pre-wrap;
         transform: scale(1.0);
     }
     100% {
-        transform: scale(1.4);
+        transform: scale(1.5);
     }
 }
 i{
@@ -336,6 +304,27 @@ i{
 
 #swtich_page2{ 
     display: inline;
-    margin-right: 30px;
+    margin-right: 80px;
+
 }
 
+#sortir{
+
+   /*  display: inline;*/
+    font-size: 20px;
+    /* margin-left:33.8%;*/
+    border:transparent;
+   display:block;
+      
+}
+
+#solo{ 
+    display: inline;
+   /* margin-right: 30px;*/
+}
+#load2{
+    border:transparent;
+}
+#unload{
+    border:transparent;
+}

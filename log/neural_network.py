@@ -312,33 +312,26 @@ def PulpSolve(N,w,historic,user_features,t2,track):
 #    print 'tps pr add constraints'
 #    print stop - start 
 ##    
-#    start = timeit.default_timer()
-
-#    prob.solve(pulp.COIN_CMD(dual=True,msg=1))
-    prob.solve(pulp.PULP_CBC_CMD(dual=True))
+    start = timeit.default_timer()
+#    prob.solve(pulp.COIN_CMD(dual=True,mip=1,msg=1))
+#    prob.solve(pulp.PULP_CBC_CMD(dual=True))
 
 #    prob.solve(pulp.GLPK(mip=1))
     
 #    prob.solve(pulp.GUROBI(mip=1))
-   
-    
-
-
-    
+#    pa='https://s3.ca-central-1.amazonaws.com/music-rec/solver/cbc'
     
 #    pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
-#    solver = pulp.COIN_CMD(path=pa)
-#
-#    prob.solve(solver)
+    
+    solver = pulp.COIN_CMD(dual=True,path='cbc')
+    
+
+    prob.solve(solver)
 
     
-    
-    
-    
-    
-#    stop = timeit.default_timer()
-#    print "tps de solve"
-#    print stop - start 
+    stop = timeit.default_timer()
+    print "tps de solve"
+    print stop - start 
 
 
 #    print 'constraints'

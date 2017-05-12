@@ -1,11 +1,13 @@
 $('document').ready(function(){ 
 var tracksss= document.getElementById('TRACK').innerText;
-/*var pictures=document.getElementById('wcloud_picture1').src;*/
+      $('.fa-hand-o-down').hide();
+       $('#pub2').hide(); 
+      
 
        
      $('#feedback').click(function(){
+
     
-    /*window.open('mailto:doantl89@gmail.com');*/
     var email = 'thang.doan@mail.mcgill.ca';
         var subject = 'music recommendations';
         var emailBody = 'your feedback or comments';
@@ -36,22 +38,7 @@ var tracksss= document.getElementById('TRACK').innerText;
         var data2=JSON.parse(data);   
         alert('Thanks for your comment !'); 
 
-       /* if (data2['update_wcloud']){
-          
-          document.getElementById('wcloud_picture1').src="https://s3.ca-central-1.amazonaws.com/music-rec/wait.gif"
-         
-          setTimeout(function() {
-              
-           document.getElementById('wcloud_picture1').src=pictures;
-    }, 1000);
-         
-         
-          
-              
 
-      }else{
-        alert('pas d update');
-      }*/
      },
      error: function(){
       alert('error during the callback');
@@ -96,14 +83,7 @@ function update(player) {
 
     var fraction = time / duration;
     var percent  = Math.ceil(fraction * 100);
-   // var progress = document.querySelector('.progress-bar');
-    // progress.style.width = percent + '%';
-
-    // progress.textContent = percent + '%';  
-    //$('#lol2').text(fraction); 
-    //$('.listening_time').each(function(){
-    //$(this).val(time);
-    //}); 
+ 
     $('.listening_time').val(time);
     $('.percentage').val(fraction); 
     $('.listening_time2').val(time);
@@ -167,10 +147,7 @@ $.ajax({
   
   
   };
- // console.log(mot);
-// tokenfield
-//////////////////////////
-//console.log('3');
+
 $('#tokenfield').tokenfield({
 
   autocomplete: {

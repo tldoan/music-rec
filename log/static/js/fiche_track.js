@@ -4,7 +4,9 @@ $('document').ready(function(){
 	$('.fa-hand-o-down').hide();
 	  
 
-    $('.fa-play').attr("id","ahha");
+    
+    // $('.fa-play').attr("id","ahha");
+    $('.glyphicon-play-circle').attr("id","ahha");  
     $('.glyphicon-trash').attr("id","ahha");
 
     
@@ -17,7 +19,7 @@ $('document').ready(function(){
 
      $('#feedback').click(function(){
     
-    /*window.open('mailto:doantl89@gmail.com');*/
+
     var email = 'thang.doan@mail.mcgill.ca';
         var subject = 'music recommendations';
         var emailBody = 'your feedback or comments';
@@ -237,7 +239,8 @@ $(function() {
     $('#pub2').removeClass('label label-success').addClass('label label-warning');
     $('#pub2').text('our recommendations : add one or two songs to the playlist');
 
-    $('.fa-play').attr("id","ahah");
+    // $('.fa-play').attr("id","ahah");
+    $('.glyphicon-play-circle').attr("id","ahah");
     $('.glyphicon-trash').attr("id","ahha");
 
 
@@ -258,7 +261,8 @@ $(function() {
                   $('#pub2').removeClass('label label-warning').addClass('label label-success');
                   $('#pub2').text('You can now play the song or add one more');
                  
-                  $('.fa-play').attr("id","play_songs");
+                  // $('.fa-play').attr("id","play_songs");
+                  $('.glyphicon-play-circle').attr("id","play_songs");
                   $('.glyphicon-trash').attr("id","play_songs");
 
 

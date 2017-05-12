@@ -20,9 +20,7 @@
 
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-rating/1.4.0/bootstrap-rating.min.css"></script> 
-    <!-- bootstrap -->
 
-    <!-- jquery UI-->
      
 
 
@@ -85,9 +83,10 @@ audio::-webkit-media-controls-panel {
  	
  	<div class='col-sm-1 col-md-1 col-lg-1'> </div>
 
- 	<div class="col-sm-10 col-md-10 col-lg-10">
-
-		 <img src={{track.Album_cover}}  class="img-thumbnail" alt="artist image" style="width:80%"> 
+ 	<div class="col-sm-11 col-md-11 col-lg-11">
+ 		<center>
+		 <img src={{track.Album_cover}}  class="img-thumbnail" alt="artist image" style="width:85%"> 
+		</center>
 		 <br/>
 		 <br/>
 
@@ -103,7 +102,7 @@ audio::-webkit-media-controls-panel {
 							
 
 
-							<br/>
+							
 								
 							
 
@@ -118,10 +117,18 @@ audio::-webkit-media-controls-panel {
 
 						</div>
 						<br/>
-						<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> 	 
-	 	<span class="label label-default" id='star'>Song Rating: {{track.track_popularity| floatformat:2}}/5.00</span>
+	
 <br/>
-<br/>
+<i class="fa fa-hand-o-down" style="font-size:48px;color:red"></i>
+		        <h3 id='pub'> 
+                 	<span class="label label-danger" id='pub2'>
+                 		<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading recommendations ...
+                 	</span>
+
+                </h3>
+
+	{% block in_queue2 %}
+	{% endblock  %}
 <br/>
 
 
@@ -148,14 +155,85 @@ audio::-webkit-media-controls-panel {
 	 
 	 	
 
-	 	<div class="col-sm-9 col-md-9 col-lg-9">
-	 	
+	 	<div class="col-sm-11 col-md-11 col-lg-11">
+	 	<center>
 	 	{% with 'wcloud_pictures/'|add:track.track_pseudo|add:'.jpg' as image_static %}
-		<img src="{% static image_static %}"  id='wcloud_picture1' alt="Be the first to brainstorm" style="width:85%" />
+		<img src="{% static image_static %}" id='wcloud_picture1' alt="Be the first to brainstorm" style="width:95%" />
 		{% endwith %}
-		<h4> <span class="label label-default">frequent tag words associated </span></h4>	
 		
-		  <table class="table table-inverse">
+		<h4> <span class="label label-default">frequent tag words associated </span></h4>	
+		</center>
+		
+		
+					<br/>
+
+		<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> 	 
+	<span class="label label-default" id='star'>Song Rating:{{track.track_popularity|floatformat:2}}/5.00</span>
+
+		
+	
+ 
+		
+		</div>		
+				
+					
+	 		 
+		</div>
+
+
+<div class="col-sm-4 col-md-4 col-lg-4">
+
+
+	<div class="col-sm-10 col-md-10 col-lg-10 ">
+
+
+	 			 
+	
+
+						{% if  has_yet_rated  %}
+
+			<center>	<span class="label label-success">  you have already rated this song </span>
+			</center>
+			
+
+
+								{% else  %}
+							 
+							
+							<div class='row' id='rating3'>
+							
+							<div class="panel-heading" id ='rating4'><h2>Give us your opinion</h2></div>
+								 
+	
+										{%  if Wrong %}
+						             	<h4><strong> Please give a rating</strong></h4>
+						             	{%  endif %}
+						             	<h5> Rate the song: </h5>
+						             	<input type="hidden"  class='time_before_rated' name='time_before_rated' value="0">
+										<input type="hidden" name='rating' class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" />	   
+										<span id='heart-rate' class="label label-danger"></span>
+
+										  <br/>
+										  
+										 <h5> Emotions associated with the song: </h5>
+
+											<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
+											<br/>
+											<div class='col-sm-offset-4 col-sm-10'>
+													<button type='submit' class="btn btn-lg btn-custom2" id='submit'> Submit</button>
+											</div>
+											 <br/>
+											 
+						 			</div> 
+								
+
+
+
+								{% endif  %}
+
+
+
+  <table class="table table-inverse">
 					  <thead>
 					  <tr> <th colspan="3" class='title'><h3><strong>About the track</strong></h3></th>  
 					  </tr>
@@ -189,113 +267,16 @@ audio::-webkit-media-controls-panel {
 					  </tbody>
 
 					</table>
-					<br/>
-
-		<i class="fa fa-hand-o-down" style="font-size:48px;color:red"></i>
-		                 <h3 id='pub'> 
-                 	<span class="label label-danger" id='pub2'>
-                 <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading recommendations ...
-                 	</span>
-
-                 </h3>
-	
- 
-		
-		</div>		
-				
-					
-
-					
-
-						
-
-	 	<br/>
-	 	<br/>
-	 	<br/>
-	 	
-			
-	 	
-	 	
-	 	
-
-	 		
-
-
-			
-
-					
-	 	
-	 	
-	 		 
-		</div>
-
-
-<div class="col-sm-4 col-md-4 col-lg-4">
-
-
-	<div class="col-sm-10 col-md-10 col-lg-10 ">
-
-
-	 			 
-	
-
-						{% if  has_yet_rated  %}
-
-				
-				<h3> you have rated this song {{REVIEW.rating| floatformat:0}} stars </h3>
-
-			
-
-
-								{% else  %}
-							 
-							
-							<div class='row' id='rating3'>
-							
-							<div class="panel-heading" id ='rating4'><h2>Give us your opinion</h2></div>
-								 
-	
-										{%  if Wrong %}
-						             	<h4><strong> Please give a rating</strong></h4>
-						             	{%  endif %}
-						             	<h5> Rate the song: </h5>
-						             	<input type="hidden"  class='time_before_rated' name='time_before_rated' value="0">
-										<input type="hidden" name='rating' class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" />	   
-										<span id='heart-rate' class="label label-danger"></span>
-
-										  <br/>
-										  
-										 <h5> Emotions associated with the song: </h5>
-
-											<input  type="text" name='wordcloud' class="wordcloud" id="tokenfield"  placeholder='brainsorm here'/>
-											<br/>
-											<div class='col-sm-offset-4 col-sm-10'>
-													<button type='submit' class="btn btn-lg btn-custom2" id='submit'> Submit</button>
-											</div>
-											 <br/>
-											 
-					
-								<button type="button" class="btn btn-custom2"  data-toggle="tooltip" data-placement="bottom" title="Write any words
-that come 
-to your mind
-when listening 
-this songs">
-									  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								</button>
-								 
-								
-						 			</div> 
-								
 
 
 
-								{% endif  %}
+
+
 
 		  			 {% block in_queue %}
 					{% endblock  %}
 
-					{% block in_queue2 %}
-					{% endblock  %}
+				
 		
 		
 
@@ -315,7 +296,7 @@ this songs">
 		</div>
 </div>
 <br/>
-<br/>
+
 
 
 
