@@ -213,7 +213,7 @@ def PulpSolve(N,w,historic,user_features,t2,track):
     
     double_action_values={}
     single_action_values={}
-#    start = timeit.default_timer()  
+    start = timeit.default_timer()  
     prob = LpProblem("Songs recommendation",LpMaximize)
     var={}
     c=0    
@@ -308,9 +308,9 @@ def PulpSolve(N,w,historic,user_features,t2,track):
     prob+=c     
 
 #    
-#    stop = timeit.default_timer()
-#    print 'tps pr add constraints'
-#    print stop - start 
+    stop = timeit.default_timer()
+    print 'tps pr add constraints'
+    print stop - start 
 ##    
     start = timeit.default_timer()
 #    prob.solve(pulp.COIN_CMD(dual=True,mip=1,msg=1))
@@ -322,6 +322,7 @@ def PulpSolve(N,w,historic,user_features,t2,track):
 #    pa='https://s3.ca-central-1.amazonaws.com/music-rec/solver/cbc'
     
 #    pa=os.path.join(settings.STATIC_ROOT, 'cbc') 
+    
 #    solver = pulp.COIN_CMD(dual=True,path='cbc')
     
 

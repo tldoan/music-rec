@@ -294,9 +294,10 @@ def recommend_songs(request):
 #            N=4
           
             w=predict_type(request.user,historic,track)              
-         
+            print 'done predict type'
             l=evaluate_actions(request.user,historic,track,w,t2)
             print l
+            print 'done evaluate songs'
 #            liste=[]
 #            for i in range(len(l)):
 #                liste.append(get_object_or_404(Tracks, track_pseudo=l[i])) 
