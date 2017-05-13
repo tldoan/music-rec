@@ -263,6 +263,7 @@ def recommend_songs(request):
     if request.is_ajax():
       
         if request.method=='GET':
+            songs_db=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_db.npy')).item()
 #            print 'yeees again'
 #            track_pseudo = request.POST.get('track_pseudo')
             t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]  
@@ -286,23 +287,24 @@ def recommend_songs(request):
 #            print 'longueur'
 #            print track_pseudo
 #            
-            track=get_object_or_404(Tracks, track_pseudo=track_pseudo)
+#            track=get_object_or_404(Tracks, track_pseudo=track_pseudo)
+            track=songs_db[track_pseudo]
            
             
             t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
             historic=history_update(t2)  
 #            N=4
           
-            w=predict_type(request.user,historic,track)              
-            print 'done predict type'
-            l=evaluate_actions(request.user,historic,track,w,t2)
-            print l
+            w=predict_type(request.user,historic,track_pseudo)              
+            
+#            p=evaluate_actions(request.user,historic,track,w,t2)
+#            print l
             print 'done evaluate songs'
 #            liste=[]
 #            for i in range(len(l)):
 #                liste.append(get_object_or_404(Tracks, track_pseudo=l[i])) 
             
-            songs_db=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_db.npy')).item() 
+            l=['closer','closer','closer','closer']
             data={}
             for i in range(len(l)):
                 song=songs_db[l[i]]

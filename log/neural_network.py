@@ -44,7 +44,7 @@ def history_update(h):
 
 
 # encode the actor
-def predict_type(user,historic,track):
+def predict_type(user,historic,track_pseudo):
     
         songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
 
@@ -64,8 +64,20 @@ def predict_type(user,historic,track):
         user_features[int(user_features_dict[profile.age])]=1
         user_features[int(user_features_dict[profile.area])]=1
 
-        state=np.concatenate((historic,songs[track.track_pseudo],user_features))  
-        ss=state.reshape(1,len(state))
+        state=np.concatenate((historic,songs[track_pseudo],user_features))  
+        
+        
+###############
+## a effacer
+        h=historic.reshape(1,len(historic))
+        u=user_features.reshape(1,len(user_features))
+        s=songs[track_pseudo].reshape(1,len(songs[track_pseudo]))
+        
+        ss=[h,s,u]
+##################
+        
+        
+#        ss=state.reshape(1,len(state))
         
 #        print np.shape(user_features)
 #        print 'user_features'
@@ -91,7 +103,8 @@ def predict_type(user,historic,track):
                 actor_policy=type_model.predict(ss).astype('float32')
                 
 
-#                print actor_policy
+                print actor_policy
+                print 'print actor _policy !!!!!!!!!!!!!!!!!!!'
 #                print np.max(actor_policy)
                 sess.close()
 
@@ -118,9 +131,8 @@ def evaluate_actions(user,historic,track,w,t2):
 #        if len(r[CHOICE[0])<=2:
     with tf.Session() as sess:   
 
-        w[0]=['Pop','Latin','Country','Rock']
+#        w[0]=['Pop','Latin','Country','Rock']
         if len(w[0])==4:
-            print 'ici'
             ######### single actions no correlations
             songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
             songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
