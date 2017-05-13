@@ -10,8 +10,8 @@ https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/
 import os
 
 
-import newrelic.agent
-newrelic.agent.initialize('/home/username/path/to/myproject/newrelic.ini')
+#import newrelic.agent
+#newrelic.agent.initialize('/home/username/path/to/myproject/newrelic.ini')
 
 
 from django.core.wsgi import get_wsgi_application
