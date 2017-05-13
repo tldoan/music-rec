@@ -1,3 +1,7 @@
 web: gunicorn --pythonpath="$PWD" maquette.wsgi --log-file -
 
-web: gunicorn hello:app
+web: gunicorn music-rec:app
+
+web: newrelic-admin run-program gunicorn maquette.wsgi
+
+web: newrelic-admin run-program gunicorn hello.wsgi --log-file -
