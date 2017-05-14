@@ -9,8 +9,16 @@ $('document').ready(function(){
 	$('#Icons').hide();
 	$('.gallery').hide();
 
-	$('#gallery_6').show();
-	$('.genre_display').text('All')
+
+	var random_type=Math.floor(Math.random() * 5) + 1  ;
+	console.log(random_type);
+
+
+
+	$('#gallery_'+random_type).show();
+	$('.genre_display').text($('#type_'+random_type).text());
+	
+
 
 	$('#Icons').click(function(){
 		
@@ -19,10 +27,17 @@ $('document').ready(function(){
 		$('#Icons').hide();
 		
 		dates.show();
-		$('#gallery_6').show();
-		$('.genre_display').text('All');
+
+		var random_type2 =Math.floor(Math.random() * 5) + 1  ;
+		console.log(random_type2);
+		$('#gallery_'+random_type2).show();
+
+		$('.genre_display').text($('#type_'+random_type2).text());
+		
+
 		
 	});
+
 
 	$('#List').click(function(){
 		$('#liste_songs').show();
@@ -32,8 +47,6 @@ $('document').ready(function(){
 
 		dates.hide();
 		$('.genre_display').text('');
-
-		
 
 		
 	});
