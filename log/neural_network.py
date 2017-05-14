@@ -69,7 +69,7 @@ def predict_type(user,historic,track_pseudo):
         
 ###############
 ## a effacer
-        print len(songs[track_pseudo])
+#        print len(songs[track_pseudo])
         h=historic.reshape(1,len(historic))
         u=user_features.reshape(1,len(user_features))
         s=songs[track_pseudo].reshape(1,len(songs[track_pseudo]))
@@ -104,8 +104,8 @@ def predict_type(user,historic,track_pseudo):
                 actor_policy=type_model.predict(ss).astype('float32')
                 
 
-                print actor_policy
-                print 'print actor _policy !!!!!!!!!!!!!!!!!!!'
+#                print actor_policy
+#                print 'print actor _policy !!!!!!!!!!!!!!!!!!!'
 #                print np.max(actor_policy)
                 sess.close()
 
@@ -115,7 +115,7 @@ def predict_type(user,historic,track_pseudo):
         MAX=np.max(actor_policy)
         
         p=np.exp(actor_policy/(MAX*0.25))/np.sum(np.exp(actor_policy/(MAX*0.25)))
-        print p
+#        print p
         CHOICE=np.random.choice(len(actor_policy[0]),1,p=p[0] )
  
         url=os.path.join(settings.STATIC_ROOT, 'data/actor_policy_list.npy')

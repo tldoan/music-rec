@@ -11,7 +11,7 @@ $('document').ready(function(){
 
 
 	var random_type=Math.floor(Math.random() * 5) + 1  ;
-	console.log(random_type);
+	
 
 
 
@@ -29,7 +29,7 @@ $('document').ready(function(){
 		dates.show();
 
 		var random_type2 =Math.floor(Math.random() * 5) + 1  ;
-		console.log(random_type2);
+		
 		$('#gallery_'+random_type2).show();
 
 		$('.genre_display').text($('#type_'+random_type2).text());
@@ -77,8 +77,7 @@ $('document').ready(function(){
 	 		/*console.log('gallery_'+index);*/
 	 		$('.gallery').hide();
 	 		$('#gallery_'+index).show();
-	 		console.log('gallery_'+index);
-
+	 		
 
 	 		
 	 	});

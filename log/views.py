@@ -299,7 +299,7 @@ def recommend_songs(request):
             
 #            p=evaluate_actions(request.user,historic,track,w,t2)
 #            print l
-            print 'done evaluate songs'
+#            print 'done evaluate songs'
 #            liste=[]
 #            for i in range(len(l)):
 #                liste.append(get_object_or_404(Tracks, track_pseudo=l[i])) 
