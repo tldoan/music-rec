@@ -125,14 +125,14 @@ def predict_type(user,historic,track_pseudo):
 
 
 ## compute the values of all actions
-def evaluate_actions(user,historic,track,w,t2):
+def evaluate_actions(user,historic,track_pseudo,w,t2):
     
     
     user_features=w[1]   
 #        if len(r[CHOICE[0])<=2:
     with tf.Session() as sess:   
 
-#        w[0]=['Pop','Latin','Country','Rock']
+        w[0]=['Pop','Latin','Country','Rock']
         if len(w[0])==4:
             ######### single actions no correlations
             songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
@@ -140,10 +140,10 @@ def evaluate_actions(user,historic,track,w,t2):
             songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
    
             
-            url=os.path.join(settings.STATIC_ROOT, 'model/single_action/single_action.h5')
-            single_action_model = load_model(url)
+            url=os.path.join(settings.STATIC_ROOT, 'model/action/action_model.h5')
+            action_model = load_model(url)
             # load weights into the model
-            single_action_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/single_action/single_action_weights.h5'))
+            action_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/action/action_weights.h5'))
             
             ######## 4 types differents
             choice=[]
@@ -154,8 +154,8 @@ def evaluate_actions(user,historic,track,w,t2):
                 single_action_values[i]=[]
 
                 s=np.array(songs_by_type[i].values())
-                hist=np.tile(historic,(len(s),1))
-                feat=np.tile(user_features,(len(s),1))
+                hist=np.tile(historic.astype('float32'),(len(s),1))
+                feat=np.tile(user_features.astype('float32'),(len(s),1))
                 
 #                coeff=np.ones(shape=(len(s),1))
                 
@@ -164,30 +164,36 @@ def evaluate_actions(user,historic,track,w,t2):
      
                 
                 #rr=np.ones(shape=(len(s),1))
+                Z=np.zeros(shape=(len(s),len(songs['closer'])))
+                state_songs=np.tile(songs[track_pseudo],(len(s),1))
                 
-                state_songs=np.tile(songs[track.track_pseudo],(len(s),1))
+                r=[state_songs,s,Z ,hist,feat]
   
-                r=np.concatenate((hist,state_songs,s,feat),axis=1)        
+#                r=np.concatenate((hist,state_songs,s,feat),axis=1)        
                 
                
                 
                 
-                ddd=np.multiply(single_action_model.predict(r).astype('float32'),nov_recovery((np.array(t2.novelty[i]).astype('float32'))))
+                ddd=np.multiply(action_model.predict(r).astype('float32'),nov_recovery((np.array(t2.novelty[i]).astype('float32'))))
 #                single_action_values[i]=single_action_model.predict(r).astype('float32')
                 #print 'ddd__________________'
                 #print ddd
 #                print ddd
-                single_action_values[i]=ddd
-                cc=np.argmax(single_action_values[i])
+#                single_action_values[i]=ddd
+#                cc=np.argmax(single_action_values[i])
+#                cc=np.argmax(ddd)
 
-                choice.append(songs_list[i][cc])
+#                choice.append(songs_list[i][cc])
+               
 #                print 'solo 4 de chaque'
 
+                choice.append(songs_list[i][np.argmax(ddd)])
 
-#            return choice
+
+
         
         else:
-            choice=PulpSolve(4,w,historic,user_features,t2,track)
+            choice=PulpSolve(4,w,historic,user_features,t2,track_pseudo)
 #            return choice
             
                       
