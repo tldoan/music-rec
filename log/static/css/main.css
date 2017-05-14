@@ -250,7 +250,9 @@ white-space:pre-wrap;
 
 
 #pub2{
-    font-size: 18px;
+    font-size: 22px;
+  
+    display: inline-block;
 }
 
 .fa-hand-o-down{
@@ -292,7 +294,7 @@ i{
 
 #pub
 {
-    text-align:center;
+   /* margin-left:0px;*/
 }
 
 #titre_1{
