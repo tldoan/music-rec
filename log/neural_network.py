@@ -192,14 +192,14 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
         
         
         
-#                    ddd=np.multiply(action_model.predict(r).astype('float32'),nov_recovery((np.array(t2.novelty[i]).astype('float32'))))
-#                    choice.append(songs_list[i][np.argmax(ddd)])
-            STATE=np.ones(shape=(144,20)) 
-            HIST=np.ones(shape=(144,6))
-            FEAT=np.ones(shape=(144,24))
-            R=[STATE,STATE,STATE ,HIST,FEAT]
-            action_model.predict(R).astype('float32')
-            print len(action_model.predict(R).astype('float32'))
+                    ddd=np.multiply(action_model.predict(r).astype('float32'),nov_recovery((np.array(t2.novelty[i]).astype('float32'))))
+                    choice.append(songs_list[i][np.argmax(ddd)])
+#            STATE=np.ones(shape=(144,20)) 
+#            HIST=np.ones(shape=(144,6))
+#            FEAT=np.ones(shape=(144,24))
+#            R=[STATE,STATE,STATE ,HIST,FEAT]
+#            action_model.predict(R).astype('float32')
+#            print len(action_model.predict(R).astype('float32'))
             
             stop = timeit.default_timer()
             print 'tps pr add constraints'

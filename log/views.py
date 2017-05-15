@@ -297,15 +297,15 @@ def recommend_songs(request):
           
             w=predict_type(request.user,historic,track_pseudo)              
             print 'start evaluate action'
-            p=evaluate_actions(request.user,historic,track_pseudo,w,t2)
-#            print l
+            l=evaluate_actions(request.user,historic,track_pseudo,w,t2)
+            print l
 #            print l
 #            print 'done evaluate songs'
 #            liste=[]
 #            for i in range(len(l)):
 #                liste.append(get_object_or_404(Tracks, track_pseudo=l[i])) 
             
-            l=['closer','closer','closer','closer']
+#            l=['closer','closer','closer','closer']
             data={}
             for i in range(len(l)):
                 song=songs_db[l[i]]
