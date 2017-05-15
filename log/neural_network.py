@@ -100,8 +100,6 @@ def predict_type(user,historic,track_pseudo):
         print 'load from json'
 
         with tf.Session() as sess:  
-            
-                
 #                type_model=load_model(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.h5'))
                 type_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
                 
@@ -121,7 +119,7 @@ def predict_type(user,historic,track_pseudo):
 #                print actor_policy
 #                print 'print actor _policy !!!!!!!!!!!!!!!!!!!'
 #                print np.max(actor_policy)
-                sess.close()
+#                sess.close()
 
        
 #        print actor_policy
@@ -217,7 +215,7 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
             stop = timeit.default_timer()
             print 'tps pr compute neural net'
             print stop - start 
-            sess.close()    
+#            sess.close()    
              
 
                 
