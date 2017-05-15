@@ -31,16 +31,25 @@ from django.http import HttpResponse
 
 from django.views.decorators.csrf import csrf_exempt
 
-import tensorflow as tf
+#import tensorflow as tf
 from neural_network import predict_type, history_update,evaluate_actions
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
-from memory_profiler import profile
+#from memory_profiler import profile
+
+
+
+
+
+
+
+
+
 
 def custom_500(request):
     return render(request, '500.html', {}, status=500)
 
-
+#@profile
 def loggin(request):  
     logout(request)
     #form=UserForm(None)
@@ -75,7 +84,7 @@ def loggout(request):
     return redirect(reverse('login'))
 
 
-@profile
+#@profile
 @login_required 
 def homepage(request):
     """'affiche la liste des tracks'""" 
@@ -251,7 +260,7 @@ def save_rating(request):
         msg={'error':'No'}
         return HttpResponse(json.dumps(msg),content_type="application/json")
             
-@profile
+#@profile
 def recommend_songs(request):
     if request.is_ajax():
       

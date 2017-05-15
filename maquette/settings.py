@@ -18,9 +18,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-import guppy
-from guppy.heapy import Remote
-Remote.on()
+#import guppy
+#from guppy.heapy import Remote
+#Remote.on()
 
 
 # SECURITY WARNING: keep the secret key used in production secret!

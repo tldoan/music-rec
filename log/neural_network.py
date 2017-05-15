@@ -15,7 +15,7 @@ import tensorflow as tf
 from pulp import *
 from operator import itemgetter
 import pulp
-from memory_profiler import profile
+#from memory_profiler import profile
 
 
 
@@ -44,7 +44,7 @@ def history_update(h):
 
 
 # encode the actor
-@profile
+#@profile
 def predict_type(user,historic,track_pseudo):
     
         songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
@@ -138,7 +138,7 @@ def predict_type(user,historic,track_pseudo):
 
 
 ## compute the values of all actions
-@profile
+#@profile
 def evaluate_actions(user,historic,track_pseudo,w,t2):
     
     
