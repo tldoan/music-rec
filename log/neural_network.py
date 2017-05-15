@@ -132,7 +132,9 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
     
     user_features=w[1]   
 #        if len(r[CHOICE[0])<=2:
-    with tf.Session() as sess:   
+    with tf.Session() as sess:  
+        
+        start = timeit.default_timer()
 
         w[0]=['Pop','Latin','Country','Rock']
         if len(w[0])==4:
@@ -198,6 +200,10 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
             R=[STATE,STATE,STATE ,HIST,FEAT]
             action_model.predict(R).astype('float32')
             print len(action_model.predict(R).astype('float32'))
+            
+            stop = timeit.default_timer()
+            print 'tps pr add constraints'
+            print stop - start 
 
                 
                 
