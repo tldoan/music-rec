@@ -6,7 +6,7 @@ import os
 
 import timeit
 
-from keras.models import model_from_json,load_model
+from keras.models import load_model,model_from_json
 
 from django.shortcuts import  get_object_or_404
 from .models import Profile
@@ -92,10 +92,22 @@ def predict_type(user,historic,track_pseudo):
       
         ##############################################################
         ### load neural network
+        
+        json_file = open(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.json'), 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        type_model = model_from_json(loaded_model_json)
+        print 'load from json'
 
         with tf.Session() as sess:  
-                type_model=load_model(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.h5'))
+            
+                
+#                type_model=load_model(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.h5'))
                 type_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
+                
+                init = tf.global_variables_initializer()
+                sess.run(init)
+                
                 
                 # load weights into new model
             
@@ -132,34 +144,35 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
     
     user_features=w[1]   
 #        if len(r[CHOICE[0])<=2:
+    
+    
+    
+    json_file = open(os.path.join(settings.STATIC_ROOT, 'model/action/action_model.json'), 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    action_model = model_from_json(loaded_model_json)
+    print 'load action from json'
     with tf.Session() as sess:  
+        init = tf.global_variables_initializer()
+        sess.run(init)
         
         start = timeit.default_timer()
 
         w[0]=['Pop','Latin','Country','Rock']
         if len(w[0])==4:
+  
             ######### single actions no correlations
             songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
             songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
             songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
-   
             
-            url=os.path.join(settings.STATIC_ROOT, 'model/action/action_model.h5')
-            action_model = load_model(url)
+#            url=os.path.join(settings.STATIC_ROOT, 'model/action/action_model.h5')
+#            action_model = load_model(url)
             # load weights into the model
             action_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/action/action_weights.h5'))
             
             ######## 4 types differents
             choice=[]
-            
-            
-            
-#            single_action_values={}
-#            STATE=[]
-#            SONGS=[]
-#            ZEROS=[]
-#            HIST=[]
-#            FEAT=[]
             
             for i in w[0]:
                 
@@ -202,8 +215,10 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
 #            print len(action_model.predict(R).astype('float32'))
             
             stop = timeit.default_timer()
-            print 'tps pr add constraints'
+            print 'tps pr compute neural net'
             print stop - start 
+            sess.close()    
+             
 
                 
                 
@@ -220,11 +235,14 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
 
         
         else:
+            print 'cettte branche'
+#            with tf.Session() as sess:  
             choice=PulpSolve(4,w,historic,user_features,t2,track_pseudo)
+#                sess.close()     
 #            return choice
-            
+        
                       
-        sess.close()     
+        
     return choice         
        
        

@@ -31,7 +31,7 @@ from django.http import HttpResponse
 
 from django.views.decorators.csrf import csrf_exempt
 
-
+import tensorflow as tf
 from neural_network import predict_type, history_update,evaluate_actions
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
@@ -79,14 +79,6 @@ def loggout(request):
 @login_required 
 def homepage(request):
     """'affiche la liste des tracks'""" 
-#    Country=Tracks.objects.filter(track_genre='Country').order_by('?')
-#    Dance=Tracks.objects.filter(track_genre='Dance/Electronic').order_by('?')
-#    Hip_Hop=Tracks.objects.filter(track_genre='Hip-Hop/R&B').order_by('?')
-#    Latin=Tracks.objects.filter(track_genre='Latin').order_by('?')
-#    Pop=Tracks.objects.filter(track_genre='Pop').order_by('?')
-#    Rock=Tracks.objects.filter(track_genre='Rock').order_by('?')
-#    track_list = Tracks.objects.order_by('track_name')
-    
     tracks_list=list(np.load(os.path.join(settings.STATIC_ROOT, 'data/tracks_list.npy'))) 
     random.shuffle(tracks_list)
 
@@ -96,8 +88,7 @@ def homepage(request):
     for r in L:
         random.shuffle(r)
     
-#    L=[Country,Dance,Hip_Hop,Latin,Pop,Rock,track_list]
-#    print len(L)
+
     
 
 
@@ -128,7 +119,8 @@ def homepage(request):
                 
                 try:      
               
-                    t3=Traj.objects.filter(user=request.user).order_by('-start_time')[1]                   
+                    t3=Traj.objects.filter(user=request.user).order_by('-start_time')[1]  
+                    
                     if (timezone.now()-t3.start_time).seconds >=900:
                     ## was the last conexion of the user more than 30min ago?
                         t2=history(path=['start'])
@@ -140,7 +132,8 @@ def homepage(request):
                     t2=history(path=['start']) 
                     t2.user=request.user
                    
-                    t2.save()                    
+                    t2.save()       
+                    
                 try:
           
                     t2=history.objects.filter(user=request.user).order_by('-start_time')[0]
@@ -284,8 +277,7 @@ def recommend_songs(request):
                     
                     track_pseudo=t.path[length-2]
                 
-#            print 'longueur'
-#            print track_pseudo
+
 #            
 #            track=get_object_or_404(Tracks, track_pseudo=track_pseudo)
             track=songs_db[track_pseudo]

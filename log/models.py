@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
-#from django.forms import ModelForm
+
 from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django import forms
+
 
 
 from jsonfield import JSONField
 from django.conf import settings
 import os
 import numpy as np
-   
+
        
 
 class Profile(models.Model):  
@@ -19,7 +18,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # La liaison OneToOne vers le modèle User
     region = models.CharField(default='', max_length=30)
     area = models.CharField(default='',max_length=30)
-    #age = models.CharField(choices=age_range,max_length=30)
+
     age = models.CharField(default='',max_length=30)
     sex = models.CharField(default='',max_length=30)
 
@@ -53,13 +52,13 @@ class Tracks(models.Model):
     track_link=models.CharField(default='',max_length=250)
     
     Artist_popularity=models.FloatField(default=0)
-    #Artist_genre=models.CharField(default='',max_length=50)
+
     Artist_image=models.URLField(blank=True)
     
     Album_name=models.CharField(default='',max_length=250)
     Album_cover=models.URLField(blank=True)
     
-    #lyrics=models.CharField(default='',max_length=250) ## save in a text file
+
     
     duration=models.FloatField(default=0)  ## lenght of the song in ms
     preview=models.URLField(blank=True)  ## preview of 30sec
@@ -112,10 +111,6 @@ class Traj(models.Model):
 
    
 def default_songs():
-#    songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
-#    novelty={}
-#    for i in songs_list:
-#        novelty[i]=np.ones(shape=(len(songs_list[i]),1))*5
     novelty=np.load(os.path.join(settings.STATIC_ROOT, 'data/novelty.npy')).item()
     return novelty
     
@@ -137,7 +132,9 @@ class history(models.Model):
         
     def __str__(self):  # __unicode__ on Python 2
        return 'history'
-    
+
+
+
 
 
     
