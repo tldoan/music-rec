@@ -27,6 +27,7 @@ tensorflow==1.1.0
 Werkzeug==0.12.1
 gunicorn==19.7.1
 newrelic==2.86.0.65
+whitenoise==3.3.0
 
 
 
