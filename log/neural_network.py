@@ -15,7 +15,7 @@ import tensorflow as tf
 from pulp import *
 from operator import itemgetter
 import pulp
-
+from memory_profiler import profile
 
 
 
@@ -44,6 +44,7 @@ def history_update(h):
 
 
 # encode the actor
+@profile
 def predict_type(user,historic,track_pseudo):
     
         songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
@@ -137,6 +138,7 @@ def predict_type(user,historic,track_pseudo):
 
 
 ## compute the values of all actions
+@profile
 def evaluate_actions(user,historic,track_pseudo,w,t2):
     
     
@@ -151,8 +153,8 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
     action_model = model_from_json(loaded_model_json)
     print 'load action from json'
     with tf.Session() as sess:  
-        init = tf.global_variables_initializer()
-        sess.run(init)
+#        init = tf.global_variables_initializer()
+#        sess.run(init)
         
         start = timeit.default_timer()
 

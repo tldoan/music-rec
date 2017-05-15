@@ -16,11 +16,11 @@ import timeit
 
 from django.conf import settings
 import os
-from wordcloud import WordCloud
+#from wordcloud import WordCloud
 import random,string
 
 
-from PIL import Image
+#from PIL import Image
 import numpy as np
 
 from django.db.models import Avg
@@ -35,7 +35,7 @@ import tensorflow as tf
 from neural_network import predict_type, history_update,evaluate_actions
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
-
+from memory_profiler import profile
 
 def custom_500(request):
     return render(request, '500.html', {}, status=500)
@@ -75,7 +75,7 @@ def loggout(request):
     return redirect(reverse('login'))
 
 
-
+@profile
 @login_required 
 def homepage(request):
     """'affiche la liste des tracks'""" 
@@ -251,7 +251,7 @@ def save_rating(request):
         msg={'error':'No'}
         return HttpResponse(json.dumps(msg),content_type="application/json")
             
-
+@profile
 def recommend_songs(request):
     if request.is_ajax():
       
