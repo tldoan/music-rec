@@ -92,12 +92,14 @@ def predict_type(user,historic,track_pseudo):
       
         ##############################################################
         ### load neural network
+
         with tf.Session() as sess:  
+                type_model=load_model(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.h5'))
+                type_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
                 
                 # load weights into new model
             
-                type_model=load_model(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.h5'))
-                type_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
+                
 
 #                rr=np.ones(shape=(1,100))
 
@@ -147,49 +149,68 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
             
             ######## 4 types differents
             choice=[]
-
-            single_action_values={}
+            
+            
+            
+#            single_action_values={}
+#            STATE=[]
+#            SONGS=[]
+#            ZEROS=[]
+#            HIST=[]
+#            FEAT=[]
+            
             for i in w[0]:
                 
-                single_action_values[i]=[]
+                
+                
+#                single_action_values[i]=[]
+            
 
-                s=np.array(songs_by_type[i].values())
-                hist=np.tile(historic.astype('float32'),(len(s),1))
-                feat=np.tile(user_features.astype('float32'),(len(s),1))
-                
-#                coeff=np.ones(shape=(len(s),1))
-                
-#                tt=np.array(s)
-#                coeff2=(tt[:,0].reshape(len(s),1))/2
-     
-                
-                #rr=np.ones(shape=(len(s),1))
-                Z=np.zeros(shape=(len(s),len(songs['closer'])))
-                state_songs=np.tile(songs[track_pseudo],(len(s),1))
-                
-                r=[state_songs,s,Z ,hist,feat]
-  
-#                r=np.concatenate((hist,state_songs,s,feat),axis=1)        
-                
-               
-                
-                
-                ddd=np.multiply(action_model.predict(r).astype('float32'),nov_recovery((np.array(t2.novelty[i]).astype('float32'))))
-#                single_action_values[i]=single_action_model.predict(r).astype('float32')
-                #print 'ddd__________________'
-                #print ddd
-#                print ddd
-#                single_action_values[i]=ddd
-#                cc=np.argmax(single_action_values[i])
-#                cc=np.argmax(ddd)
+                    s=np.array(songs_by_type[i].values())
+                  
+        
+                    hist=np.tile(historic.astype('float32'),(len(s),1))
+                    feat=np.tile(user_features.astype('float32'),(len(s),1))
+                    #rr=np.ones(shape=(len(s),1))
+                    Z=np.zeros(shape=(len(s),len(songs['closer'])))
+                    state_songs=np.tile(songs[track_pseudo],(len(s),1))
+                    
+                    r=[state_songs,s,Z ,hist,feat]
+          
+        #                r=np.concatenate((hist,state_songs,s,feat),axis=1)        
+                   
+        
+        
+        #                single_action_values[i]=ddd
+        #                cc=np.argmax(single_action_values[i])
+        #                cc=np.argmax(ddd)
+        
+        #                choice.append(songs_list[i][cc])
+                   
+        
+        
+        
+#                    ddd=np.multiply(action_model.predict(r).astype('float32'),nov_recovery((np.array(t2.novelty[i]).astype('float32'))))
+#                    choice.append(songs_list[i][np.argmax(ddd)])
+            STATE=np.ones(shape=(144,20)) 
+            HIST=np.ones(shape=(144,6))
+            FEAT=np.ones(shape=(144,24))
+            R=[STATE,STATE,STATE ,HIST,FEAT]
+            action_model.predict(R).astype('float32')
+            print len(action_model.predict(R).astype('float32'))
 
-#                choice.append(songs_list[i][cc])
-               
-#                print 'solo 4 de chaque'
-
-                choice.append(songs_list[i][np.argmax(ddd)])
-
-
+                
+                
+#==============================================================================
+#                 STATE.extend(np.tile(songs[track_pseudo],(len(s),1)))
+#                 SONGS.extend(songs_by_type[i].values())
+#                 HIST.extend(np.tile(historic.astype('float32'),(len(s),1)))
+#                 FEAT.extend(np.tile(user_features.astype('float32'),(len(s),1)))
+#                 ZEROS.extend(np.zeros(shape=(len(s),len(songs['closer']))))
+#             R=[STATE,SONGS,ZEROS ,HIST,FEAT]
+#             action_model.predict(R).astype('float32')
+#             print len(action_model.predict(R).astype('float32'))
+#==============================================================================
 
         
         else:
