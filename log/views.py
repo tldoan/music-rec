@@ -97,10 +97,6 @@ def homepage(request):
     for r in L:
         random.shuffle(r)
     
-
-    
-
-
     if request.method=='GET':  
         
       
@@ -297,16 +293,16 @@ def recommend_songs(request):
 #            N=4
           
             w=predict_type(request.user,historic,track_pseudo)              
-            print 'start evaluate action'
-            l=evaluate_actions(request.user,historic,track_pseudo,w,t2)
-            print l
+          
+            p=evaluate_actions(request.user,historic,track_pseudo,w,t2)
+            print p
 #            print l
 #            print 'done evaluate songs'
 #            liste=[]
 #            for i in range(len(l)):
 #                liste.append(get_object_or_404(Tracks, track_pseudo=l[i])) 
             
-#            l=['closer','closer','closer','closer']
+            l=['closer','closer','closer','closer']
             data={}
             for i in range(len(l)):
                 song=songs_db[l[i]]
@@ -847,35 +843,6 @@ def change_password(request):
         return render(request,'change_password.html',locals())
    
     
-#def grey_color_func(word, font_size, position, orientation, random_state=None,
-#                    **kwargs):
-#    return "hsl(0, 0%%, %d%%)" % random.randint(60, 100)
-#         
-#
-#def load_wordcloud(track_pseudo,brainstorm):
-#    if brainstorm!='':     
-#        #text = open(os.path.join(settings.STATIC_URL+'wordcloud_txt/', track_name+'.txt'), 'a')
-#        
-#            
-#        text=open(os.path.join(settings.STATIC_ROOT, "wordcloud_txt/" + track_pseudo+ ".txt"), 'a')
-#        ## add words 
-#        text.write('\n')
-#        text.write(brainstorm)
-#        text.close()
-#        
-#        text = open(os.path.join(settings.STATIC_ROOT+'wordcloud_txt/', track_pseudo+'.txt')).read()
-#        ## now that we have written in the text, let's generate it
-#
-#        mask = np.array(Image.open(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/', 'play_icon'+'.jpg')))
-#        #default_colors = wordcloud.to_array()
-#        wordcloud = WordCloud(relative_scaling = 0.60,mask=mask).generate(text)
-#
-#        wordcloud.recolor(color_func=grey_color_func, random_state=1)
-#        wordcloud.to_file(os.path.join(settings.STATIC_ROOT+'wcloud_pictures/',track_pseudo+'.jpg'))
-        
-
-
-
 
 ##############################################################################
 ##############################################################################

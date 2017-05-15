@@ -19,7 +19,9 @@ $('#cancel').hide();
 	});
 		//console.log(document.getElementById("sex").innerHTML);
 		
-		
+	$('#changes').click(function(){	
+
+		});
 		
 	
 	 if( $('.age').text()=='' || $('.area').text()=='' || $('.region').text()=='' || $('.sex').text()=='' ) 
@@ -33,7 +35,8 @@ $('#cancel').hide();
 	 {
 	 	$('#homee').show();
 	 	$('#homee2').show();
-	 	$('.uncomplete_form').text('');
+	 	console.log('done');
+	 	$('.uncomplete_form').text('Go back to homepage after updating your profil');
 	 }
 
 	 

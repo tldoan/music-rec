@@ -72,7 +72,7 @@ $.ajax({
     type: "GET",
     url:"/recommend_songs",  
     async : true,
-    timeout: 10000,
+    timeout: 20000,
    // data: { track_pseudo: tracksss },  
     dataType: 'json',
    success:function(jsons){
