@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 
 import datetime
-from datetime import time
+#from datetime import time
 import timeit
 
 from django.conf import settings
@@ -36,14 +36,8 @@ from neural_network import predict_type, history_update,evaluate_actions
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 #from memory_profiler import profile
-
-
-
-
-
-
-
-
+from keras.models import model_from_json
+import tensorflow as tf
 
 
 def custom_500(request):
@@ -54,7 +48,7 @@ def loggin(request):
     logout(request)
     #form=UserForm(None)
     return render(request, 'login.html')    
-    
+#@profile    
 def auth(request):
         error=False
         username=request.POST.get('username','')
@@ -64,6 +58,24 @@ def auth(request):
         if user is not None:
                 if user.is_active:
                     login(request,user)
+                    
+                    
+                    #### save the model
+
+                   
+#                    print type(model)
+                    
+#                    print request.session.get('state_model')
+
+#                    request.session['state_model'] =  model_from_json(loaded_model_json)
+#                    correlations_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/correlations_by_type.npy')).item()
+ 
+#                    json_file = open(os.path.join(settings.STATIC_ROOT, 'model/action/action_model.json'), 'r')
+#                    loaded_model_json = json_file.read()
+#                    json_file.close()            
+#                    request.session['action_model'] =  model_from_json(loaded_model_json)
+                    
+#                    print request.session['state_model']
                     if Profile.objects.filter(user=request.user).exists():
                         prof = get_object_or_404(Profile, user=request.user)
                         #prof=Profile.objects.filter(user=request.user)
@@ -80,6 +92,7 @@ def auth(request):
             return render(request,'login.html',{'error':error})
 
 def loggout(request):
+    
     logout(request)
     return redirect(reverse('login'))
 
@@ -161,6 +174,7 @@ def homepage(request):
 
 @login_required
 def profil(request):  
+
     if request.method=='POST':       
         valid=True
         if 'age' in request.POST:
@@ -258,8 +272,7 @@ def save_rating(request):
             
 #@profile
 def recommend_songs(request):
-    if request.is_ajax():
-      
+    if request.is_ajax():     
         if request.method=='GET':
             songs_db=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_db.npy')).item()
 #            print 'yeees again'
@@ -281,9 +294,7 @@ def recommend_songs(request):
                     #### S A 
                     
                     track_pseudo=t.path[length-2]
-                
-
-#            
+                        
 #            track=get_object_or_404(Tracks, track_pseudo=track_pseudo)
             track=songs_db[track_pseudo]
            
@@ -291,12 +302,20 @@ def recommend_songs(request):
             t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
             historic=history_update(t2)  
 #            N=4
+
+
+
+#            g=settings.G            
+#            with g.as_default():    
+
+                         
+            
+            type_model=settings.TYPE_MODEL
+            w=predict_type(request.user,historic,track_pseudo,type_model)              
           
-            w=predict_type(request.user,historic,track_pseudo)              
-          
-            p=evaluate_actions(request.user,historic,track_pseudo,w,t2)
-            print p
-#            print l
+            l=evaluate_actions(request.user,historic,track_pseudo,w,t2)
+            print l
+
 #            print 'done evaluate songs'
 #            liste=[]
 #            for i in range(len(l)):
@@ -317,7 +336,7 @@ def recommend_songs(request):
                 index='#genre_'+str(i)
                 data[index]=song['track_genre']
 #            print data
-#            print 'TT'
+
 #            print t.path[length-1]
 #            print type(t.path[length-1])
             if type(t.path[length-1])==unicode:  
@@ -338,30 +357,29 @@ def recommend_songs(request):
         data={'lol':False}
         return HttpResponse(json.dumps(data),content_type="application/json")
         
-
-    
+                        
     
 @login_required       
 def fiche_track(request, track_pseudo):
     novelty_parameters=5
     novelty_limit=60
-    
+    recommend_song=True
     songs_keys=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_keys.npy')).item()   
     
     songs_db=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_db.npy')).item() 
     track=songs_db[track_pseudo]
-#    track = get_object_or_404(Tracks, track_pseudo=track_pseudo)
+    TRack = get_object_or_404(Tracks, track_pseudo=track_pseudo)
 
     base_2=False
     has_yet_rated=True  
     path='wcloud_pictures/'+track_pseudo+'.png'
     
     try:
-        REVIEW=Track_Coments.objects.get(user=request.user,track=track)        
+        REVIEW=Track_Coments.objects.get(user=request.user,track=TRack)        
     except:
         has_yet_rated=False             
         
-#    load_wordcloud(track_pseudo,'')
+
     if request.method=='GET':      
 
         liste=[]
@@ -387,12 +405,24 @@ def fiche_track(request, track_pseudo):
                 t.path.append(track_pseudo)
                 ### S A R S
             else:
-             
+#             len(t.path[length-1])>2:
                 ### S A
                 if t.path[length-2]!=track_pseudo:
 #                    print 'il a actualiserrrr'
                     t.path.append([0.0,0.0])
                     t.path.append(track_pseudo)
+                
+                elif t.path[length-2]==track_pseudo:
+                    print 'yes'
+                    recommend_song=False
+                    liste=[]
+                    choix=t.path[length-1]
+                    for i in choix:
+                        liste.append(songs_db[str(i)])
+                        
+                 
+                    
+                    
         t.save()
                 
     
@@ -436,7 +466,8 @@ def fiche_track(request, track_pseudo):
              t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
 
 
-#             genre=get_object_or_404(Tracks, track_pseudo=track_pseudo).track_genre    
+#             genre=get_object_or_404(Tracks, track_pseudo=track_pseudo).track_genre   
+
              genre=track['track_genre']
     
              # on inscrit le nom du track           
@@ -599,12 +630,18 @@ def solo(request,titre_1,titre_2):
     novelty_limit=60
     songs_keys=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_keys.npy')).item()  
     base_2=True
-    track=get_object_or_404(Tracks, track_pseudo=titre_1)
-    track2= get_object_or_404(Tracks, track_pseudo=titre_2)
+   
+    songs_db=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_db.npy')).item()  
+           
+    track=songs_db[titre_1]
+    TRack=get_object_or_404(Tracks, track_pseudo=titre_1)
+    track2=songs_db[titre_2]
+#    track2= get_object_or_404(Tracks, track_pseudo=titre_2)
     path='wcloud_pictures/'+titre_1+'.png'
-    if Track_Coments.objects.filter(track=track,user=request.user).exists():
+    if Track_Coments.objects.filter(track=TRack,user=request.user).exists():
         has_yet_rated=True
-        review=Track_Coments.objects.filter(track=track)
+#        review=Track_Coments.objects.filter(user=request.user,track=track)
+#        REVIEW=Track_Coments.objects.get(user=request.user,track=TRack)
     else:
         has_yet_rated=False
 #    print has_yet_rated
@@ -624,40 +661,7 @@ def solo(request,titre_1,titre_2):
                 
         return render(request,'fiche_track2.html',locals())         
     else: ## methode=POST
-        if 'rating' in request.POST:
-            if Track_Coments.objects.filter(user=request.user,track=track).exists():
-                return render(request,'fiche_track2.html',locals())
-            else:
-            ## method POST mais du rating form
-                track_coment=TracksForm
-                form=track_coment(request.POST) 
-                rating=request.POST.get('rating','')
-                wordcloud=request.POST.get('wordcloud','')
-                Wrong=True
-                if rating !='':
-                    wrong=False
-                    rev=form.save(commit=False)
-                    rev.rating=float(rating)
-                    rev.user=request.user
-                    rev.track=track
-                    rev.time=datetime.datetime.now()
-                    rev.wordcloud=wordcloud
-                    rev.save()            
-                    ### s il existe des lignes on fait la moyenne en faisant un loop up dans la db
-#                    print Track_Coments.objects.filter(track=track).count()
-                    if Track_Coments.objects.filter(track=track).count()>=10:                        
-                        ## it is a dictionnary convert it now to float  
-                        ## il existera toujours car le mec vient de submit en fait 
-                        track.track_popularity=Track_Coments.objects.filter(track=track).aggregate(Avg('rating'))['rating__avg']
-#                    track.nb_rating+=1
-                    track.save()  
-                    has_yet_rated=True
-#                    if wordcloud!='':
-#                        load_wordcloud(titre_1,wordcloud)
-                    has_just_commented=True
-                    time_before=float(request.POST.get('time_before_rated',''))
-                return render(request,'fiche_track2.html',locals())
-        elif 'solo' in request.POST:
+        if 'solo' in request.POST:
 #             print 'methode = POST _solo__'
              #c=request.POST.get('titre_2','')  
              t=Traj.objects.filter(user=request.user).order_by('-start_time')[0]   
@@ -686,13 +690,13 @@ def solo(request,titre_1,titre_2):
              t.save()
              t2=history.objects.filter(user=request.user).order_by('-start_time')[0] 
              # on cherche le type de la musique
-             genre=get_object_or_404(Tracks, track_pseudo=track.track_pseudo).track_genre   
+             genre=get_object_or_404(Tracks, track_pseudo=track['track_pseudo']).track_genre   
         
              length_t2=len(t2.path)
              
-             if str(t2.path[length_t2-2][0])!=track.track_pseudo:     
+             if str(t2.path[length_t2-2][0])!=track['track_pseudo']:     
                 
-                 t2.path.append([track.track_pseudo,genre])    
+                 t2.path.append([track['track_pseudo'],genre])    
                  t2.path.append([listening_time,percentage])
              
              for l in t2.novelty:
@@ -703,8 +707,8 @@ def solo(request,titre_1,titre_2):
                
 
                  
-                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]==novelty_parameters:                
-                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0.0          
+                 if t2.novelty[track ['track_genre']  ][songs_keys[track ['track_genre'] ][track['track_pseudo'] ]][0]==novelty_parameters:                
+                     t2.novelty[track ['track_genre']  ][songs_keys[track['track_genre']  ][track['track_pseudo'] ]][0]=0.0          
                 
              t2.save()
              return redirect(reverse('fiche_track',kwargs={'track_pseudo': titre_2}))
@@ -740,7 +744,8 @@ def solo(request,titre_1,titre_2):
             # on cherche le type de la musique
             
 #            genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
-            genre=get_object_or_404(Tracks, track_pseudo=name).track_genre   
+#            genre=get_object_or_404(Tracks, track_pseudo=name).track_genre   
+            genre=songs_db[name]['track_genre']
             # on inscrit le nom du track           
       
             
@@ -760,10 +765,10 @@ def solo(request,titre_1,titre_2):
                         
             if float(listening_time)>=novelty_limit:
                 
-#                 print np.shape(np.array(t2.novelty[track.track_genre])
+
                  
-                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]==novelty_parameters:                
-                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0.0          
+                 if t2.novelty[track['track_genre'] ][songs_keys[track['track_genre'] ][track['track_pseudo'] ]][0]==novelty_parameters:                
+                     t2.novelty[track['track_genre']  ][songs_keys[track['track_genre'] ][track['track_pseudo'] ]][0]=0.0          
                  
             t2.save()
             return redirect(reverse('homepage'))
@@ -801,7 +806,8 @@ def solo(request,titre_1,titre_2):
             # on cherche le type de la musique
             
 #            genre=str(Tracks.objects.filter(track_pseudo=name)[0].track_genre)
-            genre=get_object_or_404(Tracks, track_pseudo=name).track_genre   
+#            genre=get_object_or_404(Tracks, track_pseudo=name).track_genre  
+            genre=songs_db[name]['track_genre']
             # on inscrit le nom du track           
             
             
@@ -817,12 +823,13 @@ def solo(request,titre_1,titre_2):
                 for p in range(len(t2.novelty[l])):
                     if t2.novelty[l][p][0]<novelty_parameters:                  
                         t2.novelty[l][p][0]+=1.0
-            if float(listening_time)>=novelty_limit:          
-#                 print np.shape(np.array(t2.novelty[track.track_genre])
+            if float(listening_time)>=novelty_limit:
+                
+
                  
-                 if t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]==novelty_parameters:                
-                     t2.novelty[track.track_genre][songs_keys[track.track_genre][track.track_pseudo]][0]=0.0          
-               
+                 if t2.novelty[track['track_genre'] ][songs_keys[track['track_genre'] ][track['track_pseudo'] ]][0]==novelty_parameters:                
+                     t2.novelty[track['track_genre']  ][songs_keys[track['track_genre'] ][track['track_pseudo'] ]][0]=0.0          
+                 
             t2.save()
             return redirect(reverse('logout'))
               

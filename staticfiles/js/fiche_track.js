@@ -2,12 +2,13 @@ $('document').ready(function(){
 	  var tracksss= document.getElementById('TRACK').innerText;
 	 /* var pictures=document.getElementById('wcloud_picture1').src;*/
 	$('.fa-hand-o-down').hide();
-	  
+
 
     
     // $('.fa-play').attr("id","ahha");
     $('.glyphicon-play-circle').attr("id","ahha");  
     $('.glyphicon-trash').attr("id","ahha");
+    console.log($('#update_or_not').val());
 
     
 
@@ -66,89 +67,95 @@ $('document').ready(function(){
 });
 
 
+if($('#update_or_not').val()=='True'){
+  console.log('sisi');
+                $.ajax({
+                    type: "GET",
+                    url:"/recommend_songs",  
+                    async : true,
+                    timeout: 20000,
+                   // data: { track_pseudo: tracksss },  
+                    dataType: 'json',
+                   success:function(jsons){
+                        
+                        $('#conteneur').show();
+                        var data = JSON.stringify(jsons);
+                       
+
+                        var data2=JSON.parse(data);
+                        /*console.log(data2);*/
+                      	/*QQ.show();*/
+                        $('.fa-hand-o-down').show();
+                      
+                        $.each(data2, function(key, value){
+                     
+                        if (key.startsWith('#NOTE_') == true){
+                            
+                           $(key).text(value);
+                          
+                        }else if (key.startsWith('image') == true){
+                         
+                          document.getElementById(key).src=value;
+
+                        }else if (key.startsWith('#genre_') == true){
+
+                         
+                        	$(key).text(value);
+
+                    	}else if (key.startsWith('.next_song_') == true){
+                           
+                           $(key).val(value);
+
+                        }else if(key.startsWith('#Eelement_') == true){
+                           
+                          $(key).text(value);
+                        }       
+                      }); 
 
 
-$.ajax({
-    type: "GET",
-    url:"/recommend_songs",  
-    async : true,
-    timeout: 20000,
-   // data: { track_pseudo: tracksss },  
-    dataType: 'json',
-   success:function(jsons){
-        
-        $('#conteneur').show();
-        var data = JSON.stringify(jsons);
-       
-
-        var data2=JSON.parse(data);
-        /*console.log(data2);*/
-      	/*QQ.show();*/
-        $('.fa-hand-o-down').show();
-      
-        $.each(data2, function(key, value){
-     
-        if (key.startsWith('#NOTE_') == true){
-            
-           $(key).text(value);
-          
-        }else if (key.startsWith('image') == true){
-         
-          document.getElementById(key).src=value;
-
-        }else if (key.startsWith('#genre_') == true){
-
-         
-        	$(key).text(value);
-
-    	}else if (key.startsWith('.next_song_') == true){
-           
-           $(key).val(value);
-
-        }else if(key.startsWith('#Eelement_') == true){
-           
-          $(key).text(value);
-         
+                      $('.rating2').each(function(index,value){
+                        
+                      $(this).rating('rate',$('#NOTE_'+index).text())
+                       });  
 
 
-        }       
-        
+                        $('#pub2').text('');  
+                        $('#pub2').removeClass('label label-danger').addClass('label label-warning');
+                        $('#pub2').text('our recommendations : add one or two songs');
+                        // QQ.show();
+                     },
+                   error: function(){
+                    alert('error ');
 
-     
-      }); 
+                //////////////////////////////////////
+                    $.ajax({
+
+                    async : false,
+                   
+                   success:function(jsons){
+                   	
+                   	window.location.replace("https://music-rec.herokuapp.com/home");
+                   },
+                    error: function(){
+                    alert('error again...');
+                	},
+                	});
+                //////////////////////////////////////
+                   },
+
+                   });
+}else{
+  console.log('nooo');
+   $('#conteneur').show();
+                        $('#pub2').text('');  
+                        $('#pub2').removeClass('label label-danger').addClass('label label-warning');
+                        $('#pub2').text('our recommendations : add one or two songs');
+}
 
 
-      $('.rating2').each(function(index,value){
-        
-      $(this).rating('rate',$('#NOTE_'+index).text())
-       });  
 
 
-        $('#pub2').text('');  
-        $('#pub2').removeClass('label label-danger').addClass('label label-warning');
-        $('#pub2').text('our recommendations : add one or two songs');
-        // QQ.show();
-     },
-   error: function(){
-    alert('error ');
 
-//////////////////////////////////////
-    $.ajax({
-
-    async : false,
-   
-   success:function(jsons){
-   	
-   	window.location.replace("https://music-rec.herokuapp.com/home");
-   },
-    error: function(){
-    alert('error again...');
-	},
-	});
-//////////////////////////////////////
-   },
-
-   });
 
 
 });

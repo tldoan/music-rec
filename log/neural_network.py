@@ -45,7 +45,7 @@ def history_update(h):
 
 # encode the actor
 #@profile
-def predict_type(user,historic,track_pseudo):
+def predict_type(user,historic,track_pseudo,type_model):
     
         songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
 
@@ -67,7 +67,7 @@ def predict_type(user,historic,track_pseudo):
 
 #        state=np.concatenate((historic,songs[track_pseudo],user_features))  
         
-        
+       
 ###############
 ## a effacer
 #        print len(songs[track_pseudo])
@@ -79,43 +79,43 @@ def predict_type(user,historic,track_pseudo):
         ss=[historic.reshape(1,len(historic)),songs[track_pseudo].reshape(1,len(songs[track_pseudo])),user_features.reshape(1,len(user_features))]
 ##################
         
-        
-#        ss=state.reshape(1,len(state))
-        
-#        print np.shape(user_features)
-#        print 'user_features'
-#        print np.shape(historic)
-#        print 'historic'
-#        print np.shape(songs[track.track_pseudo]) 
-#        print 'songs[tracks]'
-
-             
-        ##len(state)=211
-      
         ##############################################################
         ### load neural network
         
-        json_file = open(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.json'), 'r')
-        loaded_model_json = json_file.read()
-        json_file.close()
-        type_model = model_from_json(loaded_model_json)
-        print 'load from json'
+#        json_file = open(os.path.join(settings.STATIC_ROOT, 'model/state/state_model.json'), 'r')
+#        loaded_model_json = json_file.read()
+#        json_file.close()
+#        type_model = model_from_json(loaded_model_json)
 
-        with tf.Session() as sess:  
 
-                type_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
-                
-#                init = tf.global_variables_initializer()
-#                sess.run(init)
-                
-#                rr=np.ones(shape=(1,100))
 
-                actor_policy=type_model.predict(ss).astype('float32')
+#        with tf.Graph().as_defau
+#        tf.reset_default_graph()
+#        type_model=settings.TYPE_MODEL
+
+        g=settings.GRAPH
+#        with g.as_default():
+        with tf.Session(graph=g) as sess:  
+#                    init = tf.initialize_all_variables()
+#                    sess.run(init) 
+            
+                    type_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
+#                    r.predict([rr,rrr,rrrr])
                 
-#                print actor_policy
-#                print 'print actor _policy !!!!!!!!!!!!!!!!!!!'
-#                print np.max(actor_policy)
-#                sess.close()
+#                    r.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
+#                    type_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/state/state_weights.h5'))
+
+                    
+    
+#                    actor_policy=type_model.predict(ss).astype('float32')
+                    actor_policy=type_model.predict(ss).astype('float32')
+                    
+                    
+                    
+    #                print actor_policy
+    #                print 'print actor _policy !!!!!!!!!!!!!!!!!!!'
+    #                print np.max(actor_policy)
+    #                sess.close()
 
        
 #        print actor_policy
@@ -142,15 +142,19 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
 #        sess.run(init)   
     
 
-    w[0]=['Pop','Latin','Rock']
+#    w[0]=['Pop','Latin','Rock','Country']
+    
     if len(w[0])==4:
         start = timeit.default_timer()
-        json_file = open(os.path.join(settings.STATIC_ROOT, 'model/action/action_model.json'), 'r')
-        loaded_model_json = json_file.read()
-        json_file.close()
-        action_model = model_from_json(loaded_model_json)
-
-        with tf.Session() as sess:   
+#        json_file = open(os.path.join(settings.STATIC_ROOT, 'model/action/action_model.json'), 'r')
+#        loaded_model_json = json_file.read()
+#        json_file.close()
+#        action_model = model_from_json(loaded_model_json)
+        
+        g=settings.GRAPH
+        
+        action_model=settings.ACTION_MODEL
+        with tf.Session(graph=g) as sess:   
             ######### single actions no correlations
             songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
             songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
@@ -163,7 +167,7 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
             
             ######## 4 types differents
             choice=[]
-            
+  
             for i in w[0]:
                 
                 
@@ -182,8 +186,8 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
                     
     #                    r=[state_songs,s,Z ,hist,feat]
                     r=[np.tile(songs[track_pseudo],(len(s),1)),np.array(songs_by_type[i].values()),np.zeros(shape=(len(s),len(songs['closer']))),np.tile(historic.astype('float32'),(len(s),1)),np.tile(user_features.astype('float32'),(len(s),1))]
-                    print np.shape(r)
-                    print 'ici le shape de r de predict type'
+#                    print np.shape(r)
+#                    print 'ici le shape de r de predict type'
         
         
         #                single_action_values[i]=ddd
@@ -196,9 +200,27 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
         
         
                     ddd=np.multiply(action_model.predict(r).astype('float32'),nov_recovery((np.array(t2.novelty[i]).astype('float32'))))
-                    choice.append(songs_list[i][np.argmax(ddd)])
-    
-            
+                    c=[]
+                    for k in ddd:
+                        c.append(k[0])
+                    choix=np.random.choice(len(ddd),1,p=c/np.sum(c),replace=True)
+                    
+                    choice.append(songs_list[i][choix[0]])
+                    print choice
+                    
+                    
+#                    choice.append(songs_list[i][np.argmax(ddd)])
+#            print ddd
+#            p=ddd/np.sum(ddd)
+##            print np.shape(p)
+#            print list(p[:,0])
+#            c=[]
+#            for k in ddd:
+#                c.append(k[0])
+#
+#            choix=np.random.choice(len(ddd),1,p=c/np.sum(c),replace=True)
+#            print choix[0]
+#            print songs_list[i][choix[0]]
             stop = timeit.default_timer()
             print 'tps pr compute neural net'
             print stop - start 
@@ -235,7 +257,8 @@ def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
         genre_dict = {rows[0]:rows[1] for rows in text}
         
     songs_keys=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_keys.npy')).item()    
-    correlations_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/correlations_by_type.npy')).item()
+    correlations_by_type=settings.CORRELATION
+#    correlations_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/correlations_by_type.npy')).item()
     list_correlations=np.load(os.path.join(settings.STATIC_ROOT, 'data/list_correlations.npy')).item()
     songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
     songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
@@ -243,12 +266,14 @@ def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
     
     
     ## loading neural net model
-    json_file = open(os.path.join(settings.STATIC_ROOT, 'model/action/action_model.json'), 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    action_model = model_from_json(loaded_model_json)
-    print 'load action from json'
-    with tf.Session() as sess:  
+#    json_file = open(os.path.join(settings.STATIC_ROOT, 'model/action/action_model.json'), 'r')
+#    loaded_model_json = json_file.read()
+#    json_file.close()
+#    aa = model_from_json(loaded_model_json)
+    
+    g=settings.GRAPH
+    action_model=settings.ACTION_MODEL
+    with tf.Session(graph=g) as sess:  
         action_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/action/action_weights.h5'))
         
         
@@ -292,6 +317,7 @@ def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
 
             ## correlations actions
             double_action_values[i]=action_model.predict(rr)
+#            print double_action_values[i]
 #            print action_model.predict(rr)
             
             ###########
@@ -421,16 +447,22 @@ def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
             for j in list_correlations[i]:
                 y[i][j]=var[i]['Y'][j].value()
             
-    #        if nb[i]==1:
-    #            z=np.random.choice(len(x[i]),nb[i],replace=False,p=(x[i].values()/np.sum(x[i].values())) )[0]    
-    #            choice.append(x[i].keys()[z])
-    #            print z
-    #        if nb[i]==2:
+
             if nb[i]%2==0:
             
     #            z=np.random.choice(len(y[i]),1,replace=False,p=(y[i].values()/np.sum(y[i].values())) )[0] 
+#                print 'length'
+#                print len(y[i])
+#                print 'size de p'
+#                print np.sum(y[i].values())
+#                print y[i].values()
+                
+#                print len(proba)
+                
+                proba=y[i].values()/np.sum(y[i].values())
+#                print proba
     
-                z=np.random.choice(len(y[i]),nb[i]/2,replace=False,p=(y[i].values()/np.sum(y[i].values())))
+                z=np.random.choice(len(y[i]),nb[i]/2,replace=False,p=proba)
             
                 for ee in z:
                     choice.extend(y[i].keys()[ee])
