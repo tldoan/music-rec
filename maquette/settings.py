@@ -27,7 +27,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = '5=87fsk=@y5^!cd70yr=!kti!2vw+8prmx)l7z3%n6!1w$h*6y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
@@ -256,9 +256,6 @@ with GRAPH.as_default():
     json_file.close()
     ACTION_MODEL = model_from_json(loaded_model_json)
     
-    
-
-
 
 CORRELATION=np.load(os.path.join(STATIC_ROOT, 'data/correlations_by_type.npy')).item()
 
