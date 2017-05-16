@@ -5,8 +5,14 @@
 
 <nav class="navbar navbar-custom" id='grad1'>
   <div class="container-fluid">
-
  
+ {% if  recommend_song  %}
+   	<input type="hidden"  id='update_or_not'  value="True">
+{% else  %}
+	<input type='hidden' id='update_or_not'  value="False">
+{% endif  %}
+ 
+
     <ul class="nav navbar-nav navbar-right">
  <li class="active">
  
@@ -154,55 +160,94 @@
                         
                       		
                       			<div id="conteneur">
-								{% for x in liste %}
-								
+                      			{% if recommend_song %}
+
+                      						{% for x in liste %}
+
+				                            	<div id='element_{{forloop.counter0}}' class="element">
+				                            	<br/>
+				                            	<span  id='genre_{{forloop.counter0}}' class="label label-primary"> genre </span>
+				                            	<br/>
+				                            	<br/>
+				                            	<span  id='Eelement_{{forloop.counter0}}' class="label label-custom"> N/A </span>
+				                            	<br/>
+				                            	<br/>
+				                                  <div id='queue_{{forloop.counter0}}'>
+				                                  <img src="" id='image_{{forloop.counter0}}' class='img-circle' alt="Please wait " > 
+				                                  </div>
+				                                  <br/>
+				                                  
+						   						    <input type="hidden" class="rating2" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" data-readonly data-fractions="3"  value=4/>	
+						   						    <br/>	               	   
+						   							<span id='NOTE_{{forloop.counter0}}' class="label label-danger">0</span>
+
+						   								<br/>
+						   							<br/>		
+						   					 	 <form id='swtich_page_{{forloop.counter0}}' class='swtich_page' action='' method='post'>
+						   							{% csrf_token %}					   						    
+						   							<input type="hidden" class='next_song_{{forloop.counter0}}' value="N/A"> 		
+						   		
+				                                    
+												</form>   					
+				                                  
+				                                 
+				                            	</div>
+				                            		
+				                       		 {% endfor %}
+
+
+
+
+
+
+
+
+                      			{% else %}
+
+
+
+                      						{% for x in liste %}
+
+				                            	<div id='element_{{forloop.counter0}}' class="element">
+				                            	<br/>
+				                            	<span  id='genre_{{forloop.counter0}}' class="label label-primary"> {{x.track_genre}} </span>
+				                            	<br/>
+				                            	<br/>
+				                            	<span  id='Eelement_{{forloop.counter0}}' class="label label-custom">{{x.Artist}} - {{x.track_name}} </span>
+				                            	<br/>
+				                            	<br/>
+				                                  <div id='queue_{{forloop.counter0}}'>
+				                                  <img src="{{x.Artist_image}}" id='image_{{forloop.counter0}}' class='img-circle' alt="Please wait " > 
+				                                  </div>
+				                                  <br/>
+				                                  
+						   						    <input type="hidden" class="rating2" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" data-readonly data-fractions="3"  value={{x.track_popularity}}/>	
+						   						    <br/>	               	   
+						   							<span id='NOTE_{{forloop.counter0}}' class="label label-danger">{{x.track_popularity}}</span>
+
+						   								<br/>
+						   							<br/>		
+						   					 	 <form id='swtich_page_{{forloop.counter0}}' class='swtich_page' action='' method='post'>
+						   							{% csrf_token %}					   						    
+						   							<input type="hidden" class='next_song_{{forloop.counter0}}' value="{{x.track_pseudo}}"> 		
+						   		
+				                                    
+												</form>   					
+				                                  
+				                                 
+				                            	</div>
+				                            		
+				                       		 {% endfor %}
+
+
+
+
+
+
+
+
 										
-								<!-- rate de la chanson -->
-
-										<!-- <input type="text" class='song_rate' id="song_rate" name="song_rate" value="{{ x.track_popularity }}"> -->
-
-		                            	<div id='element_{{forloop.counter0}}' class="element">
-		                            	<br/>
-		                            	<span  id='genre_{{forloop.counter0}}' class="label label-primary"> genre </span>
-		                            	
-		                            	<br/>
-		                            	<br/>
-		                            	<span  id='Eelement_{{forloop.counter0}}' class="label label-custom"> N/A </span>
-		                            	
-		                            	<br/>
-		                            	<br/>
-		                            	
-
-		                                  
-		                                  <div id='queue_{{forloop.counter0}}'>
-		                                  <img src="" id='image_{{forloop.counter0}}' class='img-circle' alt="Please wait " > 
-		                                  </div>
-		                                  <br/>
-		                                  
-
-				   						    <input type="hidden" class="rating2" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart" data-readonly data-fractions="3"  value=4/>	
-				   						    <br/>	     
-				   						                          	   
-				   							<span id='NOTE_{{forloop.counter0}}' class="label label-danger">0</span>
-
-				   								<br/>
-				   							<br/>		
-				   								   			
-
-				   					 	 <form id='swtich_page_{{forloop.counter0}}' class='swtich_page' action='' method='post'>
-				   							{% csrf_token %}	
-				   						    
-				   						
-				   						
-				   							<input type="hidden" class='next_song_{{forloop.counter0}}' value="N/A"> 		
-				   		
-		                                    
-										</form>   					
-		                                  
-		                                 
-		                            	</div>
-		                            		
-		                        {% endfor %}
+				                 {% endif %}
 		                         </div>
 
 		                         
