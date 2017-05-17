@@ -257,8 +257,8 @@ def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
         genre_dict = {rows[0]:rows[1] for rows in text}
         
     songs_keys=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_keys.npy')).item()    
-    correlations_by_type=settings.CORRELATION
-#    correlations_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/correlations_by_type.npy')).item()
+#    correlations_by_type=settings.CORRELATION
+    correlations_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/correlations_by_type.npy')).item()
     list_correlations=np.load(os.path.join(settings.STATIC_ROOT, 'data/list_correlations.npy')).item()
     songs_by_type=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type.npy')).item()
     songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()

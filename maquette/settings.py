@@ -235,7 +235,7 @@ LOGIN_REDIRECT_url='/'
 AUTH_PROFILE_MODULE='log.Profile'
 
 
-import numpy as np
+
 
 from keras.models import model_from_json,load_model
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
@@ -257,6 +257,6 @@ with GRAPH.as_default():
     ACTION_MODEL = model_from_json(loaded_model_json)
     
 
-CORRELATION=np.load(os.path.join(STATIC_ROOT, 'data/correlations_by_type.npy')).item()
+
 
 
