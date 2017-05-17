@@ -382,11 +382,11 @@ def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
         prob+=c     
     
     #    
-        stop = timeit.default_timer()
-        print 'tps pr add constraints'
-        print stop - start 
+#        stop = timeit.default_timer()
+#        print 'tps pr add constraints'
+#        print stop - start 
     ##    
-        start = timeit.default_timer()
+#        start = timeit.default_timer()
     #    prob.solve(pulp.COIN_CMD(dual=True,mip=1,msg=1))
         prob.solve(pulp.PULP_CBC_CMD(dual=True))
     
@@ -408,10 +408,10 @@ def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
 #        print stop - start 
     
     
-        print 'constraints'
-        print len(prob.constraints)
-        print 'variables'
-        print len(prob.variables())
+#        print 'constraints'
+#        print len(prob.constraints)
+#        print 'variables'
+#        print len(prob.variables())
     
     #    start = timeit.default_timer()
         c=np.zeros(len(w[0]))
