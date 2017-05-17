@@ -1,0 +1,211 @@
+h1{
+		text-align:center;
+		color:white;
+		
+}
+h3 
+{
+        text-align:center;
+       color:white;
+}
+h4 
+{
+       
+       color:white;
+}
+.row
+{
+    text-align:center;
+}
+.btn
+{
+	border:2px solid black;
+	background-color:transparent;
+	color:black;
+}
+.btn:hover
+{
+	background-color:yellow;
+
+}
+.btn-custom2
+{
+    border:2px solid white;
+    background-color:transparent;
+    color:white;
+}
+
+#grad1 {
+    
+    background: #47484a; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#92909a, #2f353f); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#92909a, #2f353f); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#92909a, #2f353f); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+}
+
+body
+{
+	background-image:url("metal_wallpaper6.8c85f3db051c.jpg");
+}
+#version
+{	
+	position:fixed;
+	bottom:0;
+	margin-right:0;
+	color:white;
+}
+.table
+{
+	background-color:transparent;
+}
+li 
+{
+	color:white;
+}
+label
+{
+	color:white;
+}
+h2{
+    color:white;
+    text-align:center;
+}
+#login_panel
+{
+	margin:0 auto;
+}
+.form-group
+{
+	margin:0 auto;
+}
+#cc
+{
+	margin:0 auto;
+}
+p
+{
+	color:black;
+}
+
+.boutons{
+text-align:center;
+
+}
+
+
+
+
+figcaption {
+  margin-top: 9px;
+ margin-left: 20px;
+}
+
+.gallery {
+ display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  flex-direction:row;
+  padding:0px;
+ margin-top:5%;
+ margin-left:7%;  
+}
+
+
+.gallery > .item {
+ display: inline-block;
+
+ margin: 2%;
+/* ici qu il faut changer*/
+  width: calc(15% - 1px);
+flex: 0 1 auto
+
+
+ }
+
+.img-circle:hover {
+  transform: scale(1.4);
+}
+
+
+.img-circle{
+  display: inline-block;
+  width: 80%;
+  border: ridge 2px;
+
+}
+
+
+
+
+@media screen and (max-width: 600px) {
+  
+
+.gallery {
+ display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  flex-direction:row;
+  padding:0px;
+ margin-top:5%;
+ margin-left:10%;  
+}
+
+
+.gallery > .item {
+ display: inline-block;
+ margin: 5%;
+  width: calc(35% - 1px);
+flex: 0 1 auto
+
+
+ }
+
+ .img-circle {
+  display: inline-block;
+  width: 90%;
+  border: ridge 2px;
+
+}
+
+
+}
+
+
+
+#beta{
+    text-align:center;
+    
+    
+}
+
+
+
+#change_settings {
+    -animation: leaves .5s ease-in-out infinite alternate;
+    -webkit-animation: leaves .5s ease-in-out infinite alternate;
+    display:block;
+    /*text-align:center;*/
+    margin-left: 20px;
+
+
+}
+
+
+@-webkit-keyframes leaves {
+    0% {
+        -webkit-transform: scale(1.0);
+    }
+    100% {
+        -webkit-transform: scale(1.3);
+    }
+}
+
+@keyframes leaves {
+    0% {
+        transform: scale(1.0);
+    }
+    100% {
+        transform: scale(1.3);
+    }
+}
