@@ -145,7 +145,7 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
 #    w[0]=['Pop','Latin','Rock','Country']
     
     if len(w[0])==4:
-        start = timeit.default_timer()
+
 #        json_file = open(os.path.join(settings.STATIC_ROOT, 'model/action/action_model.json'), 'r')
 #        loaded_model_json = json_file.read()
 #        json_file.close()
@@ -160,9 +160,7 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
             songs_list=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_list.npy')).item()
             songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
             
-    #            url=os.path.join(settings.STATIC_ROOT, 'model/action/action_model.h5')
-    #            action_model = load_model(url)
-            # load weights into the model
+
             action_model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/action/action_weights.h5'))
             
             ######## 4 types differents
@@ -203,10 +201,14 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
                     c=[]
                     for k in ddd:
                         c.append(k[0])
-                    choix=np.random.choice(len(ddd),1,p=c/np.sum(c),replace=True)
+                    MAX=np.max(ddd)
+        
+#                    print np.exp(c/(MAX*0.25))/np.sum(np.exp(c/(MAX*0.25)))
+#                    choix=np.random.choice(len(ddd),1,p=c/np.sum(c),replace=True)
+                    choix=np.random.choice(len(ddd),1,p=np.exp(c/(MAX*0.25))/np.sum(np.exp(c/(MAX*0.25))),replace=True)
                     
                     choice.append(songs_list[i][choix[0]])
-                    print choice
+        
                     
                     
 #                    choice.append(songs_list[i][np.argmax(ddd)])
@@ -221,9 +223,7 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
 #            choix=np.random.choice(len(ddd),1,p=c/np.sum(c),replace=True)
 #            print choix[0]
 #            print songs_list[i][choix[0]]
-            stop = timeit.default_timer()
-            print 'tps pr compute neural net'
-            print stop - start 
+
 #            sess.close()    
          
 
@@ -247,7 +247,7 @@ def evaluate_actions(user,historic,track_pseudo,w,t2):
 #@profile
 def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
     
-    start = timeit.default_timer()
+#    start = timeit.default_timer()
      
     
 ############### loading data ##############
@@ -403,9 +403,9 @@ def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
 #        prob.solve(solver)
     
         
-        stop = timeit.default_timer()
-        print "tps de solve"
-        print stop - start 
+#        stop = timeit.default_timer()
+#        print "tps de solve"
+#        print stop - start 
     
     
         print 'constraints'
