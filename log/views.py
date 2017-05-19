@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .forms import ( ProfileForm, UserForm,TracksForm)
+from .forms import ( ProfileForm, UserForm)
 
 from django.utils import timezone
         
@@ -12,7 +12,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 import datetime
 #from datetime import time
-import timeit
+#import timeit
 
 from django.conf import settings
 import os
@@ -32,12 +32,11 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 #import tensorflow as tf
-from neural_network import  history_update,display_songs,nov_recovery
+from neural_network import  history_update,display_songs
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 #from memory_profiler import profile
-from keras.models import model_from_json
-import tensorflow as tf
+
 
 
 def custom_500(request):
@@ -311,7 +310,7 @@ def recommend_songs(request):
           
             
 #            l=evaluate_actions(request.user,historic,track_pseudo,w,t2)
-            print l
+#            print l
 
             
 #            l=['closer','closer','closer','closer']

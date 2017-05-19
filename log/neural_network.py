@@ -6,7 +6,7 @@ import os
 
 import timeit
 
-from keras.models import load_model,model_from_json
+from keras.models import model_from_json
 
 from django.shortcuts import  get_object_or_404
 from .models import Profile
@@ -15,7 +15,7 @@ import tensorflow as tf
 from pulp import *
 from operator import itemgetter
 import pulp
-from memory_profiler import profile
+#from memory_profiler import profile
 
 
 
