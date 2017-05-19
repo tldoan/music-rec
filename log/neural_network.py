@@ -133,7 +133,7 @@ def display_songs(user,historic,track_pseudo,model,epsilon,N,t2):
         
         
         ## epsilon-greedy policy
-        epsilon=0.0
+        
         if np.random.rand(1)[0]<=epsilon:
         ## exploration
             choice=np.random.choice(len(songs.keys()), N)
