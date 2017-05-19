@@ -11,8 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 
 import datetime
-#from datetime import time
-#import timeit
+from datetime import time
+import timeit
 
 from django.conf import settings
 import os
@@ -20,7 +20,7 @@ import os
 import random,string
 
 
-#from PIL import Image
+
 import numpy as np
 
 from django.db.models import Avg
