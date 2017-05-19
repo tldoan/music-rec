@@ -627,10 +627,10 @@ def nov_recovery(x):
   
  
     
-import numpy as np
-import matplotlib.pyplot as plt
-t = np.arange(0., 5., 1)
-plt.plot(t, np.exp(-t/3), 'bs')
+#import numpy as np
+#import matplotlib.pyplot as plt
+#t = np.arange(0., 5., 1)
+#plt.plot(t, np.exp(-t/3), 'bs')
 
 
 
