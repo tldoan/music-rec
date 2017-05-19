@@ -246,16 +246,12 @@ import tensorflow as tf
 global GRAPH
 GRAPH = tf.get_default_graph()
 with GRAPH.as_default():
-    json_file = open(os.path.join(STATIC_ROOT, 'model/state/state_model.json'), 'r')
+    json_file = open(os.path.join(STATIC_ROOT, 'model/uniq_model.json'), 'r')
     loaded_model_json = json_file.read()
     json_file.close()
-    TYPE_MODEL = model_from_json(loaded_model_json)
+    MODEL = model_from_json(loaded_model_json)
     
-    json_file = open(os.path.join(STATIC_ROOT, 'model/action/action_model.json'), 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    ACTION_MODEL = model_from_json(loaded_model_json)
-    
+ 
 
 
 
