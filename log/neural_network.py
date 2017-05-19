@@ -15,7 +15,7 @@ import tensorflow as tf
 from pulp import *
 from operator import itemgetter
 import pulp
-#from memory_profiler import profile
+from memory_profiler import profile
 
 
 
@@ -41,8 +41,153 @@ def history_update(h):
          
         historic=historic/np.sum(historic)
         return historic
+    
+def convert_to_admissible_actions(action_to_display,N,t2):
+    
+    url=os.path.join(settings.STATIC_ROOT, 'csv/genre_list.csv')
+    with open(url, 'rb') as csvfile:
+        text = csv.reader(csvfile, delimiter=',')
+        genre_dict = {rows[0]:rows[1] for rows in text}
+    reverse_genre=dict((v,k) for k,v in genre_dict.iteritems())
+        
+    songs_by_type_features=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs_by_type_features.npy')).item()
+    #### get the genre to be displayed
+#    print songs_by_type_features['Country'].keys().index('my_girl')
+    genre=np.round((action_to_display[0][0][0:N]+1)*2.5).astype(int)
 
+    genre_to_display=[]
+    for i in genre:
+        genre_to_display.append(reverse_genre[str(i)])
+   
 
+#    print genre_to_display
+    ## normalizing all features to be in [0,1]
+#    for i in songs_by_features:
+#    
+    songs_to_process=action_to_display[1].reshape(8,13)
+
+    
+    ###" renormalize everything
+    index={}
+    for i in range(len(genre_to_display)):
+        if genre_to_display[i] not in index.keys():
+            index[genre_to_display[i]]=[]
+        index[genre_to_display[i]].append(i)
+    
+#    print index
+    normalizer=np.ones(shape=(1,13)).astype('float32')
+    normalizer[0,4]=11.0
+    normalizer[0,6]=-60.0
+    normalizer[0,8]=200.0  
+    normalizer[0,9]=4.0 
+    normalizer[0,11]=100.0
+    normalizer[0,12]=5.0        
+    
+    
+    ### reorganize the type
+    feasible_songs=[]
+    for i in index:
+        
+        ll=np.array(songs_by_type_features[i].values())
+#        print ll
+        ll=ll/normalizer        
+        l=list(songs_by_type_features[i].keys())
+        
+        for j in index[i]:
+         
+            aa=np.sum(np.power((songs_to_process[j,:]-ll),2),axis=1)
+            square_dist=aa.reshape(len(aa),1)
+            normalized_square_dist=np.multiply(square_dist,nov_recovery((np.array(t2.novelty[i]))))
+            min_index=np.argmin(normalized_square_dist)
+#            print normalized_square_dist
+            feasible_songs.append(l[min_index])
+#            if l[min_index]=='my_girl':
+#                print square_dist
+#                print normalized_square_dist
+#                print min_index
+#                print l
+                
+            ## the song wont be choosen again
+            ll[min_index,:]=100000
+#        print 'ahah'
+#        print np.shape(square_dist)
+#        print np.shape(t2.novelty[i])
+#        print np.shape(  (np.array(t2.novelty[i]))             )
+#        print 'lool'
+#        print np.shape(nov_recovery(np.array( t2.novelty[i] )))
+#        print 'la distance'
+#        print np.shape(normalized_square_dist)
+#    print index
+    
+#    print feasible_songs
+    return feasible_songs
+        
+        
+
+        
+        
+
+#@profile
+def display_songs(user,historic,track_pseudo,model,epsilon,N,t2):
+        songs=np.load(os.path.join(settings.STATIC_ROOT, 'data/songs.npy')).item()
+        
+        
+        ## epsilon-greedy policy
+        epsilon=0.0
+        if np.random.rand(1)[0]<=epsilon:
+        ## exploration
+            choice=np.random.choice(len(songs.keys()), N)
+            l=[]
+            for i in choice:
+                l.append(songs.keys()[i])
+            
+        
+        else:
+            
+  
+            url=os.path.join(settings.STATIC_ROOT, 'csv/user_features_list.csv')
+            with open(url, 'rb') as csvfile:
+                text = csv.reader(csvfile, delimiter=',')
+                user_features_dict = {rows[0]:rows[1] for rows in text}            
+            user_dim=len(user_features_dict)
+        
+            user_features=np.zeros(user_dim)
+            
+            profilee=get_object_or_404(Profile, user=user)   
+            
+            ## fill up the matrix
+            user_features[int(user_features_dict[profilee.region])]=1
+            user_features[int(user_features_dict[profilee.sex])]=1
+            user_features[int(user_features_dict[profilee.age])]=1
+            user_features[int(user_features_dict[profilee.area])]=1
+            
+            
+            nb_to_display=np.ones(shape=(1,1))*N
+            ss=[historic.reshape(1,len(historic)),songs[track_pseudo].reshape(1,len(songs[track_pseudo])),user_features.reshape(1,len(user_features)),nb_to_display]
+        
+            
+            g=settings.GRAPH
+    
+            with tf.Session(graph=g) as sess:
+                
+                model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/uniq_model_weights.h5'))
+                
+                action_to_display=model.predict(ss)
+            
+            l=convert_to_admissible_actions(action_to_display,N,t2)
+
+#        
+#        print l
+        return l
+        
+    
+
+    
+    
+    
+    
+    
+    
 # encode the actor
 #@profile
 def predict_type(user,historic,track_pseudo,type_model):
@@ -87,11 +232,6 @@ def predict_type(user,historic,track_pseudo,type_model):
 #        json_file.close()
 #        type_model = model_from_json(loaded_model_json)
 
-
-
-#        with tf.Graph().as_defau
-#        tf.reset_default_graph()
-#        type_model=settings.TYPE_MODEL
 
         g=settings.GRAPH
 #        with g.as_default():
@@ -483,14 +623,14 @@ def PulpSolve(N,w,historic,user_features,t2,track_pseudo):
 
         
 def nov_recovery(x):
-        return 1-np.exp(-x/1.3)
+        return np.exp(-x/1.3)
   
  
     
-#import numpy as np
-#import matplotlib.pyplot as plt
-#t = np.arange(0., 5., 1)
-#plt.plot(t, 1-np.exp(-t/1.45), 'bs')
+import numpy as np
+import matplotlib.pyplot as plt
+t = np.arange(0., 5., 1)
+plt.plot(t, np.exp(-t/3), 'bs')
 
 
 
