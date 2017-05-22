@@ -1,0 +1,340 @@
+.tokenfield .token{
+color:white;
+background-color:grey;
+
+font-weight:bold;
+
+
+
+}
+.ui-menu 
+{
+background-color:white;
+color:black;
+width:300px;
+
+
+}
+.close
+{
+    color:white;
+}
+#conteneur
+ {
+    display: flex;
+    justify-content: space-around;
+
+  
+ }
+ #listening_time
+ {
+    background-color:yellow; 
+  
+ }
+
+ 
+ 
+
+.glyphicon-heart{
+	font-size:2.5em;
+
+}
+.glyphicon-heart-empty
+{
+   font-size:2.5em; 
+}
+
+.custom-heart {
+       
+ color: red;
+  }
+ .label
+ {
+ 	font-size:15px;
+    
+ }
+
+.glyphicon-star-empty {
+
+color:#b0c619;
+font-size: 70px;
+text-align:center;
+}
+#star
+{
+   background-color:#b0c619; 
+   color:black;
+}
+
+.cell_hvr:hover {
+        background-color: grey ;
+}
+
+
+#grad1 
+ {
+    
+    background: #47484a; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(-90deg,#92909a, #2f353f); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(-90deg,#92909a, #2f353f); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(-90deg,#92909a, #2f353f); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+}
+body
+{
+ background-image:url("metal_wallpaper6.8c85f3db051c.jpg");
+}
+
+.btn
+{
+    border:2px solid black;
+    background-color:transparent;
+    color:black;
+}
+
+.btn:hover
+{
+    background-color:yellow;
+
+}
+h3
+{
+    color:white;
+}
+h4 
+{
+    color:white;
+
+}
+h1
+{
+    color:white;
+    text-align:center;
+}
+h2
+{
+ text-align:center;
+ color:white;
+
+}
+h5
+{
+color:#b0c619;  
+}
+.btn-custom2
+{
+    border:2px white solid;
+    background-color:transparent;
+    color:white;
+}
+.btn-custom3
+{
+    border:4px solid white;
+    background-color:red;
+    color:white;
+}
+
+p{
+    color:black;
+}
+.table
+{
+    background-color:transparent;
+
+}
+
+.container
+{
+    background-color:grey;
+}
+
+#queue__
+{
+background: navy; /* For browsers that do not support gradients */
+background: -webkit-linear-gradient(-90deg,navy, #2f353f); /* For Safari 5.1 to 6.0 */
+background: -o-linear-gradient(-90deg,navy, #2f353f); /* For Opera 11.1 to 12.0 */
+background: -moz-linear-gradient(-90deg,navy, #2f353f); /* For Firefox 3.6 to 15 */
+background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+border:4px inset white;
+
+}
+
+#rating3
+{   
+    
+    border:4px outset white;
+}
+#rating4
+{
+background: #2f353f; /* For browsers that do not support gradients */
+background: -webkit-linear-gradient(-90deg,#0588E6, #2f353f); /* For Safari 5.1 to 6.0 */
+background: -o-linear-gradient(-90deg,#0588E6, #2f353f); /* For Opera 11.1 to 12.0 */
+background: -moz-linear-gradient(-90deg,#0588E6, #2f353f); /* For Firefox 3.6 to 15 */
+background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+
+}
+
+.element{
+    flex:1 1 0;
+    overflow:auto; 
+    text-align: center;
+    background-color:white;
+    border: 3px black double;
+ }
+ .label-custom
+ {
+    background-color:grey;
+ }
+  .label-custom2
+ {
+    background-color:green;
+ }
+
+.glyphicon-chevron-right{
+    color:red;
+    font-size:1em;
+
+}
+.glyphicon-expand{
+font-size:2em;
+}
+#player1
+{
+    border:10px white outset;
+    background: #ff5fe2; /* For browsers that do not support gradients */
+background: -webkit-linear-gradient(-90deg,#ff5fe2, #2f353f); /* For Safari 5.1 to 6.0 */
+background: -o-linear-gradient(-90deg,#ff5fe2, #2f353f); /* For Opera 11.1 to 12.0 */
+background: -moz-linear-gradient(-90deg,#ff5fe2, #2f353f); /* For Firefox 3.6 to 15 */
+background: linear-gradient(-90deg,#92909a, #2f353f); /* Standard syntax (must be last) */
+}
+
+
+.glyphicon-info-sign
+{
+    color:red;
+    font-size:2em;
+
+}
+.tolltip-inner{
+white-space:pre-wrap;
+}
+
+
+#myAudio
+{
+    display: table;
+    margin: 0 auto;
+}
+
+
+.img-circle:hover {
+  transform: scale(1.4);
+}
+
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+
+
+#pub2{
+    font-size: 20px;
+  
+    display: inline-block;
+}
+
+.fa-hand-o-down{
+    -animation: leaves .7s ease-in-out infinite alternate;
+    -webkit-animation: leaves .7s ease-in-out infinite alternate;
+    display:block;
+    text-align:center;
+}
+
+#play_songs {
+    -animation: leaves .3s ease-in-out infinite alternate;
+    -webkit-animation: leaves .3s ease-in-out infinite alternate;
+    display:block;
+    text-align:center;
+}
+
+#load3 {
+    -animation: leaves .5s ease-in-out infinite alternate;
+    -webkit-animation: leaves .5s ease-in-out infinite alternate;
+   /* display:block;*/
+  /*  text-align:center;*/
+}
+
+
+
+@-webkit-keyframes leaves {
+    0% {
+        -webkit-transform: scale(1.0);
+    }
+    100% {
+        -webkit-transform: scale(1.5);
+    }
+}
+
+@keyframes leaves {
+    0% {
+        transform: scale(1.0);
+    }
+    100% {
+        transform: scale(1.5);
+    }
+}
+i{
+        text-align:center;
+    }
+
+
+#pub
+{
+   /* margin-left:0px;*/
+}
+
+#titre_1{
+     margin-right: 10px;
+}
+#titre_2{
+     margin-right: 25px;
+}
+
+#swtich_page2{ 
+    display: inline;
+    margin-right: 80px;
+
+}
+
+#sortir{
+
+   /*  display: inline;*/
+    font-size: 20px;
+    /* margin-left:33.8%;*/
+    border:transparent;
+   display:block;
+      
+}
+
+#solo{ 
+    display: inline;
+   /* margin-right: 30px;*/
+}
+#load2{
+    border:transparent;
+}
+#unload{
+    border:transparent;
+}
