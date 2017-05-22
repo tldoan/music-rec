@@ -3,9 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.db.models.signals import post_save
-
-
-
 from jsonfield import JSONField
 from django.conf import settings
 import os
@@ -65,7 +62,7 @@ class Tracks(models.Model):
     nb_rating=models.IntegerField(default=1)
     
     featuring=models.CharField(default='',max_length=250,blank=True)
-    #wordcloud=models.CharField(default='',max_length=250)
+
     
     acousticness=models.FloatField(default=0)
     danceability=models.FloatField(default=0) 
@@ -73,14 +70,17 @@ class Tracks(models.Model):
     instrumentalness=models.FloatField(default=0)
     key=models.IntegerField(default=0)
     liveness=models.FloatField(default=0)
-    loudness=models.IntegerField(default=0)
+    loudness=models.FloatField(default=0)
     speechiness=models.FloatField(default=0)
     tempo=models.FloatField(default=0)
     time_signature=models.IntegerField(default=0)
     valence=models.FloatField(default=0)
+    spotifyID=models.CharField(default='',max_length=250)
+    MODE=models.IntegerField(default=0)
+    
     
     def __str__(self):
-        return self.track_name
+        return self.track_pseudo
     
 
 class Track_Coments(models.Model):
@@ -89,7 +89,7 @@ class Track_Coments(models.Model):
     rating=models.FloatField(default=0)
     wordcloud=models.CharField(default='',max_length=250)
     time=models.DateTimeField()
-    
+#    
 def my_default():
     return ['']
 

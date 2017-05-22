@@ -64,7 +64,7 @@ def convert_to_admissible_actions(action_to_display,N,t2):
     ## normalizing all features to be in [0,1]
 #    for i in songs_by_features:
 #    
-    songs_to_process=action_to_display[1].reshape(8,13)
+    songs_to_process=action_to_display[1].reshape(8,12)
 
     
     ###" renormalize everything
@@ -75,13 +75,20 @@ def convert_to_admissible_actions(action_to_display,N,t2):
         index[genre_to_display[i]].append(i)
     
 #    print index
-    normalizer=np.ones(shape=(1,13)).astype('float32')
+    normalizer=np.ones(shape=(1,12)).astype('float32')
+    ## key
     normalizer[0,4]=11.0
+    
+    ## loudness
     normalizer[0,6]=-60.0
+    
+    ## tempo BPM
     normalizer[0,8]=200.0  
+    ## signature
     normalizer[0,9]=4.0 
-    normalizer[0,11]=100.0
-    normalizer[0,12]=5.0        
+    
+#    normalizer[0,11]=100.0
+#    normalizer[0,12]=5.0        
     
     
     ### reorganize the type
@@ -133,7 +140,7 @@ def display_songs(user,historic,track_pseudo,model,epsilon,N,t2):
         
         
         ## epsilon-greedy policy
-        
+#        epsilon=0.0
         if np.random.rand(1)[0]<=epsilon:
         ## exploration
             choice=np.random.choice(len(songs.keys()), N)
@@ -164,15 +171,17 @@ def display_songs(user,historic,track_pseudo,model,epsilon,N,t2):
             
             nb_to_display=np.ones(shape=(1,1))*N
             ss=[historic.reshape(1,len(historic)),songs[track_pseudo].reshape(1,len(songs[track_pseudo])),user_features.reshape(1,len(user_features)),nb_to_display]
-        
+#            print len(ss)
             
             g=settings.GRAPH
     
             with tf.Session(graph=g) as sess:
                 
+           
                 model.load_weights(os.path.join(settings.STATIC_ROOT, 'model/uniq_model_weights.h5'))
-                
+    
                 action_to_display=model.predict(ss)
+      
             
             l=convert_to_admissible_actions(action_to_display,N,t2)
 
